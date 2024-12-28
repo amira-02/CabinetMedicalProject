@@ -8,7 +8,7 @@ public class HomeController {
 
     @GetMapping("/doctorhome")
     public String doctorHome() {
-        return "doctorhome"; // Retourne la vue doctorhome.html
+        return "patients"; // Retourne la vue doctorhome.html
     }
 
     @GetMapping("/pharmacyhome")

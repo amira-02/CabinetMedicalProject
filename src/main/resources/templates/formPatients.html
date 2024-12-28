@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="template1.html">
+<head>
+    <meta charset="UTF-8">
+    <title>New Patient</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/webjars/bootstrap-icons/1.10.5/font/bootstrap-icons.css">
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="container p-4">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">Add New Patient</div>
+            <div class="card-body">
+                <form th:action="@{/savePatient}" method="post">
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="name" class="form-label">First Name</label>
+                            <input class="form-control" type="text" name="name" id="name" placeholder="Enter first name" th:value="${patient.name}">
+                            <span class="text-danger" th:errors="${patient.name}"></span>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="Adresse" class="form-label">Address</label>
+                            <input class="form-control" type="text" name="Adresse" id="Adresse" placeholder="Enter address" th:value="${patient.adresse}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="CodePostal" class="form-label">Postal Code</label>
+                            <input class="form-control" type="number" name="CodePostal" id="CodePostal" placeholder="Enter postal code" th:value="${patient.codePostal}">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="Ville" class="form-label">City</label>
+                            <input class="form-control" type="text" name="Ville" id="Ville" placeholder="Enter city" th:value="${patient.ville}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="Telephone" class="form-label">Phone</label>
+                            <input class="form-control" type="tel" name="Telephone" id="Telephone" placeholder="Enter phone number" th:value="${patient.telephone}">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="mail" class="form-label">Email</label>
+                        <input class="form-control" type="email" name="mail" id="mail" placeholder="Enter email address" th:value="${patient.mail}">
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="BirthDate" class="form-label">Birth Date</label>
+                            <input class="form-control" type="date" name="birthDate" id="birthDate"
+                                   th:value="${patient.birthDate != null ? patient.birthDate.format(T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM-dd')) : ''}">
+
+
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="Height" class="form-label">Height (cm)</label>
+                            <input class="form-control" type="number" name="Height" id="Height" placeholder="Enter height" th:value="${patient.height}">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="Weight" class="form-label">Weight (kg)</label>
+                            <input class="form-control" type="number" name="Weight" id="Weight" placeholder="Enter weight" th:value="${patient.weight}">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Gender</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="Gender" id="Male" value="true" th:checked="${patient.gender}">
+                            <label class="form-check-label" for="Male">Male</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="Gender" id="Female" value="false" th:checked="${!patient.gender}">
+                            <label class="form-check-label" for="Female">Female</label>
+                        </div>
+                    </div>
+
+
+                    <div class="mb-3">
+                        <label for="Pathology" class="form-label">Pathology</label>
+                        <textarea class="form-control" name="Pathology" id="Pathology" rows="3" placeholder="Enter pathology details" th:text="${patient.pathology}"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        Save <i class="bi bi-save"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

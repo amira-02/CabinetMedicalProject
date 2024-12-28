@@ -49,7 +49,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/js/**",
                         "/css/**",
                         "/img/**").permitAll()
-                .antMatchers("/doctorhome").hasAuthority("ROLE_DOCTOR")
+                .antMatchers("/index").hasAuthority("ROLE_DOCTOR")
                 .antMatchers("/pharmacyhome").hasAuthority("ROLE_PHARMACY")
                 .antMatchers("/patienthome").hasAuthority("ROLE_PATIENT")
                 .anyRequest().authenticated()
