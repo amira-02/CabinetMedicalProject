@@ -2,10 +2,6 @@ package tn.pi.cabinetmedicalproject.model;
 
 import javax.persistence.*;
 
-
-import javax.persistence.*;
-
-
 @Entity
 @Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class User {
@@ -14,11 +10,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "first_name")
-    private String firstName;
-
-    @Column(name = "last_name")
-    private String lastName;
+    private String name;  // Le champ 'name' contiendra le prénom et le nom de famille.
 
     @Column(unique = true, nullable = false)
     private String email;
@@ -32,9 +24,8 @@ public class User {
     public User() {
     }
 
-    public User(String firstName, String lastName, String email, String password, String role) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public User(String name, String email, String password, String role) {
+        this.name = name; // Utilisez 'name' pour stocker le prénom et le nom
         this.email = email;
         this.password = password;
         this.role = role;
@@ -48,20 +39,12 @@ public class User {
         this.id = id;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getName() {
+        return name; // Accéder au nom complet
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setName(String name) {
+        this.name = name; // Définir le nom complet
     }
 
     public String getEmail() {
@@ -87,6 +70,4 @@ public class User {
     public void setRole(String role) {
         this.role = role;
     }
-
-
 }

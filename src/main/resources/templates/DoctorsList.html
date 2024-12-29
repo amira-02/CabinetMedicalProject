@@ -6,31 +6,34 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
 <body>
+<!-- This file will be used for AJAX to dynamically load the doctors list -->
 <div class="container">
-    <h1>Doctors List</h1>
-    <!-- Exemple de tableau des médecins (ajustez selon vos besoins) -->
-    <table class="table">
+    <h2>Doctors List</h2>
+
+    <!-- Button to add a new doctor -->
+    <a href="/formDoctor" class="btn btn-primary">Add Doctor</a>
+
+    <table class="table table-bordered">
         <thead>
         <tr>
-            <th>ID</th>
-            <th>Nom</th>
-            <th>Spécialité</th>
+            <th>Name</th>
+            <th>Specialty</th>
+            <th>Actions</th>
         </tr>
         </thead>
         <tbody>
-        <!-- Vous pouvez ajouter une boucle Thymeleaf ici pour afficher les médecins -->
-        <tr>
-            <td>1</td>
-            <td>Dr. John Doe</td>
-            <td>Cardiologie</td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td>Dr. Jane Smith</td>
-            <td>Dermatologie</td>
+        <tr th:each="doctor : ${doctors}">
+            <td th:text="${doctor.name}">Doctor Name</td>
+            <td th:text="${doctor.specialty}">Doctor Specialty</td>
+            <td>
+                <a th:href="@{/EditDoctor(id=${doctor.id})}" class="btn btn-warning">Edit</a>
+                <a th:href="@{/deleteDoctor(id=${doctor.id})}" class="btn btn-danger">Delete</a>
+            </td>
         </tr>
         </tbody>
+
     </table>
 </div>
+
 </body>
 </html>

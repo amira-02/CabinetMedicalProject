@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+
+    <!-- Bootstrap CSS for the Navbar -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Add additional CSS here for custom styling -->
+</head>
+<body>
+
+<!-- Navigation Bar -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#" th:href="@{/admine}">Admin Dashboard</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <!-- Link to the Doctors List page (for AJAX call) -->
+                <li><a href="javascript:void(0);" onclick="loadDoctorsList()">Doctors</a></li>
+                <!-- Logout button -->
+                <li><a href="#" th:href="@{/logout}">Logout</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<br><br><br>
+
+<!-- Main Content Area -->
+<div class="container">
+    <h1>Welcome to the Admin Dashboard</h1>
+    <p>Here you can manage doctors and perform other administrative tasks.</p>
+
+    <!-- Dynamically loaded Doctors List will go here -->
+    <div id="doctorsListContainer"></div>
+
+</div>
+
+<!-- Bootstrap JS and jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<script>
+    // Function to load the doctors list using AJAX
+    function loadDoctorsList() {
+        $.ajax({
+            url: '/DoctorsList',  // URL where the doctors list can be fetched
+            type: 'GET',
+            success: function(response) {
+                // Dynamically update the page with the doctors list HTML
+                $('#doctorsListContainer').html(response);
+            },
+            error: function() {
+                alert('Error loading doctors list!');
+            }
+        });
+    }
+</script>
+
+</body>
+</html>

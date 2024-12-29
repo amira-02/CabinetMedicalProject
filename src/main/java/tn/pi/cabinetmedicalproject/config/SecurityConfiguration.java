@@ -13,6 +13,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import tn.pi.cabinetmedicalproject.service.UserService;
 
+import static org.springframework.security.authorization.AuthorityReactiveAuthorizationManager.hasAuthority;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -49,6 +51,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/js/**",
                         "/css/**",
                         "/img/**").permitAll()
+                .antMatchers("/admine").hasAuthority("ADMIN")
+
                 .antMatchers("/index").hasAuthority("ROLE_DOCTOR")
                 .antMatchers("/pharmacyhome").hasAuthority("ROLE_PHARMACY")
                 .antMatchers("/patienthome").hasAuthority("ROLE_PATIENT")

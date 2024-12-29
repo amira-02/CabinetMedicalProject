@@ -8,6 +8,7 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 @Setter @Getter @NoArgsConstructor
@@ -18,9 +19,6 @@ public class Patient {
     private Long id;
     @Size(min = 4, max = 50)
     private String name;
-    private String Adresse;
-    private int CodePostal;
-    private String Ville;
     private int Telephone;
     private String mail;
     private LocalDate BirthDate;
@@ -30,5 +28,9 @@ public class Patient {
     private String Pathology;
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Consultation> consultations = new ArrayList<>();
+
+
+    @ManyToMany(mappedBy = "patients")
+    private Set<Doctor> doctors;
 
 }

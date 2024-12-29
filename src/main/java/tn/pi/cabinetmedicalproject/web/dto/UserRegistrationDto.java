@@ -1,8 +1,7 @@
 package tn.pi.cabinetmedicalproject.web.dto;
 
 public class UserRegistrationDto {
-    private String firstName;
-    private String lastName;
+    private String name;
     private String email;
     private String password;
     private String role;
@@ -13,25 +12,17 @@ public class UserRegistrationDto {
 
     public UserRegistrationDto(String firstName, String lastName, String email, String password) {
         super();
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.name=name;
         this.email = email;
         this.password = password;
         this.role = role;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getName() {
+        return name;
     }
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-    public String getLastName() {
-        return lastName;
-    }
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+
+
     public String getEmail() {
         return email;
     }

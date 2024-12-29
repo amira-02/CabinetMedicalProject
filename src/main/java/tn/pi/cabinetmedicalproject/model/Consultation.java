@@ -32,6 +32,8 @@ public class Consultation {
     @JoinColumn(name = "patient_id", nullable = false)  // Foreign key linking to Patient
     private Patient patient;
 
-
+    @ManyToOne
+    @JoinColumn(name = "doctor_id")  // Référence à l'entité Doctor
+    private Doctor doctor;
 
 }

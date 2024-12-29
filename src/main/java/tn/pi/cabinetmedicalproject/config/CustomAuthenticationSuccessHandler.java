@@ -19,7 +19,9 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
                                         Authentication authentication) throws IOException, ServletException {
         Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
 
-        if (roles.contains("ROLE_DOCTOR")) {
+        if (roles.contains("ROLE_ADMIN")) {
+            response.sendRedirect("/admin"); // Redirection vers la page admin
+        } else if (roles.contains("ROLE_DOCTOR")) {
             response.sendRedirect("/index");
         } else if (roles.contains("ROLE_PHARMACY")) {
             response.sendRedirect("/pharmacyhome");
@@ -29,4 +31,5 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             response.sendRedirect("/"); // Redirection par défaut
         }
     }
+
 }

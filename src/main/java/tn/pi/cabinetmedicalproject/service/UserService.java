@@ -7,5 +7,7 @@ import tn.pi.cabinetmedicalproject.model.User;
 import tn.pi.cabinetmedicalproject.web.dto.UserRegistrationDto;
 
 public interface UserService extends UserDetailsService{
+    User save(User user);
+
     User save(UserRegistrationDto registrationDto);
 }
