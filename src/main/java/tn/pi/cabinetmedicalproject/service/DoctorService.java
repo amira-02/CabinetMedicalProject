@@ -30,4 +30,7 @@ public class DoctorService {
     public List<Doctor> getAllDoctors() {
         return doctorRepository.findAll();  // Utilisation de la méthode de JPA pour récupérer tous les docteurs
     }
+
+
+
 }

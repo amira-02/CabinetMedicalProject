@@ -23,7 +23,7 @@ public class DoctorController {
     private final DoctorRepository doctorRepository;
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
-
+    private final String UPLOAD_DIR = "src/main/resources/static/uploads/";
     public DoctorController(DoctorRepository doctorRepository, UserService userService, PasswordEncoder passwordEncoder) {
         this.doctorRepository = doctorRepository;
         this.userService = userService;
@@ -91,27 +91,36 @@ public class DoctorController {
     @PostMapping("/saveDoctor")
     public String saveDoctor(Model model, @Valid Doctor doctor, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "formDoctor";
+            return "formDoctor"; // Return the form page if there are validation errors
         }
 
+        // Ensure the User object is set for the doctor
         if (doctor.getUser() == null) {
-            doctor.setUser(new User());
+            doctor.setUser(new User()); // Create a new User if not provided
         }
 
+        // Hash the password before saving it
         User user = doctor.getUser();
         if (user.getPassword() != null && !user.getPassword().isEmpty()) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setPassword(passwordEncoder.encode(user.getPassword())); // Hash the password
         }
 
-        user.setRole("ROLE_DOCTOR");
+        user.setRole("ROLE_DOCTOR"); // Assign the role to "doctor"
+
+        // Save the User first
         userService.save(user);
 
+        // After saving the user, associate the user with the doctor
         doctor.setUser(user);
+
+        // Save the Doctor entity
         doctorRepository.save(doctor);
 
+        // Reset the form (clear the Doctor instance for the next input)
         model.addAttribute("doctor", new Doctor());
-        return "redirect:/doctors";
+        return "redirect:/DoctorsList"; // Redirect to the list of doctors
     }
+
 
     @GetMapping("/EditDoctor")
     public String EditDoctor(Model model, @RequestParam(name = "id") Long id) {

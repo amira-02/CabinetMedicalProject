@@ -1,6 +1,7 @@
 package tn.pi.cabinetmedicalproject.repository;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -16,4 +17,5 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
     // Méthode pour rechercher par spécialité, avec pagination
     Page<Doctor> findBySpecialtyContains(String keyword, Pageable pageable);
     Page<Doctor> findById(Long id, Pageable pageable);
+    Page<Doctor> findByNameContainingIgnoreCase(String name, Pageable pageable);
 }
