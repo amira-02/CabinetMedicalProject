@@ -50,7 +50,7 @@ public class DoctorController {
     @GetMapping("/DoctorsList")
     public String index(Model model,
                         @RequestParam(name = "page", defaultValue = "0") int page,
-                        @RequestParam(name = "size", defaultValue = "4") int size,
+                        @RequestParam(name = "size", defaultValue = "5") int size,
                         @RequestParam(name = "id", defaultValue = "0") Long id) {
         Page<Doctor> doctors;
 

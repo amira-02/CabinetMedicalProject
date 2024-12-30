@@ -13,8 +13,6 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import tn.pi.cabinetmedicalproject.service.UserService;
 
-import static org.springframework.security.authorization.AuthorityReactiveAuthorizationManager.hasAuthority;
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -74,11 +72,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/registration**", "/js/**", "/css/**", "/img/**", "/uploads/**").permitAll()  // Autoriser l'accès au dossier uploads
+                .antMatchers("/registration**", "/js/**", "/css/**", "/img/**", "/images/**").permitAll()  // Autoriser l'accès au dossier uploads
                 .antMatchers("/admine").hasAuthority("ADMIN")
                 .antMatchers("/index").hasAuthority("ROLE_DOCTOR")
                 .antMatchers("/pharmacyhome").hasAuthority("ROLE_PHARMACY")
-                .antMatchers("/patienthome").hasAuthority("ROLE_PATIENT")
+                .antMatchers("/Home").hasAuthority("ROLE_PATIENT")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

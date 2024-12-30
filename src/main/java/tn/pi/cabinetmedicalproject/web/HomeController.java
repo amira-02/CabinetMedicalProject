@@ -16,8 +16,8 @@ public class HomeController {
         return "pharmacyhome"; // Retourne la vue pharmacyhome.html
     }
 
-    @GetMapping("/patienthome")
+    @GetMapping("/Home")
     public String patientHome() {
-        return "patienthome"; // Retourne la vue patienthome.html
+        return "Home"; // Retourne la vue patienthome.html
     }
 }

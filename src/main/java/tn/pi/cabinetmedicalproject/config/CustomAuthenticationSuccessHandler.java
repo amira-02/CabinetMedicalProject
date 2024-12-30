@@ -26,7 +26,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         } else if (roles.contains("ROLE_PHARMACY")) {
             response.sendRedirect("/pharmacyhome");
         } else if (roles.contains("ROLE_PATIENT")) {
-            response.sendRedirect("/patienthome");
+            response.sendRedirect("/Home");
         } else {
             response.sendRedirect("/"); // Redirection par défaut
         }

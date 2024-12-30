@@ -27,10 +27,10 @@
                     <a class="nav-link" th:href="@{/index}">home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Doctors</a>
+                    <a class="nav-link" >Doctors</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">AboutUs</a>
+                    <a class="nav-link" th:href="@{/AboutUs }">AboutUs</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Patients</a>
@@ -65,11 +65,7 @@
                     <tr>
                         <th>ID</th>
                         <th>Name</th>
-                        <th>Adresse</th>
-                        <th>Code Postal</th>
-                        <th>Ville</th>
                         <th>Telephone</th>
-                        <th>Email</th>
                         <th>Birth Date</th>
                         <th>Height</th>
                         <th>Weight</th>
@@ -82,11 +78,7 @@
                     <tr th:each="p:${patients}">
                         <td th:text="${p.id}"></td>
                         <td th:text="${p.name}"></td>
-                        <td th:text="${p.adresse}"></td>
-                        <td th:text="${p.codePostal}"></td>
-                        <td th:text="${p.ville}"></td>
                         <td th:text="${p.telephone}"></td>
-                        <td th:text="${p.mail}"></td>
                         <td th:text="${p.birthDate != null ? p.birthDate.format(T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM-dd')) : ''}"></td>
                         <td th:text="${p.height}"></td>
                         <td th:text="${p.weight}"></td>

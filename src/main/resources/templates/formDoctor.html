@@ -4,9 +4,110 @@
     <meta charset="UTF-8">
     <title th:text="${doctor.id == null ? 'Add Doctor' : 'Edit Doctor'}">Doctor Form</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f7fc;
+            margin-top: 50px;
+        }
+        .container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+        h2 {
+            font-size: 28px;
+            color: #124379;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-group label {
+            font-weight: 500;
+            color: #333;
+        }
+        .form-control {
+            border-radius: 5px;
+            padding: 12px;
+            border: 1px solid #ddd;
+            box-shadow: none;
+            font-size: 16px;
+        }
+        .form-control:focus {
+            border-color: #124379;
+            box-shadow: 0 0 5px rgba(18, 67, 121, 0.4);
+        }
+        .btn-primary {
+            background-color: #124379;
+            border-color: #124379;
+            font-size: 16px;
+            padding: 10px 20px;
+            width: 100%;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #0c2a4c;
+            border-color: #0c2a4c;
+        }
+        .form-group input {
+            margin-bottom: 20px;
+        }
+        .form-group input[readonly] {
+            background-color: #f1f1f1;
+        }
+        .form-group .form-control::placeholder {
+            color: #bbb;
+        }
+        /* Custom input focus transition */
+        .form-group input:focus {
+            border-color: #2c8ed6;
+            box-shadow: 0 0 5px rgba(44, 142, 214, 0.5);
+        }
+        /* Animation for form elements */
+        .form-group {
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeInUp 0.5s forwards;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .form-group:nth-child(1) { animation-delay: 0.1s; }
+        .form-group:nth-child(2) { animation-delay: 0.2s; }
+        .form-group:nth-child(3) { animation-delay: 0.3s; }
+        .form-group:nth-child(4) { animation-delay: 0.4s; }
+        .form-group:nth-child(5) { animation-delay: 0.5s; }
+        .form-group:nth-child(6) { animation-delay: 0.6s; }
+        .form-group:nth-child(7) { animation-delay: 0.7s; }
+        .form-group:nth-child(8) { animation-delay: 0.8s; }
+        /* Back button styling */
+        .back-button {
+            font-size: 18px;
+            color: #124379;
+            margin-bottom: 20px;
+        }
+        .back-button:hover {
+            color: #0c2a4c;
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
 <div class="container">
+    <!-- Back button with a left arrow -->
+    <a href="javascript:history.back()" class="back-button">
+        <i class="glyphicon glyphicon-arrow-left"></i> Back
+    </a>
+
     <h2 th:text="${doctor.id == null ? 'Add Doctor' : 'Edit Doctor'}"></h2>
 
     <form th:action="@{/saveDoctor}" th:object="${doctor}" method="post">
@@ -53,5 +154,19 @@
         <button type="submit" class="btn btn-primary">Save</button>
     </form>
 </div>
+
+<!-- Optional: JS for form validation or dynamic interactions -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Example of form validation using JS
+        $('form').on('submit', function(event) {
+            if ($('#name').val().trim() === '') {
+                alert('Name is required');
+                event.preventDefault();
+            }
+        });
+    });
+</script>
 </body>
 </html>
