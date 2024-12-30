@@ -4,7 +4,7 @@ import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.crypto.password.PasswordEncoder; // Importer PasswordEncoder
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,79 +22,97 @@ public class DoctorController {
 
     private final DoctorRepository doctorRepository;
     private final UserService userService;
-    private final PasswordEncoder passwordEncoder; // Injection du PasswordEncoder
+    private final PasswordEncoder passwordEncoder;
 
     public DoctorController(DoctorRepository doctorRepository, UserService userService, PasswordEncoder passwordEncoder) {
         this.doctorRepository = doctorRepository;
         this.userService = userService;
-        this.passwordEncoder = passwordEncoder; // Initialisation du PasswordEncoder
+        this.passwordEncoder = passwordEncoder;
     }
 
-    // Route to display the list of doctors with pagination and search
+//    @GetMapping("/DoctorsList")
+//    public String index(Model model,
+//                        @RequestParam(name = "page", defaultValue = "0") int page,
+//                        @RequestParam(name = "size", defaultValue = "4") int size,
+//                        @RequestParam(name = "keyword", defaultValue = "") String keyword) {
+//        Page<Doctor> doctors = doctorRepository.findByNameContains(keyword, PageRequest.of(page, size));
+//
+//        doctors.getContent().forEach(doctor -> log.info("Doctor: {}", doctor));
+//        model.addAttribute("doctors", doctors.getContent());
+//        model.addAttribute("pages", new int[doctors.getTotalPages()]);
+//        model.addAttribute("currentPage", page);
+//        model.addAttribute("keyword", keyword);
+//        return "DoctorsList";
+//    }
+
+
+
     @GetMapping("/DoctorsList")
     public String index(Model model,
                         @RequestParam(name = "page", defaultValue = "0") int page,
                         @RequestParam(name = "size", defaultValue = "4") int size,
-                        @RequestParam(name = "keyword", defaultValue = "") String keyword) {
+                        @RequestParam(name = "id", defaultValue = "0") Long id) {
+        Page<Doctor> doctors;
 
-        Page<Doctor> doctors = doctorRepository.findByNameContains(keyword, PageRequest.of(page, size));
+        if (id != 0) {
+            doctors = doctorRepository.findById(id, PageRequest.of(page, size));
+        } else {
+            doctors = doctorRepository.findAll(PageRequest.of(page, size)); // Recherche tous les docteurs si id est 0
+        }
+
+        doctors.getContent().forEach(doctor -> log.info("Doctor: {}", doctor));
         model.addAttribute("doctors", doctors.getContent());
         model.addAttribute("pages", new int[doctors.getTotalPages()]);
         model.addAttribute("currentPage", page);
-        model.addAttribute("keyword", keyword);
-
+        model.addAttribute("id", id);
         return "DoctorsList";
     }
 
-    // Route to delete a doctor
+
+
+
+
+
+
+
+
     @GetMapping("/deleteDoctor")
     public String delete(@RequestParam Long id, @RequestParam String keyword, @RequestParam int page) {
         doctorRepository.deleteById(id);
-        return "redirect:/DoctorsList?page=" + page + "&keyword=" + keyword;
+        return "redirect:/doctors?page=" + page + "&keyword=" + keyword;
     }
 
-    // Route to show the form for adding a new doctor
     @GetMapping("/formDoctor")
     public String formDoctor(Model model) {
         model.addAttribute("doctor", new Doctor());
         return "formDoctor";
     }
 
-    // Route to save the new or edited doctor
     @PostMapping("/saveDoctor")
     public String saveDoctor(Model model, @Valid Doctor doctor, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "formDoctor"; // Return the form page if there are validation errors
+            return "formDoctor";
         }
 
-        // Ensure the User object is set for the doctor
         if (doctor.getUser() == null) {
-            doctor.setUser(new User()); // Create a new User if not provided
+            doctor.setUser(new User());
         }
 
-        // Hash the password before saving it
         User user = doctor.getUser();
         if (user.getPassword() != null && !user.getPassword().isEmpty()) {
-            user.setPassword(passwordEncoder.encode(user.getPassword())); // Hash the password
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
 
-        user.setRole("ROLE_DOCTOR"); // Assign the role to "doctor"
-
-        // Save the User first
+        user.setRole("ROLE_DOCTOR");
         userService.save(user);
 
-        // After saving the user, associate the user with the doctor
         doctor.setUser(user);
-
-        // Save the Doctor entity
         doctorRepository.save(doctor);
 
-        // Reset the form (clear the Doctor instance for the next input)
         model.addAttribute("doctor", new Doctor());
-        return "redirect:/DoctorsList"; // Redirect to the list of doctors
+        return "redirect:/doctors";
     }
 
-    // Route to show the form to edit an existing doctor
     @GetMapping("/EditDoctor")
     public String EditDoctor(Model model, @RequestParam(name = "id") Long id) {
         Doctor doctor = doctorRepository.findById(id).orElseThrow(() -> new RuntimeException("Doctor not found"));
@@ -102,7 +120,6 @@ public class DoctorController {
         return "EditDoctor";
     }
 
-    // Route to show the consultations for a doctor
     @GetMapping("/ConsultationDoctor")
     public String ConsultationDoctor(Model model, @RequestParam(name = "id") Long id) {
         Doctor doctor = doctorRepository.findById(id).orElseThrow(() -> new RuntimeException("Doctor not found"));

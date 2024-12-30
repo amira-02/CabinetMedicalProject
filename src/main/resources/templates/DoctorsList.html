@@ -1,39 +1,48 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Doctors List</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
 </head>
 <body>
-<!-- This file will be used for AJAX to dynamically load the doctors list -->
-<div class="container">
-    <h2>Doctors List</h2>
+<div class="container mt-3">
+    <h1>List of Doctors</h1>
 
-    <!-- Button to add a new doctor -->
-    <a href="/formDoctor" class="btn btn-primary">Add Doctor</a>
+    <!-- Search Form -->
+    <form th:action="@{/doctors}" method="get">
+        <label for="keyword">Search by Name:</label>
+        <input type="text" id="keyword" name="keyword" th:value="${keyword}" class="form-control mb-2">
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
 
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Specialty</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="doctor : ${doctors}">
-            <td th:text="${doctor.name}">Doctor Name</td>
-            <td th:text="${doctor.specialty}">Doctor Specialty</td>
-            <td>
-                <a th:href="@{/EditDoctor(id=${doctor.id})}" class="btn btn-warning">Edit</a>
-                <a th:href="@{/deleteDoctor(id=${doctor.id})}" class="btn btn-danger">Delete</a>
-            </td>
-        </tr>
-        </tbody>
+    <div class="row">
+        <div class="col-md-4" th:each="doctor : ${doctors}">
+            <div class="card doctor-card">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${doctor.name}"></h5>
+                    <p class="card-text" th:text="'Specialty: ' + ${doctor.specialty}"></p>
+                    <p class="card-text" th:text="'Phone: ' + ${doctor.phone}"></p>
+                    <p class="card-text" th:text="'City: ' + ${doctor.city}"></p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    </table>
+
+    <!-- Pagination -->
+    <ul class="pagination">
+        <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+            <a class="page-link" th:href="@{/doctors(keyword=${keyword}, page=${currentPage - 1}, size=${size})}">Previous</a>
+        </li>
+        <li class="page-item" th:each="page, status : ${#numbers.sequence(0, pages.length - 1)}"
+            th:classappend="${currentPage == page} ? 'active'">
+            <a class="page-link" th:href="@{/doctors(keyword=${keyword}, page=${page}, size=${size})}" th:text="${page + 1}"></a>
+        </li>
+        <li class="page-item" th:classappend="${currentPage == pages.length - 1} ? 'disabled'">
+            <a class="page-link" th:href="@{/doctors(keyword=${keyword}, page=${currentPage + 1}, size=${size})}">Next</a>
+        </li>
+    </ul>
 </div>
-
 </body>
 </html>

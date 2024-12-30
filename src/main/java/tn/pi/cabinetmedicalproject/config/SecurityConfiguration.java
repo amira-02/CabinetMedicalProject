@@ -42,17 +42,40 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(authenticationProvider());
     }
+//
+//    @Override
+//    protected void configure(HttpSecurity http) throws Exception {
+//        http.authorizeRequests()
+//                .antMatchers(
+//                        "/registration**",
+//                        "/js/**",
+//                        "/css/**",
+//                        "/img/**").permitAll()
+//                .antMatchers("/admine").hasAuthority("ADMIN")
+////
+//                .antMatchers("/index").hasAuthority("ROLE_DOCTOR")
+//                .antMatchers("/pharmacyhome").hasAuthority("ROLE_PHARMACY")
+//                .antMatchers("/patienthome").hasAuthority("ROLE_PATIENT")
+//                .anyRequest().authenticated()
+//                .and()
+//                .formLogin()
+//                .loginPage("/login")
+//                .successHandler(successHandler) // Gestionnaire de succès personnalisé
+//                .permitAll()
+//                .and()
+//                .logout()
+//                .invalidateHttpSession(true)
+//                .clearAuthentication(true)
+//                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+//                .logoutSuccessUrl("/login?logout")
+//                .permitAll();
+//    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers(
-                        "/registration**",
-                        "/js/**",
-                        "/css/**",
-                        "/img/**").permitAll()
+                .antMatchers("/registration**", "/js/**", "/css/**", "/img/**", "/uploads/**").permitAll()  // Autoriser l'accès au dossier uploads
                 .antMatchers("/admine").hasAuthority("ADMIN")
-
                 .antMatchers("/index").hasAuthority("ROLE_DOCTOR")
                 .antMatchers("/pharmacyhome").hasAuthority("ROLE_PHARMACY")
                 .antMatchers("/patienthome").hasAuthority("ROLE_PATIENT")
@@ -60,7 +83,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginPage("/login")
-                .successHandler(successHandler) // Gestionnaire de succès personnalisé
+                .successHandler(successHandler)  // Gestionnaire de succès personnalisé
                 .permitAll()
                 .and()
                 .logout()
@@ -70,4 +93,5 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/login?logout")
                 .permitAll();
     }
+
 }

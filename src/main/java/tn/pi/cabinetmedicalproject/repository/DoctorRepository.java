@@ -15,4 +15,5 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
 
     // Méthode pour rechercher par spécialité, avec pagination
     Page<Doctor> findBySpecialtyContains(String keyword, Pageable pageable);
+    Page<Doctor> findById(Long id, Pageable pageable);
 }

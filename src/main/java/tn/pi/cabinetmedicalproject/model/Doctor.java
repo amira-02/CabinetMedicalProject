@@ -28,7 +28,7 @@ public class Doctor {
     private String city;
 
     private int phone;
-
+//    private String imageUrl;
 
 
     // Relationship to Consultation, assuming a doctor can have many consultations
@@ -48,7 +48,17 @@ public class Doctor {
     private User user;
 
 
-
+//    @ElementCollection
+//    private List<String> imageUrls = new ArrayList<>(); // Liste pour stocker plusieurs images
+//
+//    // Getters and setters
+//    public List<String> getImageUrls() {
+//        return imageUrls;
+//    }
+//
+//    public void setImageUrls(List<String> imageUrls) {
+//        this.imageUrls = imageUrls;
+//    }
 
 
 
