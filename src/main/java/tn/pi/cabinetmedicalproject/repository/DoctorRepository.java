@@ -10,7 +10,7 @@ import tn.pi.cabinetmedicalproject.model.Patient;
 
 
 public interface DoctorRepository extends JpaRepository<Doctor, Long> {
-
+    Doctor findByname(String name);
     // Méthode pour rechercher un docteur par nom, avec pagination
     Page<Doctor> findByNameContains(String keyword, Pageable pageable);
 

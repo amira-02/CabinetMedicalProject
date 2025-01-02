@@ -1,10 +1,61 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="template1.html">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Edit Doctor</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/webjars/bootstrap-icons/1.10.5/font/bootstrap-icons.css">
 </head>
 <body>
+<div layout:fragment="content">
+    <div class="container p-3">
+        <div class="card">
+            <div class="card-header">Edit Doctor</div>
+            <div class="card-body">
+                <form th:action="@{/saveDoctor}" method="post">
+                    <div class="mb-3 mt-3">
+                        <label for="id" class="form-label">ID</label>
+                        <input class="form-control" type="text" name="id" id="id" th:value="${doctor.id}" readonly>
+                        <span class="text-danger" th:errors="${doctor.id}"></span>
+                    </div>
 
+<!--                    <div class="mb-3 mt-3">-->
+<!--                        <label for="name" class="form-label">Name</label>-->
+<!--                        <input class="form-control" type="text" name="name" id="name" placeholder="Enter name" th:value="${doctor.name}">-->
+<!--                        <span class="text-danger" th:errors="${doctor.id}"></span>-->
+<!--                    </div>-->
+
+<!--                    <div class="mb-3 mt-3">-->
+<!--                        <label for="telephone" class="form-label">Telephone</label>-->
+<!--                        <input class="form-control" type="text" name="telephone" id="telephone" placeholder="Enter phone number" th:value="${doctor.telephone}">-->
+<!--                    </div>-->
+
+                    <div class="mb-3 mt-3">
+                        <label for="email" class="form-label">email</label>
+                        <input class="form-control" type="text" name="email" id="email" placeholder="Enter email" th:value="${doctor.user.email}">
+                    </div>
+
+                    <div class="mb-3 mt-3">
+                        <label for="specialty" class="form-label">Specialty</label>
+                        <input class="form-control" type="text" name="specialty" id="specialty" placeholder="Enter specialty" th:value="${doctor.specialty}">
+                    </div>
+
+                    <div class="mb-3 mt-3">
+                        <label for="city" class="form-label">City</label>
+                        <input class="form-control" type="text" name="city" id="city" placeholder="Enter city" th:value="${doctor.city}">
+                    </div>
+
+                        <p th:text="${doctor.description}">Description</p>
+                    </div>
+
+
+                    <button type="submit" class="btn btn-primary">
+                        Save <i class="bi bi-save"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

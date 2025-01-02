@@ -18,7 +18,7 @@ public class Doctor {
 
     @Size(min = 4, max = 50)
     private String name;
-    private int Telephone;
+
     private String specialty;
 
     private String address;
@@ -28,8 +28,8 @@ public class Doctor {
     private String city;
 
     private int phone;
-//    private String imageUrl;
 
+   private String Description;
 
     // Relationship to Consultation, assuming a doctor can have many consultations
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -43,23 +43,25 @@ public class Doctor {
             inverseJoinColumns = @JoinColumn(name = "patient_id"))
     private Set<Patient> patients;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @ManyToOne(cascade = CascadeType.PERSIST)  // Cascade persist to automatically persist User if not already saved
+    @JoinColumn(name = "user_id", nullable = false)  // Foreign key to User entity, nullable = false ensures it's required
     private User user;
 
 
-//    @ElementCollection
-//    private List<String> imageUrls = new ArrayList<>(); // Liste pour stocker plusieurs images
-//
-//    // Getters and setters
-//    public List<String> getImageUrls() {
-//        return imageUrls;
-//    }
-//
-//    public void setImageUrls(List<String> imageUrls) {
-//        this.imageUrls = imageUrls;
-//    }
 
+private String imagePath;
+
+    // Getters et Setters
+    public Long getId() {
+        return id;
+    }
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
 
     public String getName() {
         return name;
@@ -67,5 +69,22 @@ public class Doctor {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getDescription() {
+        return Description;
+    }
+
+    public void setDescription(String description) {
+        this.Description = description;
     }
 }

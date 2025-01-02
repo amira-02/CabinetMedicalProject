@@ -10,7 +10,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;  // Le champ 'name' contiendra le prénom et le nom de famille.
+//    private String name;  // Le champ 'name' contiendra le prénom et le nom de famille.
 
     @Column(unique = true, nullable = false)
     private String email;
@@ -25,7 +25,7 @@ public class User {
     }
 
     public User(String name, String email, String password, String role) {
-        this.name = name; // Utilisez 'name' pour stocker le prénom et le nom
+//        this.name = name; // Utilisez 'name' pour stocker le prénom et le nom
         this.email = email;
         this.password = password;
         this.role = role;
@@ -39,13 +39,13 @@ public class User {
         this.id = id;
     }
 
-    public String getName() {
-        return name; // Accéder au nom complet
-    }
-
-    public void setName(String name) {
-        this.name = name; // Définir le nom complet
-    }
+//    public String getName() {
+//        return name; // Accéder au nom complet
+//    }
+//
+//    public void setName(String name) {
+//        this.name = name; // Définir le nom complet
+//    }
 
     public String getEmail() {
         return email;
@@ -70,4 +70,5 @@ public class User {
     public void setRole(String role) {
         this.role = role;
     }
+
 }

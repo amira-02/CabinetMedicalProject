@@ -4,8 +4,10 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -60,9 +62,18 @@ public class UserServiceImpl implements UserService {
                 mapRolesToAuthorities(user.getRole())
         );
     }
-
+    @Override
+    public User getCurrentUser() {
+        // Récupérer l'authentification de l'utilisateur courant
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof User) {
+            return (User) authentication.getPrincipal();  // Retourner l'utilisateur authentifié
+        }
+        return null;  // Si aucun utilisateur n'est connecté, retourner null
+    }
 
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(String role) {
         return Arrays.asList(new SimpleGrantedAuthority(role));
     }
+
 }
