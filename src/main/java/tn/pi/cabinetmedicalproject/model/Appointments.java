@@ -2,7 +2,9 @@ package tn.pi.cabinetmedicalproject.model;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Date;
 
 @Entity
 public class Appointments {
@@ -11,15 +13,32 @@ public class Appointments {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "patient_id") // Le nom de la colonne pour la relation ManyToOne
-    private Patient patient;
+    @JoinColumn(name = "doctor_id") // La colonne "doctor_id" doit exister dans la table Appointments
+    private Doctor doctor;
 
     @ManyToOne
-    @JoinColumn(name = "doctor_id")
-    private Doctor doctor;
+    @JoinColumn(name = "patient_id") // Optionnel : relation avec Patient
+    private Patient patient;
     private LocalDate appointmentDate;
     private LocalTime appointmentTime;
 
+    // Getter for 'date'
+//    public Date getDate() {
+//        return date;
+//    }
+//
+//    // Setter for 'date'
+//    public void setDate(Date date) {
+//        this.date = date;
+//    }
+    // Getters et setters
+//    public LocalDateTime getTime() {
+//        return time;
+//    }
+//
+//    public void setTime(LocalDateTime time) {
+//        this.time = time;
+//    }
     public Long getId() {
         return id;
     }
@@ -28,28 +47,22 @@ public class Appointments {
         this.id = id;
     }
 
-    public Long getDoctorId() {
-        return doctor != null ? doctor.getId() : null;  // Obtenir l'ID du médecin à partir de l'objet doctor
+    public Doctor getDoctor() {
+        return doctor;
     }
 
     public void setDoctor(Doctor doctor) {
         this.doctor = doctor;
     }
-
     public Long getPatientId() {
-        return patient != null ? patient.getId() : null;  // Obtenir l'ID du patient à partir de l'objet patient
+        return this.patient != null ? this.patient.getId() : null;
+    }
+    public Patient getPatient() {
+        return patient;
     }
 
     public void setPatient(Patient patient) {
         this.patient = patient;
-    }
-
-    public Doctor getDoctor() {
-        return doctor;
-    }
-
-    public Patient getPatient() {
-        return patient;
     }
 
     public LocalDate getAppointmentDate() {

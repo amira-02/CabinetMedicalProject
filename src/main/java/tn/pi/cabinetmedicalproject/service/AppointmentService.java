@@ -14,6 +14,11 @@ public class AppointmentService {
     @Autowired
     private AppointmentRepository appointmentRepository;
 
+
+    // Method to get all appointments
+    public List<Appointments> getAllAppointments() {
+        return appointmentRepository.findAll();
+    }
     // Méthode pour obtenir les rendez-vous d'un patient donné
     public List<Appointments> findAppointmentsByPatient(Patient patient) {
         return appointmentRepository.findByPatient(patient);

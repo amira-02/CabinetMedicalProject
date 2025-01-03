@@ -1,30 +1,144 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Appointment Form</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Appointment Request Form</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/webjars/bootstrap-icons/1.10.5/font/bootstrap-icons.css">
+    <script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            margin-top: 50px;
+            max-width: 700px;
+        }
+        .form-header {
+            margin-bottom: 30px;
+        }
+        .btn-primary {
+            border-radius: 25px;
+        }
+        .form-control {
+            border-radius: 8px;
+        }
+        .card {
+            border-radius: 15px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+    </style>
 </head>
 <body>
-<h1>Appointment Form</h1>
-<form th:action="@{/submit-appointment}" th:object="${appointment}" method="post">
-    <input type="hidden" th:field="*{doctor.id}" />
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Medical Office</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/appointments}">Appointments</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/AboutUs}">About Us</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link text-danger" href="#" onclick="logout()">Logout <i class="bi bi-box-arrow-right"></i></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <h2 class="form-header text-center">Appointment Form</h2>
+    <form th:action="@{/submit-appointment}" th:object="${appointment}" method="post" class="card p-4" onsubmit="return confirmSubmission()">
+        <input type="hidden" th:field="*{doctor.id}" />
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="doctorEmail" class="form-label">Doctor Email:</label>
+                <input type="text" id="doctorEmail" class="form-control" th:value="${doctorEmail}" disabled>
+            </div>
+            <div class="col-md-6">
+                <label for="doctorId" class="form-label">Doctor ID:</label>
+                <input type="text" id="doctorId" class="form-control" th:value="${doctorId}" disabled>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="name" class="form-label">Patient Name:</label>
+                <input type="text" id="name" class="form-control" th:field="*{patient.name}">
+            </div>
+            <div class="col-md-6">
+                <label for="telephone" class="form-label">Telephone:</label>
+                <input type="text" id="telephone" class="form-control" th:field="*{patient.telephone}">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="birthDate" class="form-label">Birth Date:</label>
+                <input type="date" id="birthDate" class="form-control" th:field="*{patient.birthDate}">
+            </div>
+            <div class="col-md-6">
+                <label for="appointmentDate" class="form-label">Appointment Date:</label>
+                <input type="date" id="appointmentDate" class="form-control" th:field="*{appointmentDate}">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="appointmentTime" class="form-label">Appointment Time:</label>
+                <input type="time" id="appointmentTime" class="form-control" th:field="*{appointmentTime}">
+            </div>
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-primary px-4">Submit</button>
+        </div>
+    </form>
+</div>
 
-    <label for="name">Name:</label>
-    <input type="text" id="name" th:field="*{patient.name}" />
-    <label for="telephone">Telephone:</label>
+<!-- Toast Notification -->
+<div id="successToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+        <div class="toast-body">
+            Appointment created successfully!
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+</div>
 
+<script>
+    function confirmSubmission() {
+        // Prevent form submission for now
+        event.preventDefault();
 
-    <input type="text" id="telephone" th:field="*{patient.telephone}" />
+        // Show success notification
+        let toast = new bootstrap.Toast(document.getElementById('successToast'));
+        toast.show();
 
-    <label for="birthDate">Birth Date:</label>
-    <input type="date" id="birthDate" th:field="*{patient.birthDate}" />
+        // Redirect after a short delay
+        setTimeout(function() {
+            window.location.href = '/';  // Redirect to Home page
+        },1000  );  // 2 seconds delay for the notification to be seen
+    }
 
-    <label for="appointmentDate">Appointment Date:</label>
-    <input type="date" id="appointmentDate" th:field="*{appointmentDate}" />
-
-    <label for="appointmentTime">Appointment Time:</label>
-    <input type="time" id="appointmentTime" th:field="*{appointmentTime}" />
-
-    <button type="submit">Submit</button>
-</form>
+    function logout() {
+        if (confirm("Are you sure you want to logout?")) {
+            window.location.href = '/logout';  // Redirect to logout URL
+        }
+    }
+</script>
 </body>
 </html>

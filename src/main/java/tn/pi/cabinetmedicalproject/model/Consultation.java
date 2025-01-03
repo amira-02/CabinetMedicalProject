@@ -1,4 +1,3 @@
-
 package tn.pi.cabinetmedicalproject.model;
 
 import javax.persistence.*;
@@ -28,12 +27,21 @@ public class Consultation {
     @Lob
     private String prescription;  // Prescription details
 
+    @Lob
+    private String allergies;  // Allergies details (in English)
+
+    @Lob
+    private String currentTreatments;  // Current treatments (in English)
+
+    @Lob
+    private String medicalHistory;  // Medical history (in English)
+
     @ManyToOne
     @JoinColumn(name = "patient_id", nullable = false)  // Foreign key linking to Patient
     private Patient patient;
 
     @ManyToOne
-    @JoinColumn(name = "doctor_id")  // Référence à l'entité Doctor
+    @JoinColumn(name = "doctor_id")  // Reference to the Doctor entity
     private Doctor doctor;
 
 }

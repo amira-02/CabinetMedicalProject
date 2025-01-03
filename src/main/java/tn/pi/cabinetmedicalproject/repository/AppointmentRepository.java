@@ -10,12 +10,8 @@ import java.util.List;
 
 public interface AppointmentRepository extends JpaRepository<Appointments, Long> {
 
-    // Rechercher les rendez-vous par patient
+
     List<Appointments> findByPatient(Patient patient);
-
-    // Rechercher les rendez-vous par médecin
     List<Appointments> findByDoctor(Doctor doctor);
-
-    // Rechercher les rendez-vous pour un médecin et une date spécifique
-    List<Appointments> findByDoctorAndAppointmentDate(Doctor doctor, LocalDate appointmentDate);
+    List<Appointments> findByDoctorId(Long doctorId);
 }
