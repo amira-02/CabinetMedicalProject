@@ -13,13 +13,13 @@ import tn.pi.cabinetmedicalproject.model.Appointments;
 import tn.pi.cabinetmedicalproject.model.Doctor;
 import tn.pi.cabinetmedicalproject.model.Patient;
 import tn.pi.cabinetmedicalproject.model.User;
-import tn.pi.cabinetmedicalproject.repository.AppointmentRepository;
-import tn.pi.cabinetmedicalproject.repository.DoctorRepository;
 import tn.pi.cabinetmedicalproject.repository.PatientRepository;
 import tn.pi.cabinetmedicalproject.service.AppointmentService;
 import tn.pi.cabinetmedicalproject.service.DoctorService;
-import tn.pi.cabinetmedicalproject.service.PatientService;
 import tn.pi.cabinetmedicalproject.service.UserService;
+import tn.pi.cabinetmedicalproject.service.PatientService;
+import tn.pi.cabinetmedicalproject.repository.AppointmentRepository;
+import tn.pi.cabinetmedicalproject.repository.DoctorRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +38,6 @@ public class AppointmentController {
 
     @Autowired
     private PatientService patientService;
-
     @Autowired
     private PatientRepository patientRepository;
 
@@ -48,68 +47,72 @@ public class AppointmentController {
     @Autowired
     private DoctorRepository doctorRepository;
 
-    // Endpoint to save an appointment
     @PostMapping("/appointments/save")
     public String saveAppointment(Appointments appointment) {
-        appointmentService.saveAppointment(appointment);
-        return "redirect:/appointments"; // Redirect to appointments list
+        appointmentService.saveAppointment(appointment); // Utilisation de saveAppointment du service
+        return "redirect:/appointments"; // Redirection vers la page des rendez-vous
     }
 
-    // Endpoint to display the list of all appointments
-    @GetMapping("/appointments")
-    public String getAppointments(Model model) {
-        List<Appointments> appointments = appointmentService.getAllAppointments();
-        model.addAttribute("appointments", appointments);
-        return "appointments";  // Return appointments view
-    }
-
-    // Endpoint to show the appointment form for a specific doctor
     @GetMapping("/appointmentForm/{doctorId}")
     public String showAppointmentForm(@PathVariable Long doctorId, Model model) {
+        // Récupère le médecin sélectionné
         Doctor doctor = doctorService.findById(doctorId);
-        User user = userService.getCurrentUser();  // Retrieve current user (logged-in user)
 
-        // Create a new patient object and a new appointment
+        // Récupère l'utilisateur connecté
+        User user = userService.getCurrentUser();
+
+        // Crée un nouvel objet Patient (vide pour être rempli par l'utilisateur)
         Patient patient = new Patient();
+
+        // Crée un nouvel objet Appointment avec le médecin et patient
         Appointments appointment = new Appointments();
         appointment.setDoctor(doctor);
         appointment.setPatient(patient);
 
+        // Ajoute les objets nécessaires au modèle
         model.addAttribute("appointment", appointment);
         model.addAttribute("doctor", doctor);
-        return "appointmentForm"; // Return the form view
+
+        return "appointmentForm"; // Retourne la vue du formulaire
     }
 
-    // Endpoint to handle the submission of an appointment form
     @PostMapping("/submit-appointment")
     public String submitAppointment(@ModelAttribute Appointments appointment) {
+        // Récupérer le patient du formulaire de rendez-vous
         Patient patient = appointment.getPatient();
 
-        // Check if phone number and birthdate are provided
-        if (patient != null && patient.getTelephone() != null && !patient.getTelephone().isEmpty() && patient.getBirthDate() != null) {
-            // Save the patient if valid
-            patientService.savePatient(patient);
+        // Vérifier si le téléphone et la date de naissance sont fournis et valides
+        if (patient != null) {
+            if (patient.getTelephone() != null && !patient.getTelephone().isEmpty() && patient.getBirthDate() != null) {
+                // Sauvegarder les informations du patient si elles sont valides
+                patientService.savePatient(patient);  // Sauvegarde du patient
+            }
         }
 
-        // Save the appointment
+        // Sauvegarder le rendez-vous
         appointmentService.saveAppointment(appointment);
 
-        return "redirect:/appointments"; // Redirect to the list of appointments
+        // Rediriger vers la liste des rendez-vous
+        return "redirect:/appointments";
     }
 
-    // Endpoint for the doctor to view their appointments
+    @GetMapping("/appointments")
+    public String showAppointmentsPage(Model model) {
+        // Cette méthode affiche la page principale des rendez-vous
+        return "appointments";  // Cette vue est générée par l'URL /appointments
+    }
+
     @GetMapping("/appointments/doctor")
-    public String showDoctorAppointments(Model model) {
+    public String showAppointments(Model model) {
+        // Cette méthode affiche les rendez-vous spécifiques pour le médecin
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-
-        // Retrieve the doctor using the logged-in username
-        Doctor doctor = doctorRepository.findByname(username);
+        Doctor doctor = doctorRepository.findByname(username); // Modifié pour récupérer le médecin via username
 
         if (doctor != null) {
+            // Récupérer tous les rendez-vous associés au médecin
             List<Appointments> appointments = appointmentRepository.findByDoctor(doctor);
             List<Patient> patients = new ArrayList<>();
-
             for (Appointments appointment : appointments) {
                 Patient patient = appointment.getPatient();
                 if (patient != null) {
@@ -121,27 +124,10 @@ public class AppointmentController {
             model.addAttribute("patients", patients);
         }
 
-        return "appointments";  // Return the appointments page for the doctor
+        return "appointments";  // Cette vue est générée par l'URL /appointments/doctor
     }
 
-    // Optional: Endpoint to show doctor's profile along with appointments (if necessary)
-    @GetMapping("/appointment")
-    public String showDoctorProfile(Model model) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        Doctor doctor = doctorRepository.findByUserEmail(username);
 
-        if (doctor != null) {
-            Long doctorId = doctor.getId();
-            model.addAttribute("doctorEmail", doctor.getUser().getEmail());
-            model.addAttribute("doctorId", doctorId);
 
-            // Retrieve appointments for this doctor
-            List<Appointments> appointments = appointmentRepository.findByDoctor(doctor);
-            model.addAttribute("appointments", appointments);
-        } else {
-            model.addAttribute("error", "No doctor found for the logged-in user.");
-        }
 
-        return "appointments"; // Return the appointments page for the doctor
-    }
 }

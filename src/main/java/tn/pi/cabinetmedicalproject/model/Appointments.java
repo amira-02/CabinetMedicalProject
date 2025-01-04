@@ -1,5 +1,7 @@
 package tn.pi.cabinetmedicalproject.model;
 
+import tn.pi.cabinetmedicalproject.enums.AppointmentStatus;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,23 +24,18 @@ public class Appointments {
     private LocalDate appointmentDate;
     private LocalTime appointmentTime;
 
-    // Getter for 'date'
-//    public Date getDate() {
-//        return date;
-//    }
-//
-//    // Setter for 'date'
-//    public void setDate(Date date) {
-//        this.date = date;
-//    }
-    // Getters et setters
-//    public LocalDateTime getTime() {
-//        return time;
-//    }
-//
-//    public void setTime(LocalDateTime time) {
-//        this.time = time;
-//    }
+    @Enumerated(EnumType.STRING)
+    private AppointmentStatus status = AppointmentStatus.SCHEDULED;  // Default status to 'SCHEDULED'
+
+    // Getters and setters
+    public AppointmentStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(AppointmentStatus status) {
+        this.status = status;
+    }
+
     public Long getId() {
         return id;
     }

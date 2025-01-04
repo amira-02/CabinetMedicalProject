@@ -15,4 +15,16 @@ public class PatientService {
     public Patient savePatient(Patient patient) {
         return patientRepository.save(patient);  // Enregistrer le patient dans la base de données
     }
+
+
+
+
+    // Méthode pour récupérer un patient par son ID
+    public Patient getPatientById(Long id) {
+        return patientRepository.findById(id).orElse(null);  // Renvoie le patient ou null si pas trouvé
+    }
+
+
+
+
 }

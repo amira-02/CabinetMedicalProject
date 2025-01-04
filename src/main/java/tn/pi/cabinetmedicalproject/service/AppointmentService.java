@@ -3,7 +3,6 @@ package tn.pi.cabinetmedicalproject.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.pi.cabinetmedicalproject.model.Appointments;
-import tn.pi.cabinetmedicalproject.model.Patient;
 import tn.pi.cabinetmedicalproject.repository.AppointmentRepository;
 
 import java.util.List;
@@ -14,17 +13,18 @@ public class AppointmentService {
     @Autowired
     private AppointmentRepository appointmentRepository;
 
+    // Méthode pour enregistrer un rendez-vous
+    public void saveAppointment(Appointments appointment) {
+        appointmentRepository.save(appointment);  // Utilise le repository pour sauvegarder le rendez-vous
+    }
 
-    // Method to get all appointments
+    // Méthode pour récupérer un rendez-vous par son ID
+    public Appointments getAppointmentById(Long id) {
+        return appointmentRepository.findById(id).orElse(null);  // Renvoie le rendez-vous ou null si pas trouvé
+    }
+
+    // Méthode pour récupérer tous les rendez-vous
     public List<Appointments> getAllAppointments() {
-        return appointmentRepository.findAll();
+        return appointmentRepository.findAll();  // Récupère tous les rendez-vous de la base de données
     }
-    // Méthode pour obtenir les rendez-vous d'un patient donné
-    public List<Appointments> findAppointmentsByPatient(Patient patient) {
-        return appointmentRepository.findByPatient(patient);
-    }
-    public Appointments saveAppointment(Appointments appointment) {
-        return appointmentRepository.save(appointment); // Enregistre l'entité Appointment dans la base de données
-    }
-
 }
