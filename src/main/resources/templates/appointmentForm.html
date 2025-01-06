@@ -104,14 +104,19 @@
             </div>
             <div class="row mb-3">
                 <div class="row mb-3">
+<!--                    <div class="col-md-6">-->
+<!--                        <label for="status" class="form-label">Status:</label>-->
+<!--                        <select id="status" class="form-control" th:field="*{status}">-->
+<!--                            <option value="SCHEDULED" th:selected="${appointment.status == 'SCHEDULED'}">Scheduled</option>-->
+<!--                            <option value="COMPLETED" th:selected="${appointment.status == 'COMPLETED'}">Completed</option>-->
+<!--                            <option value="CANCELED" th:selected="${appointment.status == 'CANCELED'}">Canceled</option>-->
+<!--                        </select>-->
+<!--                    </div>-->
                     <div class="col-md-6">
                         <label for="status" class="form-label">Status:</label>
-                        <select id="status" class="form-control" th:field="*{status}">
-                            <option value="SCHEDULED" th:selected="${appointment.status == 'SCHEDULED'}">Scheduled</option>
-                            <option value="COMPLETED" th:selected="${appointment.status == 'COMPLETED'}">Completed</option>
-                            <option value="CANCELED" th:selected="${appointment.status == 'CANCELED'}">Canceled</option>
-                        </select>
+                        <input type="text" id="status" class="form-control" th:value="'SCHEDULED'" readonly />
                     </div>
+
                 </div>
 
             </div>

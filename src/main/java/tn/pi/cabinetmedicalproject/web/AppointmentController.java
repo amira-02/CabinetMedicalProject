@@ -1,30 +1,26 @@
 package tn.pi.cabinetmedicalproject.web;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import tn.pi.cabinetmedicalproject.model.Appointments;
 import tn.pi.cabinetmedicalproject.model.Doctor;
 import tn.pi.cabinetmedicalproject.model.Patient;
-import tn.pi.cabinetmedicalproject.model.User;
-import tn.pi.cabinetmedicalproject.repository.PatientRepository;
-import tn.pi.cabinetmedicalproject.service.AppointmentService;
-import tn.pi.cabinetmedicalproject.service.DoctorService;
-import tn.pi.cabinetmedicalproject.service.UserService;
-import tn.pi.cabinetmedicalproject.service.PatientService;
 import tn.pi.cabinetmedicalproject.repository.AppointmentRepository;
 import tn.pi.cabinetmedicalproject.repository.DoctorRepository;
+import tn.pi.cabinetmedicalproject.service.AppointmentService;
+import tn.pi.cabinetmedicalproject.service.DoctorService;
+import tn.pi.cabinetmedicalproject.service.PatientService;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Controller
+@RequestMapping("/appointments")
 public class AppointmentController {
 
     @Autowired
@@ -34,12 +30,7 @@ public class AppointmentController {
     private DoctorService doctorService;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
     private PatientService patientService;
-    @Autowired
-    private PatientRepository patientRepository;
 
     @Autowired
     private AppointmentRepository appointmentRepository;
@@ -47,87 +38,67 @@ public class AppointmentController {
     @Autowired
     private DoctorRepository doctorRepository;
 
-    @PostMapping("/appointments/save")
-    public String saveAppointment(Appointments appointment) {
-        appointmentService.saveAppointment(appointment); // Utilisation de saveAppointment du service
-        return "redirect:/appointments"; // Redirection vers la page des rendez-vous
+    // Endpoint to save an appointment
+    @PostMapping("/save")
+    public String saveAppointment(@ModelAttribute Appointments appointment) {
+        appointmentService.saveAppointment(appointment);
+        return "redirect:/appointments"; // Redirect to appointments list
     }
 
-    @GetMapping("/appointmentForm/{doctorId}")
+    // Endpoint to display all appointments (for admin or general users)
+    @GetMapping
+    public String getAllAppointments(Model model) {
+        List<Appointments> appointments = appointmentService.getAllAppointments();
+        model.addAttribute("appointments", appointments);
+        return "appointments"; // Thymeleaf view for appointments
+    }
+
+    // Endpoint to display the appointment form for a specific doctor
+    @GetMapping("/form/{doctorId}")
     public String showAppointmentForm(@PathVariable Long doctorId, Model model) {
-        // Récupère le médecin sélectionné
         Doctor doctor = doctorService.findById(doctorId);
+        if (doctor == null) {
+            model.addAttribute("error", "Doctor not found");
+            return "error"; // Handle missing doctor scenario
+        }
 
-        // Récupère l'utilisateur connecté
-        User user = userService.getCurrentUser();
-
-        // Crée un nouvel objet Patient (vide pour être rempli par l'utilisateur)
-        Patient patient = new Patient();
-
-        // Crée un nouvel objet Appointment avec le médecin et patient
         Appointments appointment = new Appointments();
         appointment.setDoctor(doctor);
-        appointment.setPatient(patient);
-
-        // Ajoute les objets nécessaires au modèle
         model.addAttribute("appointment", appointment);
         model.addAttribute("doctor", doctor);
-
-        return "appointmentForm"; // Retourne la vue du formulaire
+        return "appointmentForm"; // Thymeleaf view for the form
     }
 
-    @PostMapping("/submit-appointment")
-    public String submitAppointment(@ModelAttribute Appointments appointment) {
-        // Récupérer le patient du formulaire de rendez-vous
-        Patient patient = appointment.getPatient();
-
-        // Vérifier si le téléphone et la date de naissance sont fournis et valides
-        if (patient != null) {
-            if (patient.getTelephone() != null && !patient.getTelephone().isEmpty() && patient.getBirthDate() != null) {
-                // Sauvegarder les informations du patient si elles sont valides
-                patientService.savePatient(patient);  // Sauvegarde du patient
-            }
-        }
-
-        // Sauvegarder le rendez-vous
-        appointmentService.saveAppointment(appointment);
-
-        // Rediriger vers la liste des rendez-vous
-        return "redirect:/appointments";
-    }
-
-    @GetMapping("/appointments")
-    public String showAppointmentsPage(Model model) {
-        // Cette méthode affiche la page principale des rendez-vous
-        return "appointments";  // Cette vue est générée par l'URL /appointments
-    }
-
-    @GetMapping("/appointments/doctor")
-    public String showAppointments(Model model) {
-        // Cette méthode affiche les rendez-vous spécifiques pour le médecin
+    // Endpoint to display appointments for the logged-in doctor
+    @GetMapping("/doctor")
+    public String showDoctorAppointments(Model model) {
+        // Get the current authenticated user's username (email or username)
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        Doctor doctor = doctorRepository.findByname(username); // Modifié pour récupérer le médecin via username
 
-        if (doctor != null) {
-            // Récupérer tous les rendez-vous associés au médecin
-            List<Appointments> appointments = appointmentRepository.findByDoctor(doctor);
-            List<Patient> patients = new ArrayList<>();
-            for (Appointments appointment : appointments) {
-                Patient patient = appointment.getPatient();
-                if (patient != null) {
-                    patients.add(patient);
-                }
-            }
+        // Find the doctor by the username
+        Doctor doctor = doctorRepository.findByUserEmail(username); // ou findByEmail si tu utilises l'email pour te connecter
 
-            model.addAttribute("appointments", appointments);
-            model.addAttribute("patients", patients);
+
+        if (doctor == null) {
+            model.addAttribute("appointments", Collections.emptyList());
+            return "appointments"; // No appointments if doctor not found
         }
 
-        return "appointments";  // Cette vue est générée par l'URL /appointments/doctor
+        // Get appointments for the specific doctor
+        List<Appointments> appointments = appointmentRepository.findByDoctor(doctor);
+        model.addAttribute("appointments", appointments);
+        return "appointments"; // Thymeleaf view for doctor's appointments
     }
 
-
-
-
+    // Optional: Endpoint for submitting an appointment form
+    @PostMapping("/submit")
+    public String submitAppointment(@ModelAttribute Appointments appointment) {
+        Patient patient = appointment.getPatient();
+        if (patient != null && patient.getTelephone() != null && !patient.getTelephone().isEmpty() && patient.getBirthDate() != null) {
+            patientService.savePatient(patient); // Save patient details if valid
+        }
+        appointmentService.saveAppointment(appointment); // Save appointment
+        return "redirect:/appointments/doctor"; // Redirect to doctor's appointments
+    }
 }
