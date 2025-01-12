@@ -1,4 +1,5 @@
 package tn.pi.cabinetmedicalproject.web;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,8 @@ import java.util.List;
 @Controller
 @RequestMapping("/appointments")
 public class AppointmentController {
+
+    private static final Logger logger = LoggerFactory.getLogger(AppointmentController.class);
 
     @Autowired
     private AppointmentService appointmentService;
@@ -77,9 +80,7 @@ public class AppointmentController {
         String username = authentication.getName();
 
         // Find the doctor by the username
-        Doctor doctor = doctorRepository.findByUserEmail(username); // ou findByEmail si tu utilises l'email pour te connecter
-
-
+        Doctor doctor = doctorRepository.findByUserEmail(username); // Or findByEmail if using email to log in
         if (doctor == null) {
             model.addAttribute("appointments", Collections.emptyList());
             return "appointments"; // No appointments if doctor not found
@@ -93,12 +94,28 @@ public class AppointmentController {
 
     // Optional: Endpoint for submitting an appointment form
     @PostMapping("/submit")
-    public String submitAppointment(@ModelAttribute Appointments appointment) {
+    public String submitAppointment(@ModelAttribute Appointments appointment, Model model) {
+        // Check if the patient data is provided
         Patient patient = appointment.getPatient();
-        if (patient != null && patient.getTelephone() != null && !patient.getTelephone().isEmpty() && patient.getBirthDate() != null) {
-            patientService.savePatient(patient); // Save patient details if valid
+        if (patient == null) {
+            model.addAttribute("error", "Patient information is missing");
+            return "appointments" ; // Show error in form if patient info is missing
         }
-        appointmentService.saveAppointment(appointment); // Save appointment
-        return "redirect:/appointments/doctor"; // Redirect to doctor's appointments
+
+        // Check if phone number and birthdate are provided for the patient
+        if (patient.getTelephone() != null && !patient.getTelephone().isEmpty() && patient.getBirthDate() != null) {
+            // Save the patient
+            patientService.savePatient(patient);
+        } else {
+            model.addAttribute("error", "Phone number and birthdate must be provided");
+            return "appointments"; // Show error in form if details are missing
+        }
+
+        // Save the appointment
+        appointmentService.saveAppointment(appointment);
+
+        logger.info("Appointment saved for patient: {} with doctor: {}", patient.getName(), appointment.getDoctor().getName());
+
+        return "Home"; // Redirect to appointments list after successful submission
     }
 }

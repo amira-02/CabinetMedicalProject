@@ -142,7 +142,7 @@
                 <p><i class="bi bi-telephone"></i><span th:text="${doctor.phone}">Phone</span></p>
                 <p><i class="bi bi-info-circle"></i><span th:text="${doctor.description}">Description</span></p>
 <!--                <a th:href="@{/appointment-form}" class="btn custom-btn">Make Appointment</a>-->
-                <a th:href="@{/appointmentForm/{doctorId}(doctorId=${doctor.id})}" class="btn custom-btn">Make Appointment</a>
+                <a th:href="@{/appointments/form/{doctorId}(doctorId=${doctor.id})}" class="btn custom-btn">Make Appointment</a>
 
             </div>
         </div>

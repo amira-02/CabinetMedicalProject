@@ -145,23 +145,29 @@
         <table class="table">
             <thead>
             <tr>
-                <th>doc id </th>
+                <th>Doctor ID</th>
                 <th>Patient Name</th>
                 <th>Date</th>
                 <th>Time</th>
                 <th>Status</th>
-
+                <th>Action</th> <!-- Nouvelle colonne pour les actions -->
             </tr>
             </thead>
             <tbody>
             <tr th:each="appointment : ${appointments}">
-                <td th:text="${appointment.doctor.id}">Patient Name</td>
+                <td th:text="${appointment.doctor.id}">Doctor ID</td>
                 <td th:text="${appointment.patient.name}">Patient Name</td>
                 <td th:text="${appointment.appointmentDate}">Date</td>
                 <td th:text="${appointment.appointmentTime}">Time</td>
                 <td th:text="${appointment.status}">Status</td>
+                <td>
+                    <a th:href="@{/consultation/start/{id}(id=${appointment.id})}" class="btn btn-success">Start Consultation</a> <!-- Bouton Start Consultation -->
+                </td>
+
+
             </tr>
             </tbody>
+
         </table>
     </div>
     <div th:if="${appointments == null or appointments.isEmpty()}">
