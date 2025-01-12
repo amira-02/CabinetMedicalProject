@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="ISO-8859-1">
+    <meta charset="UTF-8">
     <title>Registration</title>
     <link rel="stylesheet"
           href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -10,25 +10,23 @@
 </head>
 <body>
 
-<!-- create navigation bar ( header) -->
+<!-- Create navigation bar (header) -->
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed"
                     data-toggle="collapse" data-target="#navbar" aria-expanded="false"
                     aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span> <span
-                    class="icon-bar"></span> <span class="icon-bar"></span> <span
-                    class="icon-bar"></span>
+                <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span>
+                <span class="icon-bar"></span> <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#" th:href="@{/}">Registration and
-                Login Module</a>
+            <a class="navbar-brand" href="#" th:href="@{/}">Registration and Login Module</a>
         </div>
     </div>
 </nav>
 
-<br>
-<br>
+<br><br>
+
 <!-- Create HTML registration form -->
 <div class="container">
     <div class="row">
@@ -36,63 +34,68 @@
 
             <!-- success message -->
             <div th:if="${param.success}">
-                <div class="alert alert-info">You've successfully registered
-                    to our awesome app!</div>
+                <div class="alert alert-info">You've successfully registered to our awesome app!</div>
             </div>
 
             <h1>Registration</h1>
 
             <form th:action="@{/registration}" method="post" th:object="${user}">
 
-
-<!--                <div class="form-group">-->
-<!--                    <label class="control-label" for="lastName">  Name </label> <input-->
-<!--                        id="lastName" class="form-control" th:field="*{name}"-->
-<!--                        required autofocus="autofocus" />-->
-<!--                </div>-->
-
+                <!-- User email -->
                 <div class="form-group">
-                    <label class="control-label" for="email"> Email </label> <input
-                        id="email" class="form-control" th:field="*{email}" required
-                        autofocus="autofocus" />
+                    <label class="control-label" for="email"> Email </label>
+                    <input id="email" class="form-control" th:field="*{email}" required autofocus="autofocus" />
                 </div>
 
+                <!-- User password -->
                 <div class="form-group">
-                    <label class="control-label" for="password"> Password </label> <input
-                        id="password" class="form-control" type="password"
-                        th:field="*{password}" required autofocus="autofocus" />
+                    <label class="control-label" for="password"> Password </label>
+                    <input id="password" class="form-control" type="password" th:field="*{password}" required />
                 </div>
 
+                <!-- User full name (Patient) -->
+                <div class="form-group">
+                    <label class="control-label" for="name"> Name </label>
+                    <input id="name" class="form-control" th:field="*{name}" required />
+                </div>
 
+                <!-- Patient phone number -->
+                <div class="form-group">
+                    <label class="control-label" for="telephone"> Telephone </label>
+                    <input id="telephone" class="form-control" th:field="*{telephone}" required />
+                </div>
 
-<!--                <div class="form-group">-->
-<!--                    <label>Role</label><br>-->
-<!--                    &lt;!&ndash; Bouton radio pour le rôle Doctor &ndash;&gt;-->
-<!--                    <input type="radio" id="roleDoctor" name="role" th:field="*{role}" value="ROLE_DOCTOR" required />-->
-<!--                    <label for="roleDoctor">Doctor</label>-->
-<!--                    <input type="radio" id="roleUser" name="role" th:field="*{role}" value="ROLE_USER" required />-->
-<!--                    <label for="roleUser">User</label>-->
-<!--                    &lt;!&ndash; Bouton radio pour le rôle Pharmacy &ndash;&gt;-->
-<!--                    <input type="radio" id="rolePharmacy" name="role" th:field="*{role}" value="ROLE_PHARMACY" />-->
-<!--                    <label for="rolePharmacy">Pharmacy</label>-->
+                <!-- Patient birth date -->
+                <div class="form-group">
+                    <label class="control-label" for="birthDate"> Birth Date </label>
+                    <input id="birthDate" class="form-control" type="date" th:field="*{birthDate}" required />
+                </div>
 
-<!--                    &lt;!&ndash; Vous pouvez ajouter d'autres rôles si nécessaire &ndash;&gt;-->
-<!--                </div>-->
+                <!-- Gender selection -->
+                <div class="form-group">
+                    <label>Gender</label><br>
+                    <input type="radio" id="male" name="gender" th:field="*{gender}" value="Male" />
+                    <label for="male">Male</label>
+                    <input type="radio" id="female" name="gender" th:field="*{gender}" value="Female" />
+                    <label for="female">Female</label>
+                    <input type="radio" id="other" name="gender" th:field="*{gender}" value="Other" />
+                    <label for="other">Other</label>
+                </div>
 
+                <!-- Hidden input for role set to ROLE_USER -->
+                <input type="hidden" th:field="*{role}" value="ROLE_USER" />
 
-
-
-
-
-
+                <!-- Submit button -->
                 <div class="form-group">
                     <button type="submit" class="btn btn-success">Register</button>
-                    <span>Already registered? <a href="/" th:href="@{/login}">Login
-								here</a></span>
+                    <span>Already registered? <a href="/" th:href="@{/login}">Login here</a></span>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </body>
 </html>
