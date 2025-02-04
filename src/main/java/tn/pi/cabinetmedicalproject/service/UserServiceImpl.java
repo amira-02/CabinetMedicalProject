@@ -1,5 +1,6 @@
 package tn.pi.cabinetmedicalproject.service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -42,22 +43,24 @@ public class UserServiceImpl implements UserService {
     public User save(UserRegistrationDto registrationDto) {
         // Créer un nouvel utilisateur
         User user = new User(
-                registrationDto.getName(),  // Le 'name' du DTO
-                registrationDto.getEmail(),  // L'email
-                passwordEncoder.encode(registrationDto.getPassword()),  // Le mot de passe crypté
-                registrationDto.getRole()  // Le rôle
+                registrationDto.getName(),
+                registrationDto.getEmail(),
+                passwordEncoder.encode(registrationDto.getPassword()),
+                registrationDto.getRole()
         );
 
         // Sauvegarder l'utilisateur
         user = userRepository.save(user);
 
-        // Créer un patient associé à cet utilisateur
+        // Créer un patient associé
         Patient patient = new Patient();
         patient.setName(registrationDto.getName());
         patient.setTelephone(registrationDto.getTelephone());
         patient.setBirthDate(registrationDto.getBirthDate());
-        patient.setUser(user);  // Associer l'utilisateur au patient
+        patient.setGender(registrationDto.getGender()); // Ajoutez cette ligne
         user.setRole("ROLE_USER");
+        patient.setUser(user);
+
         // Sauvegarder le patient
         patientRepository.save(patient);
 
@@ -65,19 +68,41 @@ public class UserServiceImpl implements UserService {
     }
 
 
+
+//    @Override
+//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+//        User user = userRepository.findByEmail(username);
+//        if (user == null) {
+//            throw new UsernameNotFoundException("Invalid username or password.");
+//        }
+//        System.out.println("User found: " + user);
+//        return new org.springframework.security.core.userdetails.User(
+//                user.getEmail(),
+//                user.getPassword(),
+//                mapRolesToAuthorities(user.getRole())
+//        );
+//    }
+
+
+
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(username);
         if (user == null) {
-            throw new UsernameNotFoundException("Invalid username or password.");
+            throw new UsernameNotFoundException("Utilisateur introuvable avec l'email : " + username);
         }
-        System.out.println("User found: " + user);
-        return new org.springframework.security.core.userdetails.User(
-                user.getEmail(),
-                user.getPassword(),
-                mapRolesToAuthorities(user.getRole())
-        );
+
+        // Récupère les rôles de l'utilisateur
+        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(user.getRole()));
+
+        // Retourne un objet UserDetails
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), authorities);
     }
+
+
+
 
     @Override
     public User getCurrentUser() {

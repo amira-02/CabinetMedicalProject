@@ -28,6 +28,7 @@ public class Patient {
     @Column(nullable = false)
     private String gender;
 
+
     private String pathology;
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -37,8 +38,9 @@ public class Patient {
     private Set<Doctor> doctors;
 
     @OneToOne
-    @JoinColumn(name = "user_id", nullable = false, unique = true)
-    private User user; // One-to-one relationship with User
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+    // One-to-one relationship with User
 
     // Constructors
     public Patient() {}

@@ -2,8 +2,10 @@ package tn.pi.cabinetmedicalproject.model;
 
 import javax.persistence.*;
 import lombok.*;
+import tn.pi.cabinetmedicalproject.enums.AppointmentStatus;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 @Setter
@@ -18,8 +20,14 @@ public class Consultation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private LocalDate date;  // Date of the consultation
+    @ManyToOne
+    @JoinColumn(name = "patient_id", nullable = false)
+    private Patient patient;
+
+    @ManyToOne
+    @JoinColumn(name = "doctor_id", nullable = false)
+    private Doctor doctor;
+    // Date of the consultation
 
     @Lob
     private String description;  // Description of the consultation
@@ -36,12 +44,29 @@ public class Consultation {
     @Lob
     private String medicalHistory;  // Medical history (in English)
 
-    @ManyToOne
-    @JoinColumn(name = "patient_id", nullable = false)  // Foreign key linking to Patient
-    private Patient patient;
+    private LocalTime time;
+    @Column(nullable = false)
+    private LocalDate date;
+    @Enumerated(EnumType.STRING)
+    private AppointmentStatus status = AppointmentStatus.SCHEDULED;
 
-    @ManyToOne
-    @JoinColumn(name = "doctor_id")  // Reference to the Doctor entity
-    private Doctor doctor;
 
+        public Patient getPatient() {
+        return patient;
+    }
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate appointmentDate) {
+        this.date = appointmentDate;
+    }
+
+    public LocalTime getTime() {
+        return time;
+    }
+
+    public void setTime(LocalTime appointmentTime) {
+        this.time =appointmentTime;
+    }
 }

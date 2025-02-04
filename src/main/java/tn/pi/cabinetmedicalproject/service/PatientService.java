@@ -11,40 +11,33 @@ import tn.pi.cabinetmedicalproject.web.dto.UserRegistrationDto;
 @Service
 public class PatientService {
 
+
+
+    // Fetch the patient by their email address
     @Autowired
     private PatientRepository patientRepository;
 
     @Autowired
     private UserRepository userRepository;
 
+
+    // Method to find a patient by the associated user
+    public Patient findByUser(User user) {
+        return patientRepository.findByUser(user);
+    }
      //Méthode pour sauvegarder un patient à partir d'un objet Patient
     public Patient savePatient(Patient patient) {
         return patientRepository.save(patient); // Enregistre le Patient dans la base de données
     }
 
-    // Méthode pour enregistrer un patient à partir d'un DTO
-//    public Patient savePatient(UserRegistrationDto registrationDto) {
-//        // Crée un nouvel utilisateur à partir des données du DTO
-//        User user = new User();
-//        user.setEmail(registrationDto.getEmail());
-//        user.setPassword(registrationDto.getPassword());
-//        user.setRole("USER_ROLE"); // Définir le rôle par défaut
-//
-//        // Sauvegarde de l'utilisateur dans la base de données
-//        user = userRepository.save(user);
-//
-//        // Crée un objet Patient et associe-le à l'utilisateur
-//        Patient patient = new Patient();
-//        patient.setUser(user); // Associe l'utilisateur au patient
-//        patient.setTelephone(registrationDto.getTelephone());
-//        patient.setBirthDate(registrationDto.getBirthDate());
-//        patient.setHeight((float) registrationDto.getHeight());
-//        patient.setWeight((float) registrationDto.getWeight());
-//        patient.setGender(registrationDto.getGender());
-//
-//        // Sauvegarde du patient dans la base de données
-//        return patientRepository.save(patient);
-//    }
+
+    public Patient findByEmail(String email) {
+        return patientRepository.findByUserEmail(email);  // This is the correct method to call
+    }
+    public Patient findByUserId(Long userId) {
+        return patientRepository.findByUserId(userId);
+    }
+
 
     // Méthode pour récupérer un patient par son ID
     public Patient getPatientById(Long id) {

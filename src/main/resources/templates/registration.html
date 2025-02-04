@@ -71,19 +71,20 @@
                     <input id="birthDate" class="form-control" type="date" th:field="*{birthDate}" required />
                 </div>
 
-                <!-- Gender selection -->
-                <div class="form-group">
-                    <label>Gender</label><br>
-                    <input type="radio" id="male" name="gender" th:field="*{gender}" value="Male" />
-                    <label for="male">Male</label>
-                    <input type="radio" id="female" name="gender" th:field="*{gender}" value="Female" />
-                    <label for="female">Female</label>
-                    <input type="radio" id="other" name="gender" th:field="*{gender}" value="Other" />
-                    <label for="other">Other</label>
+                <div>
+                    <label for="gender">Gender</label>
+                    <select id="gender" name="gender" required>
+                        <option value="">-- Select Gender --</option>
+                        <option value="MALE">Male</option>
+                        <option value="FEMALE">Female</option>
+                        <option value="OTHER">Other</option>
+                    </select>
                 </div>
 
-                <!-- Hidden input for role set to ROLE_USER -->
-                <input type="hidden" th:field="*{role}" value="ROLE_USER" />
+
+                    <input id="role" type="hidden" th:field="*{role}" value="ROLE_USER"  required />
+
+
 
                 <!-- Submit button -->
                 <div class="form-group">

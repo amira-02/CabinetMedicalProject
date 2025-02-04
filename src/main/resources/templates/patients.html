@@ -184,7 +184,7 @@
                         <td th:text="${p.birthDate != null ? p.birthDate.format(T(java.time.format.DateTimeFormatter).ofPattern('yyyy-MM-dd')) : ''}"></td>
                         <td th:text="${p.height}"></td>
                         <td th:text="${p.weight}"></td>
-                        <td th:text="${p.gender ? 'Male' : 'Female'}"></td>
+<!--                        <td th:text="${p.gender ? 'Male' : 'Female'}"></td>-->
                         <td th:text="${p.pathology}"></td>
                         <td>
                             <a href="#" onclick="return confirm('Are you sure?')" th:href="@{delete(id=${p.id}, keyword=${keyword}, page=${currentPage})}" class="btn btn-danger">
