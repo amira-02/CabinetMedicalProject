@@ -42,7 +42,8 @@ public class ConsultationController {
 
     @Autowired
     private DoctorService doctorService;
-
+    @Autowired
+    private DoctorRepository doctorRepository;
     @Autowired
     private PatientService patientService;
     @Autowired
@@ -98,10 +99,8 @@ public class ConsultationController {
         model.addAttribute("consultationPatient", consultation.getPatient());
 
         // Redirect or return the view
-        return "appointments";  // Or wherever you need to redirect after submission
+        return "Home";  // Or wherever you need to redirect after submission
     }
-
-
     @PostMapping("/save")
     public String saveConsultation(@ModelAttribute Consultation consultation, Model model) {
         logger.info("Attempting to save consultation...");
@@ -137,8 +136,6 @@ public class ConsultationController {
             return "appointments"; // Affiche une erreur en cas d'exception
         }
     }
-
-
     @GetMapping("/form/{doctorId}")
     public String showConsultationForm(@PathVariable Long doctorId, Model model) {
         // Récupérer l'utilisateur connecté
@@ -173,6 +170,29 @@ public class ConsultationController {
 
         return "appointmentForm"; // Thymeleaf view
     }
+
+
+        // Endpoint to display Consultation for the logged-in doctor
+        @GetMapping("/doctor")
+        public String showDoctorConsultation(Model model) {
+            // Récupérer l'utilisateur connecté
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String username = authentication.getName();
+
+            // Trouver le médecin associé à cet utilisateur
+            Doctor doctor = doctorRepository.findByUserEmail(username);
+            if (doctor == null) {
+                model.addAttribute("consultation", Collections.emptyList());
+                return "appointments"; // Rediriger vers la page sans consultations
+            }
+
+            // Récupérer les consultations du médecin
+            List<Consultation> consultations = consultationRepository.findByDoctor(doctor);
+            model.addAttribute("consultation", consultations);
+
+            return "appointments"; // Affichage Thymeleaf
+        }
+
 
 }
 
@@ -327,25 +347,6 @@ public class ConsultationController {
 
 
 
-//    // Endpoint to display Consultation for the logged-in doctor
-//    @GetMapping("/doctor")
-//    public String showDoctorConsultation(Model model) {
-//        // Get the current authenticated user's username (email or username)
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        String username = authentication.getName();
-//
-//        // Find the doctor by the username
-//        Doctor doctor = doctorRepository.findByUserEmail(username); // Or findByEmail if using email to log in
-//        if (doctor == null) {
-//            model.addAttribute("Consultation", Collections.emptyList());
-//            return "appointments"; // No Consultation if doctor not found
-//        }
-//
-//        // Get Consultation for the specific doctor
-//        List<Consultation> Consultation = ConsultationRepository.findByDoctor(doctor);
-//        model.addAttribute("Consultation", Consultation);
-//        return "appointments"; // Thymeleaf view for doctor's Consultation
-//    }
 
 
 

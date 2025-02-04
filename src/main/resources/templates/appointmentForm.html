@@ -6,79 +6,85 @@
     <title>Doctor Appointment Request Form</title>
     <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="/webjars/bootstrap-icons/1.10.5/font/bootstrap-icons.css">
-    <script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
             margin: 0;
             padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
         .container {
-            margin-top: 50px;
-            max-width: 700px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            max-width: 800px;
+            width: 100%;
         }
-        .form-header {
-            margin-bottom: 30px;
+        .doctor-image {
+            max-width: 150px;
+            border-radius: 10px;
         }
         .btn-primary {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            border: none;
             border-radius: 25px;
+            padding: 12px 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background 0.3s ease;
         }
-        .form-control {
-            border-radius: 8px;
-        }
-        .card {
-            border-radius: 15px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        .toast {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 9999;
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #0056b3, #003d80);
         }
     </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">Medical Office</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/appointments}">Appointments</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/AboutUs}">About Us</a>
-                </li>
-            </ul>
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link text-danger" href="#" onclick="logout()">Logout <i class="bi bi-box-arrow-right"></i></a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
 
 <div class="container">
-    <h2 class="form-header text-center">Doctor Appointment Request Form</h2>
+    <div class="form-header text-center mb-4">
+        <h2>Doctor Appointment Request</h2>
+        <p>Fill out the form below to request an appointment.</p>
+    </div>
+
     <form th:action="@{/Consultation/submit}" method="post" th:object="${consultation}" onsubmit="return confirmSubmission(event)">
         <input type="hidden" th:field="*{doctor.id}" />
 
-        <!-- Doctor information -->
-        <div class="row mb-3">
-            <div class="col-md-6">
+        <div class="row align-items-center mb-4">
+            <div class="col-md-4 text-center">
+                <img th:src="@{${doctor.imagePath}}" alt="Doctor Image" class="img-fluid doctor-image">
+            </div>
+            <div class="col-md-8">
+
+                <div class="col-md-8">
                 <label for="doctorname" class="form-label">Doctor Name:</label>
                 <input type="text" id="doctorname" class="form-control" th:value="${doctor.name}" disabled>
+
+                <label for="phone" class="form-label">Doctor Phone:</label>
+                <input type="text" id="phone" class="form-control" th:value="${doctor.phone}" disabled>
+                </div>
+
+
+                <div class="col-md-8">
+                <label for="docadress" class="form-label">Doctor Adress  :</label>
+                <input type="text" id="docadress" class="form-control" th:value="${doctor.address}" disabled>
+                </div>
             </div>
-            <!-- More doctor info here -->
+
+<!--            -->
+<!--                <label for="phone" class="form-label">Doctor Phone:</label>-->
+<!--                <input type="text" id="phone" class="form-control" th:value="${doctor.phone}" disabled>-->
+<!--           -->
+
+
+
         </div>
 
-        <!-- Patient info (pre-filled from the logged-in user) -->
         <div class="row mb-3">
             <div class="col-md-6">
                 <label for="patientbirthDate" class="form-label">Patient Birth Date:</label>
@@ -90,9 +96,16 @@
             </div>
         </div>
 
-        <!-- Date and Time Inputs -->
-        <input type="date" id="Date" class="form-control" th:field="*{date}" required>
-        <input type="time" id="Time" class="form-control" th:field="*{time}" required>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="Date" class="form-label">Appointment Date:</label>
+                <input type="date" id="Date" class="form-control" th:field="*{date}" required>
+            </div>
+            <div class="col-md-6">
+                <label for="Time" class="form-label">Appointment Time:</label>
+                <input type="time" id="Time" class="form-control" th:field="*{time}" required>
+            </div>
+        </div>
 
         <div class="row mb-3">
             <div class="col-md-6">
@@ -102,14 +115,11 @@
         </div>
 
         <div class="text-center">
-            <button type="submit" class="btn btn-primary px-4">Submit</button>
+            <button type="submit" class="btn btn-primary">Schedule Appointment </button>
         </div>
     </form>
-
 </div>
-
-<!-- Toast Notification -->
-<div id="successToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+<div id="successToast" class="toast align-items-center text-white bg-success border-0 position-fixed top-0 end-0 m-3" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="d-flex">
         <div class="toast-body" id="toastMessage">
             Appointment created successfully!
@@ -117,33 +127,29 @@
         <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
 </div>
+<script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
+<!-- Custom Scripts -->
 <script>
     function confirmSubmission(event) {
-        event.preventDefault();  // Prevent form submission for now
+        event.preventDefault();  // Empêcher la soumission immédiate
 
-        // Get the date and time values
         let date = document.getElementById("Date").value;
         let time = document.getElementById("Time").value;
 
-        // Display the date and time in the toast message
+        // Mettre à jour le message du toast
         let toastMessage = `Appointment created successfully! Date: ${date} Time: ${time}`;
         document.getElementById("toastMessage").textContent = toastMessage;
 
-        // Show success notification
-        let toast = new bootstrap.Toast(document.getElementById('successToast'));
+        // Afficher le toast Bootstrap
+        let toastElement = document.getElementById('successToast');
+        let toast = new bootstrap.Toast(toastElement);
         toast.show();
 
-        // Submit the form after a short delay
+        // Soumettre le formulaire après 1.5 secondes
         setTimeout(function() {
-            event.target.submit();  // Submit the form
-        }, 1000);  // Wait for 1 second before submitting
-    }
-
-    function logout() {
-        if (confirm("Are you sure you want to logout?")) {
-            window.location.href = '/logout';  // Redirect to logout URL
-        }
+            event.target.submit();
+        }, 1500);
     }
 </script>
 
