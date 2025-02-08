@@ -23,11 +23,7 @@ public class HomeController {
     public String pharmacyHome() {
         return "pharmacyhome"; // Assurez-vous que le fichier pharmacyhome.html existe dans templates/
     }
-//    @GetMapping("/")
-//    public String home() {
-//        // Retourner la vue avec le formulaire d'upload
-//        return "upload";  // Assurez-vous que ce fichier HTML est dans le bon répertoire (par ex. src/main/resources/templates)
-//    }
+
     /**
      * Méthode pour afficher la page d'accueil générale des patients ou visiteurs.
      * @return Le nom de la vue "Home.html".
@@ -36,4 +32,13 @@ public class HomeController {
     public String patientHome() {
         return "Home"; // Assurez-vous que le fichier Home.html existe dans templates/
     }
+
+    // Uncomment and modify this method if you need a default home page
+    /*
+    @GetMapping("/")
+    public String home() {
+        // Retourner la vue avec le formulaire d'upload
+        return "upload";  // Assurez-vous que ce fichier HTML est dans le bon répertoire (par ex. src/main/resources/templates)
+    }
+    */
 }
