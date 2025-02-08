@@ -8,277 +8,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --primary-color: #1a73e8;
-            --secondary-color: #0f9d58;
-            --accent-color: #fbbc05;
-            --background-light: #f8f9fa;
-            --text-dark: #2d3436;
-            --text-light: #ffffff;
-        }
-
-        /* General Styles */
-        body {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: var(--background-light);
-            color: var(--text-dark);
-        }
-
-        .dashboard {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        /* Sidebar Styles */
-        .sidebar {
-            width: 280px;
-            background: linear-gradient(180deg, #2c3e50, #3498db);
-            color: var(--text-light);
-            padding: 2rem 1.5rem;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .sidebar .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 2rem;
-            color: var(--text-light);
-            text-align: center;
-        }
-
-        .doctor-info {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .doctor-info img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            margin-bottom: 1rem;
-            border: 3px solid var(--text-light);
-            object-fit: cover;
-        }
-
-        .doctor-info h3 {
-            margin: 0.5rem 0;
-            font-weight: 600;
-        }
-
-        .doctor-info h5 {
-            margin: 0.3rem 0;
-            font-weight: 400;
-            color: rgba(255, 255, 255, 0.9);
-        }
-
-        .nav {
-            list-style: none;
-            padding: 0;
-            margin: 2rem 0;
-        }
-
-        .nav li {
-            margin: 0.8rem 0;
-        }
-
-        .nav li a {
-            color: var(--text-light);
-            text-decoration: none;
-            font-size: 1rem;
-            padding: 0.8rem 1.5rem;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            transition: all 0.3s ease;
-        }
-
-        .nav li a:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateX(5px);
-        }
-
-        .nav li a.active {
-            background: var(--text-light);
-            color: var(--primary-color);
-            font-weight: 500;
-        }
-
-        .nav li a i {
-            margin-right: 1rem;
-            width: 25px;
-            font-size: 1.1rem;
-        }
-
-        /* Main Content Styles */
-        .main-content {
-            flex: 1;
-            padding: 2rem;
-            background-color: var(--background-light);
-        }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
-
-        header h1 {
-            font-size: 2rem;
-            font-weight: 600;
-            color: var(--text-dark);
-            margin: 0;
-        }
-
-        .cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .card {
-            background: var(--text-light);
-            padding: 1.5rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease;
-            border-left: 4px solid var(--primary-color);
-        }
-
-        .card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .card h3 {
-            font-size: 1rem;
-            font-weight: 500;
-            color: #666;
-            margin: 0 0 1rem;
-        }
-
-        .card p {
-            font-size: 2rem;
-            font-weight: 700;
-            margin: 0;
-            color: var(--primary-color);
-        }
-
-        /* Appointments Section */
-        .appointments {
-            background: var(--text-light);
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-        }
-
-        .appointments h2 {
-            font-size: 1.5rem;
-            margin: 0 0 1.5rem;
-            color: var(--text-dark);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: var(--text-light);
-        }
-
-        thead {
-            background-color: var(--primary-color);
-            color: var(--text-light);
-        }
-
-        th, td {
-            padding: 1rem;
-            text-align: left;
-        }
-
-        th {
-            font-weight: 500;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f8f9fa;
-        }
-
-        .status {
-            display: inline-block;
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 500;
-        }
-
-        .status.completed {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .status.pending {
-            background: #fff3cd;
-            color: #856404;
-        }
-
-        .btn-success {
-            background: var(--secondary-color);
-            color: var(--text-light);
-            border: none;
-            padding: 0.5rem 1.5rem;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-success:hover {
-            background: #0d8044;
-            transform: translateY(-2px);
-        }
-
-        /* Responsive Styles */
-        @media (max-width: 768px) {
-            .dashboard {
-                flex-direction: column;
-            }
-
-            .sidebar {
-                width: 100%;
-                padding: 1.5rem;
-            }
-
-            .main-content {
-                padding: 1.5rem;
-            }
-
-            .cards {
-                grid-template-columns: 1fr;
-            }
-            /* Ajouter cette règle */
-            .main-content > div:not(.cards):not(header) {
-                margin-top: 2rem;
-            }
-
-            /* Modifier la règle existante pour les sections */
-            .appointments,
-            .patients-section,
-            .pending-payment-section,
-            .archive-section {
-                background: var(--text-light);
-                border-radius: 12px;
-                padding: 2rem;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-                margin-top: 2rem;
-            }
-
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/doctorhome.css">
 </head>
 <body>
 <div class="dashboard">
@@ -377,29 +108,47 @@
                 </div>
             </main>
         </div>
+
+
+
+
+
+
         <!-- Patients Section -->
         <div class="patients-section" id="patients-section" style="display: none;">
             <h2>My Patients</h2>
             <div class="patients-grid">
-                <div class="patient-card" th:each="patient : ${patients}">
+                <div class="patient-card" th:each="consultation : ${consultation}">
                     <div class="patient-header">
-                        <img th:src="@{${patient.profileImage}}" alt="Patient Photo" class="patient-avatar">
+<!--                        <img th:src="@{${patient.profileImage}}" alt="Patient Photo" class="patient-avatar">-->
                         <div class="patient-info">
-                            <h3 th:text="${patient.name}"></h3>
-                            <p class="patient-age" th:text="'Age: ' + ${patient.age}"></p>
+                            <h3 th:text="${consultation.patient.name}"></h3>
+                            <p class="patient-age" th:text="'BirthDate : ' + ${consultation.patient.birthDate}"></p>
                         </div>
                     </div>
                     <div class="patient-details">
-                        <p><i class="fas fa-phone"></i> <span th:text="${patient.phone}"></span></p>
-                        <p><i class="fas fa-calendar-alt"></i> Dernière visite:
-                            <span th:text="${patient.lastVisit}"></span></p>
+                        <p><i class="fas fa-phone"></i> <span th:text="${consultation.patient.telephone}"></span></p>
+                        <p><i class="fas fa-calendar-alt"></i> Gender:
+                            <span th:text="${consultation.patient.gender}"></span>
+                        </p>
                     </div>
-                    <a th:href="@{/patients/{id}(id=${patient.id})}" class="btn-view-profile">
+                    <a th:href="@{/patients/{id}(id=${consultation.patient.id})}" class="btn-view-profile">
                         <i class="fas fa-file-medical"></i> Voir la fiche
                     </a>
                 </div>
             </div>
         </div>
+
+
+
+
+
+
+
+
+
+
+
 
         <!-- Pending Payment Section -->
         <div class="pending-payment-section" id="pending-payment-section" style="display: none;">

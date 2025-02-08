@@ -213,10 +213,44 @@ public class ConsultationController {
 
         model.addAttribute("consultations", consultations);
         model.addAttribute("doctor", doctor);
+//        model.addAttribute("patient", patient);
         return "doctorhome";  // Return the appointments view for the doctor
     }
 
+    //    /**
+//     * Ajoute une nouvelle consultation pour un patient spécifique.
+//     */
+    @PostMapping("/patient/{id}/consultation")
+    public String addConsultations(
+            @PathVariable Long id,
+            @RequestParam(required = false) String description,
+            @RequestParam(required = false) String prescription,
+            @RequestParam(required = false) String allergies,
+            @RequestParam(required = false) String currentTreatments,
+            @RequestParam(required = false) String medicalHistory,
+            Model model
+    ) {
+        Patient patient = patientRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid patient ID"));
 
+        // Créer une nouvelle consultation
+        Consultation consultation = new Consultation();
+        consultation.setPatient(patient);
+        consultation.setDescription(description);
+        consultation.setPrescription(prescription);
+        consultation.setAllergies(allergies);
+        consultation.setCurrentTreatments(currentTreatments);
+        consultation.setMedicalHistory(medicalHistory);
+        consultation.setDate(LocalDate.now());  // Utilisation de la date actuelle
+
+        // Enregistrer la consultation dans la base de données
+        consultationRepository.save(consultation);
+
+        // Ajouter un attribut pour le message de succès et la liste des consultations
+        model.addAttribute("consultations", consultationRepository.findByPatientId(id));
+        model.addAttribute("patient", patient);
+        return "redirect:/patient/{id}/consultations";  // Rediriger vers la liste des consultations du patient
+    }
 
 }
 
@@ -274,40 +308,7 @@ public class ConsultationController {
 
 
 
-//    /**
-//     * Ajoute une nouvelle consultation pour un patient spécifique.
-//     */
-//    @PostMapping("/patient/{id}/consultation")
-//    public String addConsultations(
-//            @PathVariable Long id,
-//            @RequestParam(required = false) String description,
-//            @RequestParam(required = false) String prescription,
-//            @RequestParam(required = false) String allergies,
-//            @RequestParam(required = false) String currentTreatments,
-//            @RequestParam(required = false) String medicalHistory,
-//            Model model
-//    ) {
-//        Patient patient = patientRepository.findById(id)
-//                .orElseThrow(() -> new IllegalArgumentException("Invalid patient ID"));
-//
-//        // Créer une nouvelle consultation
-//        Consultation consultation = new Consultation();
-//        consultation.setPatient(patient);
-//        consultation.setDescription(description);
-//        consultation.setPrescription(prescription);
-//        consultation.setAllergies(allergies);
-//        consultation.setCurrentTreatments(currentTreatments);
-//        consultation.setMedicalHistory(medicalHistory);
-//        consultation.setDate(LocalDate.now());  // Utilisation de la date actuelle
-//
-//        // Enregistrer la consultation dans la base de données
-//        consultationRepository.save(consultation);
-//
-//        // Ajouter un attribut pour le message de succès et la liste des consultations
-//        model.addAttribute("consultations", consultationRepository.findByPatientId(id));
-//        model.addAttribute("patient", patient);
-//        return "redirect:/patient/{id}/consultations";  // Rediriger vers la liste des consultations du patient
-//    }
+
 
 
 
