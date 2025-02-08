@@ -2,8 +2,10 @@ package tn.pi.cabinetmedicalproject.web;
 
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,12 +19,14 @@ import tn.pi.cabinetmedicalproject.model.Doctor;
 import tn.pi.cabinetmedicalproject.model.Patient;
 import tn.pi.cabinetmedicalproject.model.User;
 import tn.pi.cabinetmedicalproject.repository.DoctorRepository;
+import tn.pi.cabinetmedicalproject.service.DoctorService;
 import tn.pi.cabinetmedicalproject.service.UserService;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.Principal;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,6 +38,9 @@ public class DoctorController {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private static final String UPLOAD_DIR = "/images/";
+    @Autowired
+    private DoctorService doctorService;
+
 
     public DoctorController(DoctorRepository doctorRepository, UserService userService, PasswordEncoder passwordEncoder) {
         this.doctorRepository = doctorRepository;
@@ -82,6 +89,12 @@ public class DoctorController {
 
 
 
+
+
+
+
+
+
     @PostMapping("/saveDoctor")
     public String saveDoctor( Model model,@ModelAttribute Doctor doctor, @RequestParam("image") MultipartFile image) {
         try {
@@ -125,6 +138,18 @@ public class DoctorController {
         model.addAttribute("doctor", new Doctor());
         return "formDoctor";
     }
+
+
+
+
+
+
+
+
+
+
+
+
 //
 //    @PostMapping("/saveDoctor")
 //    public String saveDoctor(Model model, @Valid Doctor doctor, BindingResult bindingResult) {

@@ -3,7 +3,7 @@ package tn.pi.cabinetmedicalproject.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
+
 public class User {
 
     @Id
@@ -12,7 +12,7 @@ public class User {
 
 //    private String name;  // Le champ 'name' contiendra le prénom et le nom de famille.
 
-    @Column(unique = true, nullable = false)
+    @Column( nullable = false)
     private String email;
 
     @Column(nullable = false)
@@ -20,6 +20,8 @@ public class User {
 
     @Column(nullable = false)
     private String role;
+
+
 
     public User() {
     }

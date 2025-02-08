@@ -1,176 +1,515 @@
-<!DOCTYPE html>
-<html lang="en">
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Doctor Dashboard</title>-->
+<!--    &lt;!&ndash; Add Google Fonts &ndash;&gt;-->
+<!--    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">-->
+<!--    &lt;!&ndash; Font Awesome &ndash;&gt;-->
+<!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">-->
+<!--    <style>-->
+<!--        :root {-->
+<!--            &#45;&#45;primary-color: #1a73e8;-->
+<!--            &#45;&#45;secondary-color: #0f9d58;-->
+<!--            &#45;&#45;accent-color: #fbbc05;-->
+<!--            &#45;&#45;background-light: #f8f9fa;-->
+<!--            &#45;&#45;text-dark: #2d3436;-->
+<!--            &#45;&#45;text-light: #ffffff;-->
+<!--        }-->
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Doctor's Appointments</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/webjars/bootstrap-icons/1.10.5/font/bootstrap-icons.css">
-    <script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f8f9fa;
-        }
+<!--        /* General Styles */-->
+<!--        body {-->
+<!--            font-family: 'Poppins', sans-serif;-->
+<!--            margin: 0;-->
+<!--            padding: 0;-->
+<!--            background-color: var(&#45;&#45;background-light);-->
+<!--            color: var(&#45;&#45;text-dark);-->
+<!--        }-->
 
-        .navbar {
-            margin-bottom: 30px;
-        }
+<!--        .dashboard {-->
+<!--            display: flex;-->
+<!--            min-height: 100vh;-->
+<!--        }-->
 
-        .card {
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
+<!--        /* Sidebar Styles */-->
+<!--        .sidebar {-->
+<!--            width: 280px;-->
+<!--            background: linear-gradient(180deg, #2c3e50, #3498db);-->
+<!--            color: var(&#45;&#45;text-light);-->
+<!--            padding: 2rem 1.5rem;-->
+<!--            box-sizing: border-box;-->
+<!--            display: flex;-->
+<!--            flex-direction: column;-->
+<!--            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);-->
+<!--        }-->
 
-        .table th, .table td {
-            vertical-align: middle;
-        }
+<!--        .sidebar .logo {-->
+<!--            font-size: 1.8rem;-->
+<!--            font-weight: 700;-->
+<!--            margin-bottom: 2rem;-->
+<!--            color: var(&#45;&#45;text-light);-->
+<!--            text-align: center;-->
+<!--        }-->
 
-        .table th {
-            background-color: #f1f1f1;
-        }
+<!--        .doctor-info {-->
+<!--            text-align: center;-->
+<!--            margin-bottom: 2rem;-->
+<!--        }-->
 
-        .nav-pills .nav-link {
-            border-radius: 30px;
-        }
+<!--        .doctor-info img {-->
+<!--            width: 100px;-->
+<!--            height: 100px;-->
+<!--            border-radius: 50%;-->
+<!--            margin-bottom: 1rem;-->
+<!--            border: 3px solid var(&#45;&#45;text-light);-->
+<!--            object-fit: cover;-->
+<!--        }-->
 
-        .btn-info, .btn-danger, .btn-warning {
-            border-radius: 25px;
-        }
+<!--        .doctor-info h3 {-->
+<!--            margin: 0.5rem 0;-->
+<!--            font-weight: 600;-->
+<!--        }-->
 
-        .card-header {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
+<!--        .doctor-info h5 {-->
+<!--            margin: 0.3rem 0;-->
+<!--            font-weight: 400;-->
+<!--            color: rgba(255, 255, 255, 0.9);-->
+<!--        }-->
 
-        .search-form input {
-            border-radius: 25px;
-            background-color: #dddddd;
-        }
+<!--        .nav {-->
+<!--            list-style: none;-->
+<!--            padding: 0;-->
+<!--            margin: 2rem 0;-->
+<!--        }-->
 
-        .search-form button {
-            border-radius: 25px;
-            background-color: #ffffff;
-        }
+<!--        .nav li {-->
+<!--            margin: 0.8rem 0;-->
+<!--        }-->
 
-        .pagination-container {
-            text-align: center;
-            margin-top: 20px;
-        }
+<!--        .nav li a {-->
+<!--            color: var(&#45;&#45;text-light);-->
+<!--            text-decoration: none;-->
+<!--            font-size: 1rem;-->
+<!--            padding: 0.8rem 1.5rem;-->
+<!--            border-radius: 8px;-->
+<!--            display: flex;-->
+<!--            align-items: center;-->
+<!--            transition: all 0.3s ease;-->
+<!--        }-->
 
-        /* New table design */
-        .table {
-            width: 100%;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
+<!--        .nav li a:hover {-->
+<!--            background: rgba(255, 255, 255, 0.1);-->
+<!--            transform: translateX(5px);-->
+<!--        }-->
 
-        .table th, .table td {
-            padding: 10px;
-            text-align: center;
-        }
+<!--        .nav li a.active {-->
+<!--            background: var(&#45;&#45;text-light);-->
+<!--            color: var(&#45;&#45;primary-color);-->
+<!--            font-weight: 500;-->
+<!--        }-->
 
-        .table th {
-            background-color: #000000;
-            color: white;
-        }
+<!--        .nav li a i {-->
+<!--            margin-right: 1rem;-->
+<!--            width: 25px;-->
+<!--            font-size: 1.1rem;-->
+<!--        }-->
 
-        .table tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
+<!--        /* Main Content Styles */-->
+<!--        .main-content {-->
+<!--            flex: 1;-->
+<!--            padding: 2rem;-->
+<!--            background-color: var(&#45;&#45;background-light);-->
+<!--        }-->
 
-        .table-row {
-            cursor: pointer;
-        }
+<!--        header {-->
+<!--            display: flex;-->
+<!--            justify-content: space-between;-->
+<!--            align-items: center;-->
+<!--            margin-bottom: 2rem;-->
+<!--        }-->
 
-        /* Styling for the filter links */
-        .filter__link {
-            text-decoration: none;
-            color: #ffffff;
-        }
+<!--        header h1 {-->
+<!--            font-size: 2rem;-->
+<!--            font-weight: 600;-->
+<!--            color: var(&#45;&#45;text-dark);-->
+<!--            margin: 0;-->
+<!--        }-->
 
-        .filter__link--active {
-            font-weight: bold;
-        }
+<!--        .cards {-->
+<!--            display: grid;-->
+<!--            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));-->
+<!--            gap: 1.5rem;-->
+<!--            margin-bottom: 2rem;-->
+<!--        }-->
 
-        .filter__link.asc::after {
-            content: "(asc)";
-        }
+<!--        .card {-->
+<!--            background: var(&#45;&#45;text-light);-->
+<!--            padding: 1.5rem;-->
+<!--            border-radius: 12px;-->
+<!--            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);-->
+<!--            transition: transform 0.3s ease;-->
+<!--            border-left: 4px solid var(&#45;&#45;primary-color);-->
+<!--        }-->
 
-        .filter__link.desc::after {
-            content: "(desc)";
-        }
-    </style>
-</head>
+<!--        .card:hover {-->
+<!--            transform: translateY(-3px);-->
+<!--            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);-->
+<!--        }-->
 
-<body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">Medical Office</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="collapsibleNavbar">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/appointments/doctor}">Appointments</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/AboutUs}">About Us</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Patients</a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" th:href="@{/formPatients}">New Patient</a></li>
-                        <li><a class="dropdown-item" href="#">Update Patient</a></li>
-                        <li><a class="dropdown-item" th:href="@{/index}">List of Patients</a></li>
-                    </ul>
-                </li>
-            </ul>
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link text-danger" href="#" onclick="logout()">Logout <i class="bi bi-box-arrow-right"></i></a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
-<main class="container my-4">
+<!--        .card h3 {-->
+<!--            font-size: 1rem;-->
+<!--            font-weight: 500;-->
+<!--            color: #666;-->
+<!--            margin: 0 0 1rem;-->
+<!--        }-->
 
-    <div th:if="${appointments != null and !appointments.isEmpty()}">
-        <h2 class="text-gray-700">Appointments for Doctor</h2>
-        <table class="table">
-            <thead>
-            <tr>
-                <th>doc id </th>
-                <th>Patient Name</th>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Status</th>
+<!--        .card p {-->
+<!--            font-size: 2rem;-->
+<!--            font-weight: 700;-->
+<!--            margin: 0;-->
+<!--            color: var(&#45;&#45;primary-color);-->
+<!--        }-->
 
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="appointment : ${appointments}">
-                <td th:text="${appointment.doctor.id}">Patient Name</td>
-                <td th:text="${appointment.patient.name}">Patient Name</td>
-                <td th:text="${appointment.appointmentDate}">Date</td>
-                <td th:text="${appointment.appointmentTime}">Time</td>
-                <td th:text="${appointment.status}">Status</td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-    <div th:if="${appointments == null or appointments.isEmpty()}">
-        <p>No appointments found for this doctor.</p>
-    </div>
-</main>
+<!--        /* Appointments Section */-->
+<!--        .appointments {-->
+<!--            background: var(&#45;&#45;text-light);-->
+<!--            border-radius: 12px;-->
+<!--            padding: 2rem;-->
+<!--            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);-->
+<!--        }-->
 
-</body>
-<footer class="bg-gray-200 text-center p-4 mt-6">
-    <p class="text-sm text-gray-600">&copy; 2025 Cabinet Medical Project. All Rights Reserved.</p>
-</footer>
-</html>
+<!--        .appointments h2 {-->
+<!--            font-size: 1.5rem;-->
+<!--            margin: 0 0 1.5rem;-->
+<!--            color: var(&#45;&#45;text-dark);-->
+<!--        }-->
+
+<!--        table {-->
+<!--            width: 100%;-->
+<!--            border-collapse: collapse;-->
+<!--            background: var(&#45;&#45;text-light);-->
+<!--        }-->
+
+<!--        thead {-->
+<!--            background-color: var(&#45;&#45;primary-color);-->
+<!--            color: var(&#45;&#45;text-light);-->
+<!--        }-->
+
+<!--        th, td {-->
+<!--            padding: 1rem;-->
+<!--            text-align: left;-->
+<!--        }-->
+
+<!--        th {-->
+<!--            font-weight: 500;-->
+<!--        }-->
+
+<!--        tr:nth-child(even) {-->
+<!--            background-color: #f8f9fa;-->
+<!--        }-->
+
+<!--        .status {-->
+<!--            display: inline-block;-->
+<!--            padding: 0.3rem 0.8rem;-->
+<!--            border-radius: 20px;-->
+<!--            font-size: 0.85rem;-->
+<!--            font-weight: 500;-->
+<!--        }-->
+
+<!--        .status.completed {-->
+<!--            background: #d4edda;-->
+<!--            color: #155724;-->
+<!--        }-->
+
+<!--        .status.pending {-->
+<!--            background: #fff3cd;-->
+<!--            color: #856404;-->
+<!--        }-->
+
+<!--        .btn-success {-->
+<!--            background: var(&#45;&#45;secondary-color);-->
+<!--            color: var(&#45;&#45;text-light);-->
+<!--            border: none;-->
+<!--            padding: 0.5rem 1.5rem;-->
+<!--            border-radius: 6px;-->
+<!--            cursor: pointer;-->
+<!--            transition: all 0.3s ease;-->
+<!--        }-->
+
+<!--        .btn-success:hover {-->
+<!--            background: #0d8044;-->
+<!--            transform: translateY(-2px);-->
+<!--        }-->
+
+<!--        /* Responsive Styles */-->
+<!--        @media (max-width: 768px) {-->
+<!--            .dashboard {-->
+<!--                flex-direction: column;-->
+<!--            }-->
+
+<!--            .sidebar {-->
+<!--                width: 100%;-->
+<!--                padding: 1.5rem;-->
+<!--            }-->
+
+<!--            .main-content {-->
+<!--                padding: 1.5rem;-->
+<!--            }-->
+
+<!--            .cards {-->
+<!--                grid-template-columns: 1fr;-->
+<!--            }-->
+<!--            /* Ajouter cette règle */-->
+<!--            .main-content > div:not(.cards):not(header) {-->
+<!--                margin-top: 2rem;-->
+<!--            }-->
+
+<!--            /* Modifier la règle existante pour les sections */-->
+<!--            .appointments,-->
+<!--            .patients-section,-->
+<!--            .pending-payment-section,-->
+<!--            .archive-section {-->
+<!--                background: var(&#45;&#45;text-light);-->
+<!--                border-radius: 12px;-->
+<!--                padding: 2rem;-->
+<!--                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);-->
+<!--                margin-top: 2rem;-->
+<!--            }-->
+
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div class="dashboard">-->
+<!--    &lt;!&ndash; Sidebar &ndash;&gt;-->
+<!--    <div class="sidebar">-->
+<!--        <div class="logo">MediCare Pro</div>-->
+<!--        <div class="doctor-info">-->
+<!--            <img th:src="@{${doctor.imagePath}}" alt="Profile Picture">-->
+<!--            <h3 th:text="${doctor.name}"></h3>-->
+<!--            <h5 th:text="${doctor.specialty}"></h5>-->
+<!--            <h5 th:text="${doctor.city}"></h5>-->
+<!--            <h5 th:text="${doctor.phone}"></h5>-->
+<!--            <h5 th:text="${doctor.address}"></h5>-->
+<!--        </div>-->
+<!--        <ul class="nav">-->
+<!--            <li><a href="#" class="active" data-target="dashboard"><i class="fas fa-home"></i>Dashboard</a></li>-->
+<!--            <li><a href="#" data-target="patients"><i class="fas fa-user-injured"></i>Patients</a></li>-->
+<!--            <li><a href="#" data-target="appointments"><i class="fas fa-calendar-check"></i>Appointments</a></li>-->
+<!--            <li><a href="#" data-target="pending-payment"><i class="fas fa-prescription"></i>Pending Payment</a></li>-->
+<!--            <li><a href="#" data-target="archive"><i class="fas fa-chart-line"></i>Archive</a></li>-->
+<!--            <li><a href="#"><i class="fas fa-cog"></i>Settings</a></li>-->
+<!--            &lt;!&ndash; Logout Button &ndash;&gt;-->
+<!--            <li>-->
+<!--                <form th:action="@{/logout}" method="post">-->
+<!--                    <a href="#" onclick="this.closest('form').submit()" style="color: inherit; text-decoration: none;">-->
+<!--                        <i class="fas fa-sign-out-alt"></i> Logout-->
+<!--                    </a>-->
+<!--                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>-->
+<!--                </form>-->
+<!--            </li>-->
+<!--        </ul>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Main Content &ndash;&gt;-->
+<!--    <div class="main-content">-->
+<!--        <header>-->
+<!--            <h1>Welcome Back, Dr. <span th:text="${doctor.name.split(' ')[1]}"></span></h1>-->
+<!--        </header>-->
+
+<!--        <div class="cards">-->
+<!--            <div class="card">-->
+<!--                <h3>Total Patients</h3>-->
+<!--                <p>1,234</p>-->
+<!--            </div>-->
+<!--            <div class="card">-->
+<!--                <h3>Today's Appointments</h3>-->
+<!--                <p>15</p>-->
+<!--            </div>-->
+<!--            <div class="card">-->
+<!--                <h3>Pending Prescriptions</h3>-->
+<!--                <p>8</p>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Appointments Section &ndash;&gt;-->
+<!--        <div class="appointments" id="appointments-section" style="display: none;">-->
+<!--            <h2>Today's Appointments</h2>-->
+<!--            <main class="container">-->
+<!--                <div th:if="${consultation != null and !consultation.isEmpty()}">-->
+<!--                    <table>-->
+<!--                        <thead>-->
+<!--                        <tr>-->
+<!--                            <th>Patient Name</th>-->
+<!--                            <th>Appointment Time</th>-->
+<!--                            <th>Status</th>-->
+<!--                            <th>Action</th>-->
+<!--                        </tr>-->
+<!--                        </thead>-->
+<!--                        <tbody>-->
+<!--                        <tr th:each="consultation : ${consultation}">-->
+<!--                            <td th:text="${consultation.patient != null ? consultation.patient.name : 'N/A'}"></td>-->
+<!--                            <td>-->
+<!--                                <span th:text="${consultation.date}"></span><br>-->
+<!--                                <small th:text="${consultation.time}"></small>-->
+<!--                            </td>-->
+<!--                            <td>-->
+<!--                                <span class="status" th:classappend="${consultation.status == 'COMPLETED'} ? 'completed' : 'pending'"-->
+<!--                                      th:text="${consultation.status}"></span>-->
+<!--                            </td>-->
+<!--                            <td>-->
+<!--                                <a th:href="@{/Consultation/start/{id}(id=${consultation.id})}"-->
+<!--                                   class="btn-success">-->
+<!--                                    <i class="fas fa-play-circle"></i> Start-->
+<!--                                </a>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+<!--                        </tbody>-->
+<!--                    </table>-->
+<!--                </div>-->
+<!--                <div th:if="${consultation == null or consultation.isEmpty()}">-->
+<!--                    <div class="empty-state">-->
+<!--                        <i class="fas fa-calendar-times fa-3x"></i>-->
+<!--                        <h3>No appointments scheduled</h3>-->
+<!--                        <p>You have no appointments for today</p>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </main>-->
+<!--        </div>-->
+<!--    </div>-->
+
+
+
+
+
+
+
+<!--    &lt;!&ndash; Patients Section &ndash;&gt;-->
+<!--    <div class="patients-section" id="patients-section" style="display: none;">-->
+<!--            <h2>My Patients</h2>-->
+<!--            <div class="patients-grid">-->
+<!--                <div class="patient-card" th:each="patient : ${patients}">-->
+<!--                    <div class="patient-header">-->
+<!--                        <img th:src="@{${patient.profileImage}}" alt="Patient Photo" class="patient-avatar">-->
+<!--                        <div class="patient-info">-->
+<!--                            <h3 th:text="${patient.name}"></h3>-->
+<!--                            <p class="patient-age" th:text="'Age: ' + ${patient.age}"></p>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="patient-details">-->
+<!--                        <p><i class="fas fa-phone"></i> <span th:text="${patient.phone}"></span></p>-->
+<!--                        <p><i class="fas fa-calendar-alt"></i> Dernière visite:-->
+<!--                            <span th:text="${patient.lastVisit}"></span></p>-->
+<!--                    </div>-->
+<!--                    <a th:href="@{/patients/{id}(id=${patient.id})}" class="btn-view-profile">-->
+<!--                        <i class="fas fa-file-medical"></i> Voir la fiche-->
+<!--                    </a>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--    </div>-->
+
+<!--        &lt;!&ndash; Pending Payment Section &ndash;&gt;-->
+<!--    <div class="pending-payment-section" id="pending-payment-section" style="display: none;">-->
+<!--            <h2>Pending Payment Consultations</h2>-->
+<!--            <table>-->
+<!--                <thead>-->
+<!--                <tr>-->
+<!--                    <th>Patient Name</th>-->
+<!--                    <th>Consultation Date</th>-->
+<!--                    <th>Amount Due</th>-->
+<!--                    <th>Action</th>-->
+<!--                </tr>-->
+<!--                </thead>-->
+<!--                <tbody>-->
+<!--                <tr th:each="consultation : ${pendingConsultations}">-->
+<!--                    <td th:text="${consultation.patient.name}"></td>-->
+<!--                    <td th:text="${consultation.date}"></td>-->
+<!--                    <td th:text="'$' + ${consultation.amountDue}"></td>-->
+<!--                    <td>-->
+<!--                        <a th:href="@{/consultations/payment/{id}(id=${consultation.id})}" class="btn-success">-->
+<!--                            Process Payment-->
+<!--                        </a>-->
+<!--                    </td>-->
+<!--                </tr>-->
+<!--                </tbody>-->
+<!--            </table>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Archive Section &ndash;&gt;-->
+<!--    <div class="archive-section" id="archive-section" style="display: none;">-->
+<!--            <h2>Consultation Archive</h2>-->
+<!--            <table>-->
+<!--                <thead>-->
+<!--                <tr>-->
+<!--                    <th>Patient Name</th>-->
+<!--                    <th>Consultation Date</th>-->
+<!--                    <th>Diagnosis</th>-->
+<!--                    <th>Documents</th>-->
+<!--                </tr>-->
+<!--                </thead>-->
+<!--                <tbody>-->
+<!--                <tr th:each="consultation : ${archivedConsultations}">-->
+<!--                    <td th:text="${consultation.patient.name}"></td>-->
+<!--                    <td th:text="${consultation.date}"></td>-->
+<!--                    <td th:text="${consultation.diagnosis}"></td>-->
+<!--                    <td>-->
+<!--                        <a th:href="@{/consultations/files/{id}(id=${consultation.id})}" class="btn-success">-->
+<!--                            View Files-->
+<!--                        </a>-->
+<!--                    </td>-->
+<!--                </tr>-->
+<!--                </tbody>-->
+<!--            </table>-->
+<!--        </div>-->
+
+
+
+<!--</div>-->
+
+<!--<script>-->
+<!--    document.addEventListener('DOMContentLoaded', function() {-->
+<!--        const sections = {-->
+<!--            dashboard: document.querySelector('.cards'), // Les cartes sont le dashboard-->
+<!--            patients: document.getElementById('patients-section'),-->
+<!--            appointments: document.getElementById('appointments-section'),-->
+<!--            'pending-payment': document.getElementById('pending-payment-section'),-->
+<!--            archive: document.getElementById('archive-section')-->
+<!--        };-->
+
+<!--        const navLinks = document.querySelectorAll('.sidebar .nav li a');-->
+
+<!--        navLinks.forEach(link => {-->
+<!--            link.addEventListener('click', function(e) {-->
+<!--                e.preventDefault();-->
+<!--                const target = this.dataset.target;-->
+
+<!--                // Masquer toutes les sections-->
+<!--                Object.values(sections).forEach(section => {-->
+<!--                    if(section) {-->
+<!--                        if(section === sections.dashboard) {-->
+<!--                            section.style.display = 'grid'; // Afficher les cartes-->
+<!--                        } else {-->
+<!--                            section.style.display = 'none';-->
+<!--                        }-->
+<!--                    }-->
+<!--                });-->
+
+<!--                // Retirer la classe active de tous les liens-->
+<!--                navLinks.forEach(link => link.classList.remove('active'));-->
+
+<!--                // Afficher la section cible-->
+<!--                if(target) {-->
+<!--                    if(target === 'dashboard') {-->
+<!--                        sections.dashboard.style.display = 'grid';-->
+<!--                    } else if(sections[target]) {-->
+<!--                        sections[target].style.display = 'block';-->
+<!--                    }-->
+<!--                    this.classList.add('active');-->
+<!--                }-->
+<!--            });-->
+<!--        });-->
+<!--    });-->
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->

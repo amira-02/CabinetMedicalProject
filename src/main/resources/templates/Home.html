@@ -6,6 +6,7 @@
   <title>Medical Office - Home</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+<<<<<<< HEAD
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,500;0,700;0,800;0,900;1,600;1,700;1,800&display=swap" rel="stylesheet">
   <style>
     /* General Body Styling */
@@ -247,19 +248,22 @@
       }
     }
   </style>
+=======
+  <link rel="stylesheet" href="/css/Style.css">
+>>>>>>> ed01212f1bd8e09844ed521dd39afb6fbd4221d7
 </head>
 <body>
-
 <!-- Navigation Bar -->
 <nav class="navbar navbar-expand-lg navbar-light">
   <div class="container">
-    <a class="navbar-brand" href="#">Medical Office</a>
+    <a class="navbar-brand" href="/">Medical Office</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
+<<<<<<< HEAD
         <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
         <li class="nav-item"><a class="nav-link" href="#">Doctors</a></li>
         <li class="nav-item"><a class="nav-link" th:href="@{/DoctorsListForPatient}">Appointments</a></li>
@@ -270,13 +274,53 @@
             <span th:text="${#authentication.name != null} ? 'Logout' : 'Login'"></span>
           </a>
         </li>
+=======
+        <li class="nav-item"><a class="nav-link" href="/" th:href="@{/}">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="/doctors" th:href="@{/doctors}">Doctors</a></li>
+        <li class="nav-item"><a class="nav-link" href="#" th:href="@{/DoctorsListForPatient}">Appointments</a></li>
+        <li class="nav-item"><a class="nav-link" href="/contact" th:href="@{/contact}">Contact</a></li>
+
+        <!-- Si l'utilisateur est authentifié -->
+        <li class="nav-item dropdown" th:if="${#authentication.principal != null}">
+          <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-person-circle"></i>
+            <!-- Affiche le nom d'utilisateur de l'utilisateur connecté -->
+            <span th:text="${#authentication.principal.username}">Profile</span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+            <li><a class="dropdown-item" th:href="@{/profile}">Mon Profil</a></li>
+            <li><a class="dropdown-item" th:href="@{/logout}">Déconnexion</a></li>
+          </ul>
+        </li>
+
+        <!-- Si l'utilisateur n'est pas authentifié -->
+        <li class="nav-item" th:if="${#authentication == null}">
+          <a class="nav-link" href="/signup" th:href="@{/signup}">
+            <i class="fas fa-user-plus"></i> S'inscrire
+          </a>
+        </li>
+
+        <li class="nav-item" th:if="${#authentication == null}">
+          <a class="nav-link" href="/login" th:href="@{/login}">
+            <i class="fas fa-sign-in-alt"></i> Connexion
+          </a>
+        </li>
+>>>>>>> ed01212f1bd8e09844ed521dd39afb6fbd4221d7
       </ul>
     </div>
   </div>
 </nav>
 
+<<<<<<< HEAD
 <!-- Hero Section -->
 <section class="hero-section">
+=======
+
+
+
+<div id="targetSection">
+<section class="hero-section" >
+>>>>>>> ed01212f1bd8e09844ed521dd39afb6fbd4221d7
   <div class="container text-center">
     <!-- Sparkles Effect -->
     <div id="sparkles-container"></div>
@@ -285,7 +329,10 @@
     <a href="#appointment" class="btn btn-primary btn-lg custom-btn">Book an Appointment</a>
   </div>
 </section>
+<<<<<<< HEAD
 
+=======
+>>>>>>> ed01212f1bd8e09844ed521dd39afb6fbd4221d7
 <!-- Testimonials Section -->
 <section class="testimonials">
   <div class="container text-center">
@@ -401,6 +448,7 @@
 </footer>
 
 <!-- Bootstrap JS and dependencies -->
+<<<<<<< HEAD
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
@@ -423,5 +471,102 @@
   // Generate sparkles every 1s
   setInterval(createSparkle, 1000);
 </script>
+=======
+<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>-->
+<!--<script>-->
+<!--  document.querySelectorAll('a[href^="#"]').forEach(anchor => {-->
+<!--    anchor.addEventListener('click', function (e) {-->
+<!--      e.preventDefault();-->
+<!--      document.querySelector(this.getAttribute('href')).scrollIntoView({-->
+<!--        behavior: 'smooth'-->
+<!--      });-->
+<!--    });-->
+<!--  });-->
+<!--</script>-->
+<!-- Navbar Scroll Effect -->
+<!--<script>-->
+<!--  const navbar = document.querySelector('.navbar');-->
+<!--  window.addEventListener('scroll', () => {-->
+<!--    if (window.scrollY > 50) {-->
+<!--      navbar.classList.add('scrolled');-->
+<!--    } else {-->
+<!--      navbar.classList.remove('scrolled');-->
+<!--    }-->
+<!--  });-->
+
+<!--  const cursor = document.getElementById("TryCircle");-->
+
+<!--  // Variables to store the current mouse position-->
+<!--  let mouseX = 0;-->
+<!--  let mouseY = 0;-->
+
+<!--  // Variables to store the target position of the cursor with a small delay-->
+<!--  let targetX = 0;-->
+<!--  let targetY = 0;-->
+
+<!--  // The delay in milliseconds (controls how much the cursor lags behind the mouse)-->
+<!--  const delay = 100;  // You can adjust this value to control the amount of delay-->
+
+<!--  // Track the mouse position-->
+<!--  window.addEventListener("mousemove", (e) => {-->
+<!--    mouseX = e.clientX;-->
+<!--    mouseY = e.clientY;-->
+<!--    cursor.classList.add("active"); // Make cursor visible when moving-->
+<!--  });-->
+
+<!--  // Function to move the cursor with a delay-->
+<!--  function moveCursor() {-->
+<!--    // Update the target position slowly to match the mouse position with delay-->
+<!--    targetX += (mouseX - targetX) * 0.1; // Adjust the speed (0.1) to control how fast it follows-->
+<!--    targetY += (mouseY - targetY) * 0.1;-->
+
+<!--    // Update the cursor position with slight lag-->
+<!--    cursor.style.left = `${targetX - 25}px`; // Center the cursor (50px / 2)-->
+<!--    cursor.style.top = `${targetY - 25}px`; // Center the cursor (50px / 2)-->
+
+<!--    // Call the function again for smooth animation-->
+<!--    requestAnimationFrame(moveCursor);-->
+<!--  }-->
+
+<!--  // Start moving the cursor with the defined delay-->
+<!--  moveCursor();-->
+
+<!--  // Add hover effect for the specific section (targetSection)-->
+<!--  const targetSection = document.getElementById("targetSection"); // The section where you want the cursor to grow-->
+<!--  targetSection.addEventListener("mouseenter", () => {-->
+<!--    cursor.classList.add("active");-->
+<!--    cursor.classList.remove("shrink");-->
+<!--  });-->
+<!--  targetSection.addEventListener("mouseleave", () => {-->
+<!--    cursor.classList.add("shrink");-->
+<!--    cursor.classList.remove("active");-->
+<!--  });-->
+
+<!--  // Shrink cursor when hovering over <p> or <a> elements or images-->
+<!--  document.querySelectorAll("p, a , img ").forEach((element) => {-->
+<!--    element.addEventListener("mouseenter", () => {-->
+<!--      cursor.classList.add("shrink");-->
+<!--      cursor.classList.remove("active");-->
+<!--    });-->
+
+<!--    element.addEventListener("mouseleave", () => {-->
+<!--      cursor.classList.remove("shrink");-->
+<!--      cursor.classList.add("active");-->
+<!--    });-->
+<!--  });-->
+
+<!--  // Hide cursor when leaving the entire document area-->
+<!--  window.addEventListener("mouseleave", () => {-->
+<!--    cursor.classList.add("shrink");-->
+<!--    cursor.classList.remove("active");-->
+<!--  });-->
+
+<!--  // When mouse enters the page again, ensure the cursor starts from normal state-->
+<!--  window.addEventListener("mouseenter", () => {-->
+<!--    cursor.classList.remove("shrink");-->
+<!--  });-->
+
+<!--</script>-->
+>>>>>>> ed01212f1bd8e09844ed521dd39afb6fbd4221d7
 </body>
 </html>

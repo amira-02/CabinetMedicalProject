@@ -56,14 +56,17 @@
                     <div class="mb-3">
                         <label class="form-label">Gender</label>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="gender" id="Male" value="true" th:checked="${patient.gender}">
+                            <input class="form-check-input" type="radio" name="gender" id="Male" value="MALE"
+                                   th:checked="${patient.gender == 'MALE'}">
                             <label class="form-check-label" for="Male">Male</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="gender" id="Female" value="false" th:checked="${!patient.gender}">
+                            <input class="form-check-input" type="radio" name="gender" id="Female" value="FEMALE"
+                                   th:checked="${patient.gender == 'FEMALE'}">
                             <label class="form-check-label" for="Female">Female</label>
                         </div>
                     </div>
+
 
                     <div class="mb-3">
                         <label for="pathology" class="form-label">Pathology</label>

@@ -72,11 +72,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/registration**", "/js/**", "/css/**", "/img/**", "/images/**").permitAll()  // Autoriser l'accès au dossier uploads
+                // Autoriser l'accès sans authentification à ces pages
+                .antMatchers("/home", "/login", "/registration**", "/js/**", "/static/css/**", "/img/**", "/images/**")
+                .permitAll()
+                // Restreindre l'accès à certaines pages en fonction des rôles
                 .antMatchers("/admine").hasAuthority("ADMIN")
-                .antMatchers("/index").hasAuthority("ROLE_DOCTOR")
+                .antMatchers("/doctorhome").hasAuthority("ROLE_DOCTOR")
                 .antMatchers("/pharmacyhome").hasAuthority("ROLE_PHARMACY")
-                .antMatchers("/Home").hasAuthority("ROLE_PATIENT")
+                .antMatchers("/patienthome").hasAuthority("ROLE_PATIENT")
+                // Toutes les autres pages nécessitent une authentification
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -91,5 +95,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/login?logout")
                 .permitAll();
     }
+
 
 }

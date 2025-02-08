@@ -6,25 +6,33 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <style>
         body {
-            background-color: #ffffff;
-            color: #f8f9fa;
-        }
-        .container {
-            max-width: 600px;
+            background-color: #f4f6f9;
+            color: #495057;
         }
         .navbar {
-            margin-bottom: 30px;
+            background-color: #343a40;
         }
+        .navbar-nav .nav-link {
+            transition: all 0.3s ease;
+        }
+        .navbar-nav .nav-link:hover {
+            color: rgb(52, 58, 64);
+        }
+
         /* Doctor Card Styles */
         .doctor-card {
-            background-color: rgba(246, 246, 248, 0.96);
-            border: none;
+            background-color: rgba(255, 255, 255, 0.95);
             border-radius: 10px;
             margin-bottom: 20px;
-            padding: 15px;
+            padding: 20px;
             display: flex;
-            align-items: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            flex-direction: row;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .doctor-card:hover {
+            transform: translateY(-5px);
         }
 
         .doctor-card img {
@@ -32,68 +40,94 @@
             height: 100px;
             border-radius: 50%;
             object-fit: cover;
-            margin-right: 15px;
-            border: 3px solid #000000;
+            margin-right: 20px;
+            border: 3px solid rgb(52, 58, 64);
         }
 
         .doctor-card h5 {
-            font-size: 1.5rem;
-            color: #000000;
-            margin-bottom: 8px;
+            font-size: 1.7rem;
+            font-weight: bold;
+            color: rgb(52, 58, 64);
+            margin-bottom: 10px;
         }
 
         .doctor-card p {
-            color: #000000;
-            font-size: 1rem;
-            margin-bottom: 5px;
+            color: #6c757d;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
             display: flex;
             align-items: center;
         }
 
         .doctor-card p i {
-            margin-right: 10px;
-            color: #495057;
+            margin-right: 12px;
+            color: rgb(52, 58, 64);
         }
 
         .doctor-card .custom-btn {
-            background-color: rgba(163, 163, 171, 0.96);
+            background-color: rgb(52, 58, 64);
             color: white;
-            padding: 10px 20px;
+            padding: 12px 25px;
             text-transform: uppercase;
-            border-radius: 50px;
+            border-radius: 30px;
             font-weight: bold;
+            border: 2px solid rgb(52, 58, 64);
+            text-decoration: none;
             transition: all 0.3s ease;
-            border: 2px solid #000000;
-            text-decoration: none
+            display: inline-block;
         }
 
         .doctor-card .custom-btn:hover {
-            background-color: #495057;
+            background-color: rgb(52, 58, 64);
+            border-color: rgb(52, 58, 64);
             transform: translateY(-3px);
         }
 
+        /* Pagination Styles */
         .pagination .page-item.active .page-link {
-            background-color: rgba(18, 27, 121, 0.96);
-            border-color: #ffffff;
+            background-color: rgb(52, 58, 64);
+            border-color: rgba(18, 27, 121, 0.96);
         }
 
-        .pagination .page-link {
-            background-color: #1c1c1c;
-            color: #f8f9fa;
+        .pagination .page-item .page-link {
+            background-color: #f8f9fa;
+            color: rgb(52, 58, 64);
+            border: 1px solid rgba(18, 27, 121, 0.96);
+            transition: background-color 0.3s ease;
         }
 
-        .pagination .page-item.disabled .page-link {
-            color: #6c757d;
+        .pagination .page-item .page-link:hover {
+            background-color: #e9ecef;
+        }
+
+        /* Responsiveness */
+        @media (max-width: 767px) {
+            .doctor-card {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .doctor-card img {
+                margin-bottom: 15px;
+            }
+
+            .doctor-card .custom-btn {
+                width: 100%;
+                text-align: center;
+                margin-top: 10px;
+            }
+
+            .pagination {
+                justify-content: center;
+            }
         }
     </style>
 </head>
 <body>
 
-
-
-
 <!-- Navigation Bar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container">
         <a class="navbar-brand" href="#">Medical Office</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -107,43 +141,33 @@
                 <li class="nav-item"><a class="nav-link" th:href="@{/DoctorsListForPatient}">Appointments</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
                 <li class="nav-item">
-                    <a
-                            class="nav-link"
-                            th:href="${#authentication.name != null} ? '/logout?redirect=' + ${#httpServletRequest.requestURI} : '/login'">
-                        <i
-                                class="fas"
-                                th:classappend="${#authentication.name != null} ? ' fa-sign-out-alt' : ' fa-sign-in-alt'">
-                        </i>
-                        <span
-                                th:text="${#authentication.name != null} ? 'Logout' : 'Login'">
-        </span>
+                    <a class="nav-link" th:href="${#authentication.name != null} ? '/logout?redirect=' + ${#httpServletRequest.requestURI} : '/login'">
+                        <i class="fas" th:classappend="${#authentication.name != null} ? ' fa-sign-out-alt' : ' fa-sign-in-alt'"></i>
+                        <span th:text="${#authentication.name != null} ? 'Logout' : 'Login'"></span>
                     </a>
                 </li>
-
-
             </ul>
-
         </div>
     </div>
 </nav>
 
-
+<!-- Doctors List Section -->
 <div class="container mt-5">
     <h1 class="text-center mb-5">Doctors List</h1>
 
-    <div class="list-group">
-        <div class="doctor-card" th:each="doctor : ${doctors}">
-            <img th:src="@{${doctor.imagePath}}" alt="Doctor Image">
-            <div>
-                <h5 th:text="${doctor.name}">Dr. Name</h5>
-                <p><i class="bi bi-person-circle"></i><span th:text="${doctor.specialty}">Specialty</span></p>
-                <p><i class="bi bi-envelope"></i><span th:text="${doctor.user.email}">Email</span></p>
-                <p><i class="bi bi-geo-alt"></i><span th:text="${doctor.address}">Address</span></p>
-                <p><i class="bi bi-telephone"></i><span th:text="${doctor.phone}">Phone</span></p>
-                <p><i class="bi bi-info-circle"></i><span th:text="${doctor.description}">Description</span></p>
-<!--                <a th:href="@{/appointment-form}" class="btn custom-btn">Make Appointment</a>-->
-                <a th:href="@{/appointmentForm/{doctorId}(doctorId=${doctor.id})}" class="btn custom-btn">Make Appointment</a>
-
+    <div class="row">
+        <div class="col-12" th:each="doctor : ${doctors}">
+            <div class="doctor-card">
+                <img th:src="@{${doctor.imagePath}}" alt="Doctor Image">
+                <div>
+                    <h5 th:text="${doctor.name}">Dr. Name</h5>
+                    <p><i class="bi bi-person-circle"></i><span th:text="${doctor.specialty}">Specialty</span></p>
+                    <p><i class="bi bi-envelope"></i><span th:text="${doctor.user.email}">Email</span></p>
+                    <p><i class="bi bi-geo-alt"></i><span th:text="${doctor.address}">Address</span></p>
+                    <p><i class="bi bi-telephone"></i><span th:text="${doctor.phone}">Phone</span></p>
+                    <p><i class="bi bi-info-circle"></i><span th:text="${doctor.description}">Description</span></p>
+                    <a th:href="@{/Consultation/form/{doctorId}(doctorId=${doctor.id})}" class="btn custom-btn">Make Appointment</a>
+                </div>
             </div>
         </div>
     </div>
