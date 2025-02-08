@@ -127,45 +127,50 @@
       background-color: #ffffff; /* White background */
     }
 
-    .card {
-      border: none;
+    .testimonial-item {
+      padding: 2rem;
+      background-color: #f9f9f9; /* Light gray background */
       border-radius: 10px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      margin: 0 auto;
+      max-width: 600px;
     }
 
-    .card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Enhanced shadow on hover */
-    }
-
-    .card-body {
-      padding: 2rem;
-    }
-
-    .card-text {
-      font-size: 1rem;
+    .testimonial-text {
+      font-size: 1.1rem;
       color: #666666; /* Light gray text */
       font-style: italic;
+      margin-bottom: 1rem;
     }
 
-    .card-title {
+    .testimonial-author {
       font-size: 1.2rem;
       font-weight: bold;
       color: #007AFF; /* Blue text */
+      margin-bottom: 0.5rem;
     }
 
-    .card-footer {
-      padding: 0.75rem;
-      background-color: transparent;
-      border-top: none;
+    .testimonial-role {
+      font-size: 0.9rem;
+      color: #999999; /* Light gray text */
     }
 
-    .card-footer .fa-quote-right {
-      font-size: 2rem;
-      color: #007AFF; /* Blue icon */
+    .carousel-control-prev,
+    .carousel-control-next {
+      width: 5%;
+      color: #007AFF; /* Blue color for controls */
     }
 
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+      filter: invert(1); /* Make arrows white */
+    }
+
+    .carousel-indicators button {
+      background-color: #007AFF; /* Blue color for indicators */
+    }
+
+    /* Doctors Section */
     /* Doctors Section */
     .doctors {
       padding: 50px 0;
@@ -174,32 +179,217 @@
 
     .doctor-card {
       border: none;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      background: white;
+    }
+
+    .doctor-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .doctor-image-container {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .doctor-image {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .doctor-card:hover .doctor-image {
+      transform: scale(1.05);
+    }
+
+    .doctor-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, rgba(0, 122, 255, 0) 0%, rgba(0, 122, 255, 0.8) 100%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    .doctor-card:hover .doctor-overlay {
+      opacity: 1;
+    }
+
+    .doctor-social {
+      padding: 1rem;
+      transform: translateY(100%);
+      transition: transform 0.3s ease;
+    }
+
+    .doctor-card:hover .doctor-social {
+      transform: translateY(-20%);
+    }
+
+    .doctor-social a {
+      color: white;
+      font-size: 1.5rem;
+      margin: 0 0.5rem;
+      transition: color 0.3s ease;
+    }
+
+    .doctor-social a:hover {
+      color: #ffdd57; /* Yellow hover for icons */
+    }
+
+    .doctor-info {
+      padding: 1.5rem;
+    }
+
+    .doctor-info h4 {
+      font-size: 1.4rem;
+      color: #007AFF; /* Blue text */
+      margin-bottom: 0.5rem;
+    }
+
+    .doctor-info p {
+      font-size: 1rem;
+      color: #666666; /* Light gray text */
+      margin-bottom: 1rem;
+    }
+    /* Newsletter Section */
+    .newsletter {
+      padding: 50px 0;
+      background-color: #f9f9f9; /* Light gray background */
+    }
+
+    .newsletter h2 {
+      font-size: 2rem;
+      color: #007AFF; /* Blue text */
+      margin-bottom: 1.5rem;
+    }
+
+    .newsletter p {
+      font-size: 1rem;
+      color: #666666; /* Light gray text */
+      margin-bottom: 1.5rem;
+    }
+
+    .newsletter .form-control {
+      border-radius: 30px;
+      border: 1px solid #ddd;
+      padding: 10px 20px;
+      margin-bottom: 1rem;
+    }
+
+    .newsletter .btn {
+      background: linear-gradient(145deg, #007AFF, #005BB5); /* Gradient blue */
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 30px;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .newsletter .btn:hover {
+      background: linear-gradient(145deg, #005BB5, #007AFF); /* Reverse gradient on hover */
+    }
+
+    /* Services Section */
+    .services {
+      padding: 50px 0;
+      background-color: #ffffff; /* White background */
+    }
+
+    .service-card {
+      text-align: center;
+      padding: 2rem;
+      border: none;
       border-radius: 10px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
-    .doctor-card:hover {
+    .service-card:hover {
       transform: translateY(-10px);
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Enhanced shadow on hover */
     }
 
-    .doctor-card img {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
+    .service-card i {
+      font-size: 2.5rem;
+      color: #007AFF; /* Blue icon */
       margin-bottom: 1rem;
-      border: 2px solid #007AFF; /* Blue border */
     }
 
-    .doctor-card h4 {
+    .service-card h4 {
       font-size: 1.2rem;
       color: #007AFF; /* Blue text */
     }
 
-    .doctor-card p {
-      font-size: 0.9rem;
+    .service-card p {
+      font-size: 1rem;
       color: #666666; /* Light gray text */
+    }
+
+    /* About Us Section */
+    .about-us {
+      padding: 50px 0;
+      background-color: #f9f9f9; /* Light gray background */
+    }
+
+    .about-us h2 {
+      font-size: 2rem;
+      color: #007AFF; /* Blue text */
+      margin-bottom: 1.5rem;
+    }
+
+    .about-us p {
+      font-size: 1rem;
+      color: #666666; /* Light gray text */
+      line-height: 1.8;
+    }
+
+    /* Contact Form Section */
+    .contact-form {
+      padding: 50px 0;
+      background-color: #ffffff; /* White background */
+    }
+
+    .contact-form h2 {
+      font-size: 2rem;
+      color: #007AFF; /* Blue text */
+      margin-bottom: 1.5rem;
+    }
+
+    .contact-form .form-control {
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      padding: 10px;
+      margin-bottom: 1rem;
+    }
+
+    .contact-form .form-control:focus {
+      border-color: #007AFF; /* Blue border on focus */
+      box-shadow: 0 0 5px rgba(0, 122, 255, 0.5); /* Blue shadow */
+    }
+
+    .contact-form .btn {
+      background: linear-gradient(145deg, #007AFF, #005BB5); /* Gradient blue */
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 30px;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .contact-form .btn:hover {
+      background: linear-gradient(145deg, #005BB5, #007AFF); /* Reverse gradient on hover */
     }
 
     /* Footer */
@@ -290,41 +480,77 @@
 <section class="testimonials">
   <div class="container text-center">
     <h2 class="mb-4"><strong>What Our Patients Say</strong></h2>
+    <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+      <!-- Carousel Indicators -->
+      <div class="carousel-indicators">
+        <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+      </div>
+      <!-- Carousel Items -->
+      <div class="carousel-inner">
+        <!-- Testimonial 1 -->
+        <div class="carousel-item active">
+          <div class="testimonial-item">
+            <p class="testimonial-text">"The doctors here are very attentive and caring. I feel well taken care of every time I visit."</p>
+            <h5 class="testimonial-author">John Doe</h5>
+            <p class="testimonial-role">Patient</p>
+          </div>
+        </div>
+        <!-- Testimonial 2 -->
+        <div class="carousel-item">
+          <div class="testimonial-item">
+            <p class="testimonial-text">"Excellent service! The staff is friendly, and I always feel welcome. Highly recommend!"</p>
+            <h5 class="testimonial-author">Jane Smith</h5>
+            <p class="testimonial-role">Patient</p>
+          </div>
+        </div>
+        <!-- Testimonial 3 -->
+        <div class="carousel-item">
+          <div class="testimonial-item">
+            <p class="testimonial-text">"I had a wonderful experience during my treatment. The doctors are highly skilled."</p>
+            <h5 class="testimonial-author">Emily Johnson</h5>
+            <p class="testimonial-role">Patient</p>
+          </div>
+        </div>
+      </div>
+      <!-- Carousel Controls -->
+      <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- Services Section -->
+<section class="services">
+  <div class="container text-center">
+    <h2 class="mb-4">Our Services</h2>
     <div class="row">
       <div class="col-md-4 mb-4">
-        <div class="card h-100">
-          <div class="card-body">
-            <p class="card-text font-italic">"The doctors here are very attentive and caring. I feel well taken care of every time I visit."</p>
-            <h5 class="card-title">John Doe</h5>
-            <p class="text-muted">Patient</p>
-          </div>
-          <div class="card-footer bg-transparent border-0 text-center">
-            <i class="fas fa-quote-right"></i>
-          </div>
+        <div class="service-card">
+          <i class="fas fa-stethoscope"></i>
+          <h4>General Consultation</h4>
+          <p>Comprehensive health checkups and consultations.</p>
         </div>
       </div>
       <div class="col-md-4 mb-4">
-        <div class="card h-100">
-          <div class="card-body">
-            <p class="card-text font-italic">"Excellent service! The staff is friendly, and I always feel welcome. Highly recommend!"</p>
-            <h5 class="card-title">Jane Smith</h5>
-            <p class="text-muted">Patient</p>
-          </div>
-          <div class="card-footer bg-transparent border-0 text-center">
-            <i class="fas fa-quote-right"></i>
-          </div>
+        <div class="service-card">
+          <i class="fas fa-pills"></i>
+          <h4>Pharmacy Services</h4>
+          <p>Get your prescribed medications conveniently.</p>
         </div>
       </div>
       <div class="col-md-4 mb-4">
-        <div class="card h-100">
-          <div class="card-body">
-            <p class="card-text font-italic">"I had a wonderful experience during my treatment. The doctors are highly skilled."</p>
-            <h5 class="card-title">Emily Johnson</h5>
-            <p class="text-muted">Patient</p>
-          </div>
-          <div class="card-footer bg-transparent border-0 text-center">
-            <i class="fas fa-quote-right"></i>
-          </div>
+        <div class="service-card">
+          <i class="fas fa-hospital"></i>
+          <h4>Emergency Care</h4>
+          <p>24/7 emergency care for critical situations and optimal care.</p>
         </div>
       </div>
     </div>
@@ -332,41 +558,108 @@
 </section>
 
 <!-- Doctors Section -->
+<!-- Doctors Section -->
 <section class="doctors">
   <div class="container text-center">
     <h2 class="mb-4">Meet Our Doctors</h2>
     <div class="row">
-      <div class="col-md-4">
-        <div class="card h-100">
-          <img src="/images/doc2.png" class="card-img-top img-fluid" alt="Doctor Image">
-          <div class="card-body">
-            <h5 class="card-title">Dr. John Doe</h5>
-            <p class="card-text">General Practitioner</p>
+      <!-- Doctor 1 -->
+      <div class="col-md-4 mb-4">
+        <div class="doctor-card">
+          <div class="doctor-image-container">
+            <img src="/images/doc2.png" class="doctor-image" alt="Doctor Image">
+            <div class="doctor-overlay">
+              <div class="doctor-social">
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fas fa-envelope"></i></a>
+              </div>
+            </div>
+          </div>
+          <div class="doctor-info">
+            <h4>Dr. John Doe</h4>
+            <p>General Practitioner</p>
             <a href="#" class="btn btn-primary custom-btn">View Profile</a>
           </div>
         </div>
       </div>
-      <div class="col-md-4">
-        <div class="card h-100">
-          <img src="/images/doc2.png" class="card-img-top img-fluid" alt="Doctor Image">
-          <div class="card-body">
-            <h5 class="card-title">Dr. Jane Smith</h5>
-            <p class="card-text">Pediatrician</p>
+
+      <!-- Doctor 2 -->
+      <div class="col-md-4 mb-4">
+        <div class="doctor-card">
+          <div class="doctor-image-container">
+            <img src="/images/doc2.png" class="doctor-image" alt="Doctor Image">
+            <div class="doctor-overlay">
+              <div class="doctor-social">
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fas fa-envelope"></i></a>
+              </div>
+            </div>
+          </div>
+          <div class="doctor-info">
+            <h4>Dr. Jane Smith</h4>
+            <p>Pediatrician</p>
             <a href="#" class="btn btn-primary custom-btn">View Profile</a>
           </div>
         </div>
       </div>
-      <div class="col-md-4">
-        <div class="card h-100">
-          <img src="/images/doc2.png" class="card-img-top img-fluid" alt="Doctor Image">
-          <div class="card-body">
-            <h5 class="card-title">Dr. Emily Johnson</h5>
-            <p class="card-text">Cardiologist</p>
+
+      <!-- Doctor 3 -->
+      <div class="col-md-4 mb-4">
+        <div class="doctor-card">
+          <div class="doctor-image-container">
+            <img src="/images/doc2.png" class="doctor-image" alt="Doctor Image">
+            <div class="doctor-overlay">
+              <div class="doctor-social">
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fas fa-envelope"></i></a>
+              </div>
+            </div>
+          </div>
+          <div class="doctor-info">
+            <h4>Dr. Emily Johnson</h4>
+            <p>Cardiologist</p>
             <a href="#" class="btn btn-primary custom-btn">View Profile</a>
           </div>
         </div>
       </div>
     </div>
+  </div>
+</section>
+<!-- Contact Form Section -->
+<section class="contact-form">
+  <div class="container">
+    <h2 class="text-center mb-4">Contact Us</h2>
+    <form>
+      <div class="form-group">
+        <input type="text" class="form-control" placeholder="Your Name" required>
+      </div>
+      <div class="form-group">
+        <input type="email" class="form-control" placeholder="Your Email" required>
+      </div>
+      <div class="form-group">
+        <textarea class="form-control" rows="5" placeholder="Your Message" required></textarea>
+      </div>
+      <div class="text-center">
+        <button type="submit" class="btn custom-btn">Send Message</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- Newsletter Section -->
+<section class="newsletter">
+  <div class="container text-center">
+    <h2>Subscribe to Our Newsletter</h2>
+    <p>Stay updated with the latest news and health tips from our medical office.</p>
+    <form>
+      <div class="form-group">
+        <input type="email" class="form-control" placeholder="Enter your email" required>
+      </div>
+      <button type="submit" class="btn custom-btn">Subscribe</button>
+    </form>
   </div>
 </section>
 
