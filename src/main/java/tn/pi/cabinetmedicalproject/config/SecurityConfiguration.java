@@ -77,7 +77,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 // Restreindre l'accès à certaines pages en fonction des rôles
                 .antMatchers("/admine").hasAuthority("ADMIN")
-                .antMatchers("/index").hasAuthority("ROLE_DOCTOR")
+                .antMatchers("/doctorhome").hasAuthority("ROLE_DOCTOR")
                 .antMatchers("/pharmacyhome").hasAuthority("ROLE_PHARMACY")
                 .antMatchers("/patienthome").hasAuthority("ROLE_PATIENT")
                 // Toutes les autres pages nécessitent une authentification

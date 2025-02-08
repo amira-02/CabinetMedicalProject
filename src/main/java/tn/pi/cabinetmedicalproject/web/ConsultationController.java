@@ -76,13 +76,13 @@ public class ConsultationController {
         if (consultation.getTime() == null) {
             logger.error("Time is missing!");
             model.addAttribute("error", "Time is required.");
-            return "appointments";  // Return the form with an error
+            return "doctorhome";  // Return the form with an error
         }
 
         if (consultation.getDate() == null) {
             logger.error("Date is missing!");
             model.addAttribute("error", "Date is required.");
-            return "appointments";  // Return the form with an error
+            return "doctorhome";  // Return the form with an error
         }
 
         // Set the patient in the consultation
@@ -111,14 +111,14 @@ public class ConsultationController {
         if (consultation.getPatient() == null || consultation.getDoctor() == null) {
             logger.error("Error: Patient or Doctor is missing!");
             model.addAttribute("error", "Patient or Doctor information is missing.");
-            return "appointments"; // Retourne la page avec le message d'erreur
+            return "doctorhome"; // Retourne la page avec le message d'erreur
         }
 
         // Vérification si la date et l'heure sont renseignées
         if (consultation.getDate() == null || consultation.getTime() == null) {
             logger.error("Error: Date or Time is missing!");
             model.addAttribute("error", "Date and time must be provided.");
-            return "appointments"; // Retourne la page avec le message d'erreur
+            return "doctorhome"; // Retourne la page avec le message d'erreur
         }
 
         try {
@@ -129,11 +129,11 @@ public class ConsultationController {
             consultationService.saveConsultation(consultation);
             logger.info("Consultation successfully saved!");
 
-            return "redirect:/appointments"; // Redirige après un succès
+            return "redirect:/doctorhome"; // Redirige après un succès
         } catch (Exception e) {
             logger.error("Error saving consultation: {}", e.getMessage());
             model.addAttribute("error", "An unexpected error occurred while saving the consultation.");
-            return "appointments"; // Affiche une erreur en cas d'exception
+            return "doctorhome"; // Affiche une erreur en cas d'exception
         }
     }
     @GetMapping("/form/{doctorId}")
@@ -183,68 +183,42 @@ public class ConsultationController {
             Doctor doctor = doctorRepository.findByUserEmail(username);
             if (doctor == null) {
                 model.addAttribute("consultation", Collections.emptyList());
-                return "appointments"; // Rediriger vers la page sans consultations
+                return "doctorhome"; // Rediriger vers la page sans consultations
             }
 
             // Récupérer les consultations du médecin
             List<Consultation> consultations = consultationRepository.findByDoctor(doctor);
-            model.addAttribute("consultation", consultations);
 
-            return "appointments"; // Affichage Thymeleaf
+            model.addAttribute("consultation", consultations);
+            model.addAttribute("doctor", doctor);
+            return "doctorhome"; // Affichage Thymeleaf
         }
 
 
+
+    @GetMapping("/appointments")
+    public String showAppointmentsPage(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName(); // Get the logged-in user's username (email)
+
+        // Retrieve the doctor associated with this username
+        Doctor doctor = doctorRepository.findByUserEmail(username);
+        if (doctor == null) {
+            model.addAttribute("error", "Doctor not found");
+            return "error";  // Return an error page if the doctor is not found
+        }
+
+        // Get the consultations associated with this doctor
+        List<Consultation> consultations = consultationRepository.findByDoctor(doctor);
+
+        model.addAttribute("consultations", consultations);
+        model.addAttribute("doctor", doctor);
+        return "doctorhome";  // Return the appointments view for the doctor
+    }
+
+
+
 }
-
-
-
-//    @PostMapping("/submit")
-//    public String submitConsultation(@ModelAttribute Consultation consultation, Model model) {
-//        // Vérifiez si le patient et le médecin sont présents
-//        Patient patient = consultation.getPatient();
-//        Doctor doctor = consultation.getDoctor();
-//
-//        if (patient == null || doctor == null) {
-//            model.addAttribute("error", "Patient or Doctor information is missing");
-//            return "appointments"; // Affiche l'erreur si les informations sont manquantes
-//        }
-//
-//        // Assurez-vous que la date et l'heure sont renseignées
-//        if (consultation.getDate() == null || consultation.getTime() == null) {
-//            model.addAttribute("error", "Date and time must be provided");
-//            return "appointments"; // Affiche une erreur si la date ou l'heure manquent
-//        }
-//
-//        // Définissez le statut de la consultation comme 'SCHEDULED' (prévu)
-//        consultation.setStatus(AppointmentStatus.SCHEDULED);
-//
-//        // Enregistrez la consultation avec les informations de base (date, heure, statut, patient et médecin)
-//        consultationService.saveConsultation(consultation);
-//
-//        logger.info("Consultation saved for patient: {} with doctor: {}", patient.getName(), doctor.getName());
-//
-//        return "Home"; // Redirige vers la page des consultations après l'enregistrement
-//    }
-
-
-
-
-//
-//    // Endpoint to save an Consultation after the patient has selected a doctor
-//    @PostMapping("/save")
-//    public String saveConsultation(@ModelAttribute Consultation Consultation, Model model) {
-//        if (Consultation.getPatient() == null) {
-//            model.addAttribute("error", "Patient information is missing");
-//            return "appointmentForm"; // Show error in form if patient info is missing
-//        }
-//
-//        // Save the Consultation
-//        ConsultationService.saveConsultation(Consultation);
-//
-//        logger.info("Consultation saved for patient: {} with doctor: {}", Consultation.getPatient().getName(), Consultation.getDoctor().getName());
-//
-//        return "redirect:/appointments"; // Redirect to Consultation list after successful submission
-//    }
 
 
 

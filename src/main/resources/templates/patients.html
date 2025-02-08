@@ -138,9 +138,36 @@
                 </li>
             </ul>
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link text-danger" href="#" onclick="logout()">Logout <i class="bi bi-box-arrow-right"></i></a>
+<!--                <li class="nav-item">-->
+<!--                    <a class="nav-link text-danger" href="#" onclick="logout()">Logout <i class="bi bi-box-arrow-right"></i></a>-->
+<!--                </li>-->
+                li class="nav-item dropdown" th:if="${#authentication.principal != null}">
+                <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-person-circle"></i>
+                    <!-- Affiche le nom d'utilisateur de l'utilisateur connecté -->
+                    <span th:text="${#authentication.principal.username}">Profile</span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                    <li><a class="dropdown-item" th:href="@{/profile}">Mon Profil</a></li>
+                    <li><a class="dropdown-item" th:href="@{/logout}">Déconnexion</a></li>
+                </ul>
                 </li>
+
+                <!-- Si l'utilisateur n'est pas authentifié -->
+                <li class="nav-item" th:if="${#authentication == null}">
+                    <a class="nav-link" href="/signup" th:href="@{/signup}">
+                        <i class="fas fa-user-plus"></i> S'inscrire
+                    </a>
+                </li>
+
+                <li class="nav-item" th:if="${#authentication == null}">
+                    <a class="nav-link" href="/login" th:href="@{/login}">
+                        <i class="fas fa-sign-in-alt"></i> Connexion
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
             </ul>
         </div>
     </div>
@@ -151,12 +178,13 @@
         <div class="card">
             <div class="card-header">List of Patients</div>
             <div class="card-body">
+
                 <form th:action="@{/index}" method="get" class="search-form">
 
                     <div class="input-group mb-3">
                         <input type="text" name="keyword" id="keyword" th:value="${keyword}" class="form-control" placeholder="Search...">
                         <button class="btn btn-info" type="submit">
-                            <i class="bi bi-search"></i>
+                            <i class="bi bi-search">    </i>
                         </button>
                     </div>
                 </form>
@@ -204,7 +232,7 @@
                 <div class="pagination-container">
                     <ul class="nav nav-pills">
                         <li th:each="page, status : ${pages}">
-                            <a th:href="@{/index(page=${status.index}, keyword=${keyword})}" th:class="${currentPage == status.index ? 'btn btn-info ms-1' : 'btn btn-outline-info ms-1'}" th:text="${status.index}"></a>
+                            <a th:href="@{/index(page=${satus.index}, keyword=${keyword})}" th:class="${currentPage == status.index ? 'btn btn-info ms-1' : 'btn btn-outline-info ms-1'}" th:text="${status.index}"></a>
                         </li>
                     </ul>
                 </div>
