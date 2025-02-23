@@ -1,0 +1,111 @@
+.doctor-card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+    margin-bottom: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.doctor-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.card-img-top {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid #fff;
+    margin-bottom: 15px;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.card-title {
+    font-size: 1.25em;
+    color: rgba(18, 27, 121, 0.96);
+    margin-bottom: 10px;
+}
+
+.card-text {
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.action-icons a,
+.action-icons button {
+    color: inherit;
+    font-size: 1.5rem;
+    text-decoration: none;
+    border: none;
+    background: none;
+    margin: 0 5px;
+}
+
+.search-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.search-bar input {
+    flex: 1;
+}
+
+/* Pagination */
+.pagination .page-link {
+    color: rgba(18, 27, 121, 0.96);
+}
+
+.pagination .page-link:hover {
+    background-color: rgba(18, 27, 121, 0.96);
+    color: white;
+}
+
+.pagination .active .page-link {
+    background-color: rgba(18, 27, 121, 0.96);
+    border-color: rgba(18, 27, 121, 0.96);
+    color: white;
+}
+.doctor-card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Subtle shadow around the card */
+    border-radius: 10px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out;
+}
+
+.doctor-card:hover {
+    transform: translateY(-5px);  /* Lift effect on hover */
+}
+
+.doctor-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;  /* Circular image */
+    object-fit: cover;
+    margin-right: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Adds shadow around the image */
+}
+
+.doctor-info {
+    flex-grow: 1;
+}
+
+.doctor-info p {
+    margin: 5px 0;
+}
+
+.action-icons i {
+    font-size: 1.5rem;
+    transition: color 0.3s;
+}
+
+.action-icons i:hover {
+    color: #0056b3;
+}

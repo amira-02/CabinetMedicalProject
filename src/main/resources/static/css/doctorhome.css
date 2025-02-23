@@ -24,7 +24,7 @@ body {
 /* Sidebar Styles */
 .sidebar {
     width: 280px;
-    background: linear-gradient(180deg, #2c3e50, #3498db);
+    background: linear-gradient(180deg, #4f96d9, #764ba2);
     color: var(--text-light);
     padding: 2rem 1.5rem;
     box-sizing: border-box;

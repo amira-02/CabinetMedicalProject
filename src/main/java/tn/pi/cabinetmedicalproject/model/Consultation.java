@@ -2,6 +2,7 @@ package tn.pi.cabinetmedicalproject.model;
 
 import javax.persistence.*;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 import tn.pi.cabinetmedicalproject.enums.AppointmentStatus;
 
 import java.time.LocalDate;
@@ -43,17 +44,21 @@ public class Consultation {
 
     @Lob
     private String medicalHistory;  // Medical history (in English)
+    private String pathology;
+    private float price;
 
     private LocalTime time;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(nullable = false)
     private LocalDate date;
     @Enumerated(EnumType.STRING)
     private AppointmentStatus status = AppointmentStatus.SCHEDULED;
 
 
-        public Patient getPatient() {
-        return patient;
+    public Patient getPatient() {
+        return this.patient;
     }
+
     public LocalDate getDate() {
         return date;
     }
@@ -69,4 +74,14 @@ public class Consultation {
     public void setTime(LocalTime appointmentTime) {
         this.time =appointmentTime;
     }
+
+
+    public String getPathology() {
+        return pathology;
+    }
+
+    public void setPathology(String pathology) {
+        this.pathology = pathology;
+    }
+
 }

@@ -5,183 +5,250 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Patient File</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
     <style>
+        :root {
+            --primary: #2A5C82;
+            --secondary: #5BA4E6;
+            --accent: #FF6B6B;
+            --light: #F8F9FC;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            margin: 20px;
-            line-height: 1.6;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f0f4f8;
+            color: #2E384D;
         }
-        .header {
-            text-align: right;
-            margin-bottom: 30px;
+
+        .main-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
         }
-        .header h5 {
-            margin: 0;
+
+        .patient-header {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            padding: 2rem 0;
+            border-bottom: 2px solid var(--primary);
         }
-        .title {
+
+        .doctor-info {
+            background: var(--light);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .patient-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: var(--light);
+            border-radius: 8px;
+        }
+
+        .form-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            margin: 2rem 0;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control {
+            border: 2px solid #E0E7FF;
+            border-radius: 8px;
+            padding: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--secondary);
+            box-shadow: 0 0 8px rgba(91, 164, 230, 0.2);
+        }
+
+        .icon-box {
+            width: 40px;
+            height: 40px;
+            background: var(--secondary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-right: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: #1D4665;
+            transform: translateY(-2px);
+        }
+
+        .vital-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .stat-box {
+            background: var(--light);
+            padding: 1rem;
+            border-radius: 8px;
             text-align: center;
-            font-weight: bold;
-            margin: 30px 0;
-        }
-        .confidential {
-            text-align: center;
-            font-weight: bold;
-            text-decoration: underline;
-            margin-bottom: 30px;
-        }
-        .section {
-            margin-bottom: 30px;
-        }
-        .info-label {
-            font-weight: bold;
-            color: #495057;
-        }
-        .divider {
-            border-top: 3px solid #6c757d;
-            margin: 30px 0;
-        }
-        .rdv-section {
-            background-color: #ffffff;
-            border: 1px solid #dee2e6;
-            border-radius: 5px;
-            padding: 15px;
-            margin-top: 20px;
-        }
-        .rdv-section h6 {
-            font-weight: bold;
-            text-decoration: underline;
-            color: #343a40;
-        }
-        .rdv-section p {
-            margin: 5px 0;
         }
 
-        /* Style de l'icône "+" */
-        .add-icon {
-            cursor: pointer;
-            color: #28a745;
-            font-size: 1.5rem;
-            margin-left: 10px;
-        }
+        @media (max-width: 768px) {
+            .patient-header {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 1.5rem;
+            }
 
-        .add-icon:hover {
-            color: #218838;
-        }
-
-        /* Cacher le formulaire par défaut */
-        .add-consultation-form {
-            display: none;
-            margin-top: 20px;
+            .main-container {
+                margin: 1rem;
+                padding: 1rem;
+            }
         }
     </style>
 </head>
 <body>
-<div class="container">
+<div class="main-container">
     <div class="mb-4">
-        <a href="/index" class="btn btn-secondary">
-            <i class="fas fa-arrow-left"></i>
+        <a href="/Consultation/doctor/home" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
         </a>
     </div>
-    <div class="header d-flex justify-content-between align-items-center">
-        <!-- Section de gauche -->
-        <div class="right text-end">
-            <p>121 rue d'Aguesse<br>12100 Millau</p>
+
+    <!-- Patient Header -->
+    <div class="patient-header">
+        <div class="doctor-info">
+            <h4><i class="fas fa-user-md me-2"></i> Dr. <span th:text="${doctor.name}"></span></h4>
+            <p class="text-muted mb-0" th:text="${doctor.specialty}"></p>
         </div>
 
-        <!-- Section centrale -->
-        <div class="center text-center">
-            <div class="title">
-                <h3>PATIENT FILE</h3>
+        <div class="text-center">
+            <h2 class="mb-3" style="color: var(--primary);">PATIENT MEDICAL RECORD</h2>
+            <div class="confidential-badge" style="color: var(--accent); font-weight: 500;">
+                <i class="fas fa-lock me-2"></i>STRICTLY CONFIDENTIAL
             </div>
-            <p class="confidential">CONFIDENTIAL</p>
         </div>
 
-        <!-- Section de droite -->
-        <div class="left">
-            <h5>Dr Arnaud Provost</h5>
-            <p>General Practitioner</p>
+        <div class="doctor-info text-end">
+            <h5>Clinic Information</h5>
+            <p class="mb-1" th:text="${doctor.address}"></p>
+            <p class="mb-0" th:text="${doctor.phone}"></p>
         </div>
-
     </div>
 
-    <div class="section">
-        <p><span class="info-label">Full Name:</span> <span th:text="${patient.name}"></span></p>
-        <p><span class="info-label">Phone:</span> <span th:text="${patient.telephone}"></span></p>
-        <p><span class="info-label">Date of Birth:</span> <span th:text="${patient.birthDate}"></span></p>
-        <p><span class="info-label">Height:</span> <span th:text="${patient.height}"></span></p>
-        <p><span class="info-label">Weight:</span> <span th:text="${patient.weight}"></span></p>
-        <p><span class="info-label">Pathology:</span> <span th:text="${patient.pathology}"></span></p>
+    <!-- Patient Summary -->
+    <div class="patient-summary">
+        <div>
+            <h5><i class="fas fa-user me-2"></i> Patient Details</h5>
+            <p class="mb-1"><strong>Name:</strong> <span th:text="${patient.name}"></span></p>
+            <p class="mb-1"><strong>DOB:</strong> <span th:text="${patient.birthDate}"></span></p>
+            <p class="mb-0"><strong>Age:</strong> <!-- Add age calculation here --></p>
+        </div>
+
+        <div>
+            <h5><i class="fas fa-notes-medical me-2"></i> Vital Stats</h5>
+            <div class="vital-stats">
+                <div class="stat-box">
+                    <small>Height</small>
+                    <h4 class="mb-0" th:text="${patient.height + ' cm'}"></h4>
+                </div>
+                <div class="stat-box">
+                    <small>Weight</small>
+                    <h4 class="mb-0" th:text="${patient.weight + ' kg'}"></h4>
+                </div>
+                <div class="stat-box">
+                    <small>BMI</small>
+                    <h4 class="mb-0"><!-- Add BMI calculation --></h4>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="divider"></div>
+    <!-- Consultation Form -->
+    <div class="form-card">
+        <h4 class="mb-4" style="color: var(--primary);">
+            <i class="fas fa-edit me-2"></i>Consultation Details
+        </h4>
 
-    <!-- Section des consultations -->
-    <div class="section">
-        <h4>Consultations <i class="fas fa-plus add-icon" onclick="toggleForm()"></i></h4>
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>Date</th>
-                <th>Description</th>
-                <th>Prescription</th>
-                <th>Allergies</th>
-                <th>Current Treatments</th>
-                <th>Medical History</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="consultation : ${consultations}">
-                <td th:text="${consultation.date}"></td>
-                <td th:text="${consultation.description}"></td>
-                <td th:text="${consultation.prescription}"></td>
-                <td th:text="${consultation.allergies}"></td>
-                <td th:text="${consultation.currentTreatments}"></td>
-                <td th:text="${consultation.medicalHistory}"></td>
-            </tr>
-            </tbody>
-        </table>
+        <form th:action="@{/patient/{patientId}/consultation/{consultationId}/update}" method="post">
+            <div class="row g-4">
+                <!-- Left Column -->
+                <div class="col-md-6">
+                    <div class="mb-4">
+                        <label class="form-label"><i class="fas fa-diagnoses me-2"></i>Pathology</label>
+                        <input type="text" class="form-control" th:value="${consultation.Pathology}" readonly>
+                    </div>
 
-        <!-- Formulaire d'ajout de consultation -->
-        <div class="add-consultation-form" id="addConsultationForm">
-            <h5>Add New Consultation</h5>
-            <form th:action="@{/patient/{id}/consultation(id=${patient.id})}" method="post">
-                <div class="mb-3">
-                    <label for="description" class="form-label">Description:</label>
-                    <textarea class="form-control" id="description" name="description" rows="3"></textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="prescription" class="form-label">Prescription:</label>
-                    <textarea class="form-control" id="prescription" name="prescription" rows="3"></textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="allergies" class="form-label">Allergies:</label>
-                    <textarea class="form-control" id="allergies" name="allergies" rows="3"></textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="currentTreatments" class="form-label">Current Treatments:</label>
-                    <textarea class="form-control" id="currentTreatments" name="currentTreatments" rows="3"></textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="medicalHistory" class="form-label">Medical History:</label>
-                    <textarea class="form-control" id="medicalHistory" name="medicalHistory" rows="3"></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">Save Consultation</button>
-            </form>
+                    <div class="mb-4">
+                        <label class="form-label"><i class="fas fa-comment-medical me-2"></i>Description</label>
+                        <textarea class="form-control" rows="4" name="description"
+                                  th:text="${consultation.description}"></textarea>
+                    </div>
 
-        </div>
+                    <div class="mb-4">
+                        <label class="form-label"><i class="fas fa-prescription me-2"></i>Prescription</label>
+                        <textarea class="form-control" rows="4" name="prescription"
+                                  th:text="${consultation.prescription}"></textarea>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div class="col-md-6">
+                    <div class="mb-4">
+                        <label class="form-label"><i class="fas fa-allergies me-2"></i>Allergies</label>
+                        <textarea class="form-control" rows="3" name="allergies"
+                                  th:text="${consultation.allergies}"></textarea>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label"><i class="fas fa-pills me-2"></i>Current Treatments</label>
+                        <textarea class="form-control" rows="3" name="currentTreatments"
+                                  th:text="${consultation.currentTreatments}"></textarea>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label"><i class="fas fa-history me-2"></i>Medical History</label>
+                        <textarea class="form-control" rows="3" name="medicalHistory"
+                                  th:text="${consultation.medicalHistory}"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-primary px-5">
+                    <i class="fas fa-save me-2"></i>Update Record
+                </button>
+            </div>
+        </form>
     </div>
 </div>
-
-
-<script>
-    // Fonction pour afficher/masquer le formulaire d'ajout
-    function toggleForm() {
-        const form = document.getElementById('addConsultationForm');
-        form.style.display = form.style.display === 'none' || form.style.display === '' ? 'block' : 'none';
-    }
-</script>
 </body>
 </html>

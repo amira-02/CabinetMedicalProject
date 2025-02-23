@@ -6,19 +6,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import tn.pi.cabinetmedicalproject.model.Consultation;
 import tn.pi.cabinetmedicalproject.model.Doctor;
 import tn.pi.cabinetmedicalproject.model.Patient;
 import tn.pi.cabinetmedicalproject.model.User;
+import tn.pi.cabinetmedicalproject.repository.ConsultationRepository;
 import tn.pi.cabinetmedicalproject.repository.DoctorRepository;
+import tn.pi.cabinetmedicalproject.repository.PatientRepository;
+import tn.pi.cabinetmedicalproject.repository.UserRepository;
 import tn.pi.cabinetmedicalproject.service.DoctorService;
 import tn.pi.cabinetmedicalproject.service.UserService;
 
@@ -27,12 +29,18 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.Principal;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @Slf4j
 public class DoctorController {
+
+    @Autowired
+    private ConsultationRepository consultationRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     private final DoctorRepository doctorRepository;
     private final UserService userService;
@@ -41,12 +49,44 @@ public class DoctorController {
     @Autowired
     private DoctorService doctorService;
 
-
+    @Autowired
+    private PatientRepository patientRepository;
     public DoctorController(DoctorRepository doctorRepository, UserService userService, PasswordEncoder passwordEncoder) {
         this.doctorRepository = doctorRepository;
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
     }
+
+    @GetMapping("/doctor/patients")
+    public String getUniquePatientsForDoctor(Model model, Principal principal) {
+        // Récupérer l'utilisateur connecté
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        // Trouver le médecin associé à cet utilisateur
+        Doctor doctor = doctorRepository.findByUserEmail(username);
+        if (doctor == null) {
+            model.addAttribute("consultation", Collections.emptyList());
+            return "doctorhome"; // Rediriger vers la page sans consultations
+        }
+
+        // Utiliser la requête personnalisée pour récupérer les patients distincts
+        List<Patient> distinctPatients = consultationRepository.findDistinctPatientsByDoctor(doctor);
+
+        // Vérifier si la liste est vide
+        if (distinctPatients.isEmpty()) {
+            model.addAttribute("message", "Aucun patient trouvé.");
+        }
+
+        // Ajouter les patients distincts au modèle
+        model.addAttribute("patients", distinctPatients);
+        model.addAttribute("doctor", doctor);
+        return "doctorhome"; // Affichage Thymeleaf
+    }
+
+
+
+
 //    @GetMapping("/DoctorsList")
 //    public String index(Model model,
 //                        @RequestParam(name = "page", defaultValue = "0") int page,
@@ -60,6 +100,32 @@ public class DoctorController {
 //        model.addAttribute("currentPage", page);
 //        model.addAttribute("keyword", keyword);
 //        return "DoctorsList";
+//    }
+
+//
+//
+//    @GetMapping("/doctor/patients")
+//    public String getUniquePatientsForDoctor(Model model) {
+//        // Récupérer l'utilisateur connecté (doctor)
+//        User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        Long doctorId = Long.parseLong(principal.getEmail()); // Si l'ID du médecin est stocké dans le nom d'utilisateur
+//
+//        // Récupérer toutes les consultations du médecin avec l'ID doctorId
+//        List<Consultation> consultations = consultationRepository.findAllByDoctorId(doctorId);
+//
+//        // Créer un Set pour garantir l'unicité des patients
+//        Set<Patient> uniquePatients = new HashSet<>();
+//
+//        // Ajouter chaque patient de chaque consultation au Set pour filtrer les doublonsx  x
+//        for (Consultation consultation : consultations) {
+//            uniquePatients.add(consultation.getPatient());
+//        }
+//
+//        // Ajouter la liste des patients uniques au modèle
+//        model.addAttribute("uniquePatients", uniquePatients);
+//
+//        // Retourner le nom de la vue
+//        return "doctorhome";
 //    }
 
 
@@ -118,7 +184,7 @@ public class DoctorController {
             doctorRepository.save(doctor);
             // Reset the form (clear the Doctor instance for the next input)
             model.addAttribute("doctor", new Doctor());
-            return "redirect:/DoctorsList"; // Rediriger vers la liste des médecins
+            return "redirect:/admin"; // Rediriger vers la liste des médecins
         } catch (IOException e) {
             e.printStackTrace();
             return "error"; // Retourner une page d'erreur si quelque chose se passe mal

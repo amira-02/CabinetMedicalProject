@@ -1,233 +1,4 @@
-<!--<!DOCTYPE html>-->
-<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-<!--    <title>Doctors List</title>-->
-<!--    <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">-->
-<!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">-->
 
-<!--    <style>-->
-<!--        .doctor-card {-->
-<!--            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);-->
-<!--            border-radius: 15px;-->
-<!--            margin-bottom: 20px;-->
-<!--            transition: transform 0.3s ease, box-shadow 0.3s ease;-->
-<!--        }-->
-
-<!--        .doctor-card:hover {-->
-<!--            transform: translateY(-5px);-->
-<!--            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);-->
-<!--        }-->
-
-<!--        .card-img-top {-->
-<!--            width: 100px;-->
-<!--            height: 100px;-->
-<!--            object-fit: cover;-->
-<!--            border-radius: 50%;-->
-<!--            border: 3px solid #fff;-->
-<!--            margin-bottom: 15px;-->
-<!--        }-->
-
-<!--        .card-body {-->
-<!--            padding: 20px;-->
-<!--        }-->
-
-<!--        .card-title {-->
-<!--            font-size: 1.25em;-->
-<!--            color: rgba(18, 27, 121, 0.96);-->
-<!--            margin-bottom: 10px;-->
-<!--        }-->
-
-<!--        .card-text {-->
-<!--            color: #555;-->
-<!--            margin-bottom: 10px;-->
-<!--        }-->
-
-<!--        .action-icons a,-->
-<!--        .action-icons button {-->
-<!--            color: inherit;-->
-<!--            font-size: 1.5rem;-->
-<!--            text-decoration: none;-->
-<!--            border: none;-->
-<!--            background: none;-->
-<!--            margin: 0 5px;-->
-<!--        }-->
-
-<!--        .search-bar {-->
-<!--            display: flex;-->
-<!--            gap: 10px;-->
-<!--            margin-bottom: 20px;-->
-<!--        }-->
-
-<!--        .search-bar input {-->
-<!--            flex: 1;-->
-<!--        }-->
-
-<!--        /* Pagination */-->
-<!--        .pagination .page-link {-->
-<!--            color: rgba(18, 27, 121, 0.96);-->
-<!--        }-->
-
-<!--        .pagination .page-link:hover {-->
-<!--            background-color: rgba(18, 27, 121, 0.96);-->
-<!--            color: white;-->
-<!--        }-->
-
-<!--        .pagination .active .page-link {-->
-<!--            background-color: rgba(18, 27, 121, 0.96);-->
-<!--            border-color: rgba(18, 27, 121, 0.96);-->
-<!--            color: white;-->
-<!--        }-->
-<!--    </style>-->
-<!--</head>-->
-<!--<body>-->
-<!--<div class="container mt-4">-->
-<!--    &lt;!&ndash; Header &ndash;&gt;-->
-<!--&lt;!&ndash;    <div class="d-flex justify-content-between align-items-center mb-4">&ndash;&gt;-->
-<!--&lt;!&ndash;        <h1 class="text-primary">Doctors List</h1>&ndash;&gt;-->
-<!--&lt;!&ndash;        &lt;!&ndash; Add Doctor Button &ndash;&gt;&ndash;&gt;-->
-<!--&lt;!&ndash;        <a href="#" th:href="@{/formDoctor}" class="btn btn-success btn-lg">&ndash;&gt;-->
-<!--&lt;!&ndash;            <i class="bi bi-plus-lg"></i> Add Doctor&ndash;&gt;-->
-<!--&lt;!&ndash;        </a>&ndash;&gt;-->
-<!--&lt;!&ndash;    </div>&ndash;&gt;-->
-<!--    <div class="d-flex justify-content-between align-items-center mb-4">-->
-<!--        <h1 class="text-primary">Doctors List</h1>-->
-<!--        &lt;!&ndash; New Add Doctor Button &ndash;&gt;-->
-<!--        <a href="#" th:href="@{/formDoctor}" class="group cursor-pointer outline-none hover:rotate-90 duration-300">-->
-<!--            <svg xmlns="http://www.w3.org/2000/svg" width="50px" height="50px" viewBox="0 0 24 24" class="stroke-zinc-400 fill-none group-hover:fill-zinc-800 group-active:stroke-zinc-200 group-active:fill-zinc-600 group-active:duration-0 duration-300">-->
-<!--                <path d="M12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22Z" stroke-width="1.5"></path>-->
-<!--                <path d="M8 12H16" stroke-width="1.5"></path>-->
-<!--                <path d="M12 16V8" stroke-width="1.5"></path>-->
-<!--            </svg>-->
-<!--        </a>-->
-<!--    </div>-->
-
-
-<!--    &lt;!&ndash; Search Form &ndash;&gt;-->
-<!--    <form th:action="@{/DoctorsList}" method="get" class="search-bar">-->
-<!--        <input type="text" id="keyword" name="keyword" th:value="${keyword}" class="form-control" placeholder="Search by name...">-->
-<!--        <button type="submit" class="btn btn-primary">Search</button>-->
-<!--    </form>-->
-
-<!--    &lt;!&ndash; Doctors List &ndash;&gt;-->
-<!--    <div class="row">-->
-<!--        <div class="col-md-4" th:each="doctor : ${doctors}">-->
-<!--            <div class="card doctor-card d-flex flex-row">-->
-<!--                &lt;!&ndash; Doctor Profile Image &ndash;&gt;-->
-<!--                <img th:src="@{${doctor.imagePath}}" alt="Doctor Image" class="doctor-image" />-->
-<!--                <div class="card-body doctor-info">-->
-<!--                    <p class="card-text">-->
-<!--                        <strong>Name:</strong> <span th:text="${doctor.name}">Name</span>-->
-<!--                    </p>-->
-<!--                    <p class="card-text">-->
-<!--                        <strong>Specialty:</strong> <span th:text="${doctor.specialty}">Specialty</span>-->
-<!--                    </p>-->
-
-<!--                    <p class="card-text">-->
-<!--                        <strong>Phone:</strong> <span th:text="${doctor.phone}">Phone</span>-->
-<!--                    </p>-->
-<!--                    <p class="card-text">-->
-<!--                        <strong>City:</strong> <span th:text="${doctor.city}">City</span>-->
-<!--                    </p>-->
-
-<!--                    &lt;!&ndash; Action Icons &ndash;&gt;-->
-<!--                    <div class="d-flex justify-content-around mt-3 action-icons">-->
-<!--                        &lt;!&ndash; View Profile &ndash;&gt;-->
-<!--                        <a th:href="@{/doctor/{id}(id=${doctor.id})}" class="text-primary" title="View Profile">-->
-<!--                            <i class="bi bi-eye"></i>-->
-<!--                        </a>-->
-
-<!--                        &lt;!&ndash; Edit Doctor &ndash;&gt;-->
-<!--                        <a th:href="@{EditDoctor(id=${doctor.id}, keyword=${keyword}, page=${currentPage})}" class="text-warning" title="Edit Doctor">-->
-<!--                            <i class="bi bi-pencil"></i>-->
-<!--                        </a>-->
-
-<!--                        &lt;!&ndash; Delete Doctor &ndash;&gt;-->
-<!--                        <a onclick="javascript:return confirm('Are you sure ?')"-->
-<!--                           th:href="@{deleteDoctor(id=${doctor.id}, keyword=${keyword}, page=${currentPage})}">-->
-<!--                            <i class="bi bi-trash"></i>-->
-<!--                        </a>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-
-<!--    &lt;!&ndash; Add CSS for the design &ndash;&gt;-->
-<!--    <style>-->
-<!--        .doctor-card {-->
-<!--            display: flex;-->
-<!--            flex-direction: row;-->
-<!--            align-items: center;-->
-<!--            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Subtle shadow around the card */-->
-<!--            border-radius: 10px;-->
-<!--            margin-bottom: 20px;-->
-<!--            overflow: hidden;-->
-<!--            transition: transform 0.3s ease-in-out;-->
-<!--        }-->
-
-<!--        .doctor-card:hover {-->
-<!--            transform: translateY(-5px);  /* Lift effect on hover */-->
-<!--        }-->
-
-<!--        .doctor-image {-->
-<!--            width: 100px;-->
-<!--            height: 100px;-->
-<!--            border-radius: 50%;  /* Circular image */-->
-<!--            object-fit: cover;-->
-<!--            margin-right: 15px;-->
-<!--            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Adds shadow around the image */-->
-<!--        }-->
-
-<!--        .doctor-info {-->
-<!--            flex-grow: 1;-->
-<!--        }-->
-
-<!--        .doctor-info p {-->
-<!--            margin: 5px 0;-->
-<!--        }-->
-
-<!--        .action-icons i {-->
-<!--            font-size: 1.5rem;-->
-<!--            transition: color 0.3s;-->
-<!--        }-->
-
-<!--        .action-icons i:hover {-->
-<!--            color: #0056b3;-->
-<!--        }-->
-<!--    </style>-->
-
-
-<!--    <nav aria-label="Page navigation">-->
-<!--        <ul class="pagination justify-content-center mt-4">-->
-<!--            &lt;!&ndash; Previous Button &ndash;&gt;-->
-<!--            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">-->
-<!--                <a class="page-link" th:href="@{/DoctorsList(keyword=${keyword}, page=${currentPage - 1}, size=${size})}" aria-label="Previous">-->
-<!--                    &laquo; Previous-->
-<!--                </a>-->
-<!--            </li>-->
-
-<!--            &lt;!&ndash; Page Numbers &ndash;&gt;-->
-<!--            <li th:each="page, status : ${pages}" th:classappend="${currentPage == status.index} ? 'active'">-->
-<!--                <a class="page-link" th:href="@{/DoctorsList(keyword=${keyword}, page=${status.index}, size=${size})}" th:text="${status.index + 1}"></a>-->
-<!--            </li>-->
-
-<!--            &lt;!&ndash; Next Button &ndash;&gt;-->
-<!--            <li class="page-item" th:classappend="${currentPage == pages.length - 1} ? 'disabled'">-->
-<!--                <a class="page-link" th:href="@{/DoctorsList(keyword=${keyword}, page=${currentPage + 1}, size=${size})}" aria-label="Next">-->
-<!--                    Next &raquo;-->
-<!--                </a>-->
-<!--            </li>-->
-<!--        </ul>-->
-<!--    </nav>-->
-
-
-
-<!--    &lt;!&ndash; Bootstrap Icons &ndash;&gt;-->
-<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.js"></script>-->
-<!--</body>-->
-<!--</html>-->
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -236,103 +7,13 @@
     <title>Doctors List</title>
     <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-
-    <style>
-        .doctor-card {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            border-radius: 15px;
-            margin-bottom: 20px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .doctor-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-        }
-
-        .card-img-top {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 50%;
-            border: 3px solid #fff;
-            margin-bottom: 15px;
-        }
-
-        .card-body {
-            padding: 20px;
-        }
-
-        .card-title {
-            font-size: 1.25em;
-            color: rgba(18, 27, 121, 0.96);
-            margin-bottom: 10px;
-        }
-
-        .card-text {
-            color: #555;
-            margin-bottom: 10px;
-        }
-
-        .action-icons a,
-        .action-icons button {
-            color: inherit;
-            font-size: 1.5rem;
-            text-decoration: none;
-            border: none;
-            background: none;
-            margin: 0 5px;
-        }
-
-        .search-bar {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .search-bar input {
-            flex: 1;
-        }
-
-        /* Pagination */
-        .pagination .page-link {
-            color: rgba(18, 27, 121, 0.96);
-        }
-
-        .pagination .page-link:hover {
-            background-color: rgba(18, 27, 121, 0.96);
-            color: white;
-        }
-
-        .pagination .active .page-link {
-            background-color: rgba(18, 27, 121, 0.96);
-            border-color: rgba(18, 27, 121, 0.96);
-            color: white;
-        }
-    </style>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.js"></script>
+    <link rel="stylesheet" href="/css/DoctorsList.css">
+<link>
 </head>
 <body>
-<div class="container mt-4">
-    <!-- Header -->
-    <!--    <div class="d-flex justify-content-between align-items-center mb-4">-->
-    <!--        <h1 class="text-primary">Doctors List</h1>-->
-    <!--        &lt;!&ndash; Add Doctor Button &ndash;&gt;-->
-    <!--        <a href="#" th:href="@{/formDoctor}" class="btn btn-success btn-lg">-->
-    <!--            <i class="bi bi-plus-lg"></i> Add Doctor-->
-    <!--        </a>-->
-    <!--    </div>-->
-    <div class="container mt-4">
-        <!-- Header -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="text-primary">Doctors List</h1>
-            <!-- Add Doctor Button -->
-            <a href="#" th:href="@{/formDoctor}" class="btn btn-success btn-lg">
-                <i class="bi bi-plus-lg"></i> Add Doctor
-            </a>
-        </div>
 
-        <!-- Search Form -->
-        <form th:action="@{/DoctorsList}" method="get" class="search-bar mb-4">
+        <form th:action="@{/admin}" method="get" class="search-bar mb-4">
             <input type="text" id="keyword" name="keyword" th:value="${keyword}" class="form-control" placeholder="Search by name...">
             <button type="submit" class="btn btn-primary">Search</button>
         </form>
@@ -341,6 +22,7 @@
         <table class="table table-striped table-bordered">
             <thead class="thead-light">
             <tr>
+
                 <th>#</th>
                 <th>Image</th>
                 <th>Name</th>
@@ -385,103 +67,30 @@
             </tbody>
         </table>
 
-        <!--        &lt;!&ndash; Pagination &ndash;&gt;-->
-        <!--        <nav aria-label="Page navigation">-->
-        <!--            <ul class="pagination justify-content-center mt-4">-->
-        <!--                &lt;!&ndash; Previous Button &ndash;&gt;-->
-        <!--                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">-->
-        <!--                    <a class="page-link" th:href="@{/DoctorsList(keyword=${keyword}, page=${currentPage - 1}, size=${size})}" aria-label="Previous">-->
-        <!--                        &laquo; Previous-->
-        <!--                    </a>-->
-        <!--                </li>-->
+                <!-- Pagination -->
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center mt-4">
+                        <!-- Previous Button -->
+                        <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                            <a class="page-link" th:href="@{/DoctorsList(keyword=${keyword}, page=${currentPage - 1}, size=${size})}" aria-label="Previous">
+                                &laquo; Previous
+                            </a>
+                        </li>
 
-        <!--                &lt;!&ndash; Page Numbers &ndash;&gt;-->
-        <!--                <li th:each="page, status : ${pages}" th:classappend="${currentPage == status.index} ? 'active'">-->
-        <!--                    <a class="page-link" th:href="@{/DoctorsList(keyword=${keyword}, page=${status.index}, size=${size})}" th:text="${status.index + 1}"></a>-->
-        <!--                </li>-->
+                        <!-- Page Numbers -->
+                        <li th:each="page, status : ${pages}" th:classappend="${currentPage == status.index} ? 'active'">
+                            <a class="page-link" th:href="@{/DoctorsList(keyword=${keyword}, page=${status.index}, size=${size})}" th:text="${status.index + 1}"></a>
+                        </li>
 
-        <!--                &lt;!&ndash; Next Button &ndash;&gt;-->
-        <!--                <li class="page-item" th:classappend="${currentPage == pages.length - 1} ? 'disabled'">-->
-        <!--                    <a class="page-link" th:href="@{/DoctorsList(keyword=${keyword}, page=${currentPage + 1}, size=${size})}" aria-label="Next">-->
-        <!--                        Next &raquo;-->
-        <!--                    </a>-->
-        <!--                </li>-->
-        <!--            </ul>-->
-        <!--        </nav>-->
-        <!--    </div>-->
+                        <!-- Next Button -->
+                        <li class="page-item" th:classappend="${currentPage == pages.length - 1} ? 'disabled'">
+                            <a class="page-link" th:href="@{/DoctorsList(keyword=${keyword}, page=${currentPage + 1}, size=${size})}" aria-label="Next">
+                                Next &raquo;
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
 
-
-        <!-- Add CSS for the design -->
-        <style>
-            .doctor-card {
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Subtle shadow around the card */
-                border-radius: 10px;
-                margin-bottom: 20px;
-                overflow: hidden;
-                transition: transform 0.3s ease-in-out;
-            }
-
-            .doctor-card:hover {
-                transform: translateY(-5px);  /* Lift effect on hover */
-            }
-
-            .doctor-image {
-                width: 100px;
-                height: 100px;
-                border-radius: 50%;  /* Circular image */
-                object-fit: cover;
-                margin-right: 15px;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Adds shadow around the image */
-            }
-
-            .doctor-info {
-                flex-grow: 1;
-            }
-
-            .doctor-info p {
-                margin: 5px 0;
-            }
-
-            .action-icons i {
-                font-size: 1.5rem;
-                transition: color 0.3s;
-            }
-
-            .action-icons i:hover {
-                color: #0056b3;
-            }
-        </style>
-
-
-        <nav aria-label="Page navigation">
-            <ul class="pagination justify-content-center mt-4">
-                <!-- Previous Button -->
-                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                    <a class="page-link" th:href="@{/DoctorsList(keyword=${keyword}, page=${currentPage - 1}, size=${size})}" aria-label="Previous">
-                        &laquo; Previous
-                    </a>
-                </li>
-
-                <!-- Page Numbers -->
-                <li th:each="page, status : ${pages}" th:classappend="${currentPage == status.index} ? 'active'">
-                    <a class="page-link" th:href="@{/DoctorsList(keyword=${keyword}, page=${status.index}, size=${size})}" th:text="${status.index + 1}"></a>
-                </li>
-
-                <!-- Next Button -->
-                <li class="page-item" th:classappend="${currentPage == pages.length - 1} ? 'disabled'">
-                    <a class="page-link" th:href="@{/DoctorsList(keyword=${keyword}, page=${currentPage + 1}, size=${size})}" aria-label="Next">
-                        Next &raquo;
-                    </a>
-                </li>
-            </ul>
-        </nav>
-
-
-
-        <!-- Bootstrap Icons -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.js"></script>
 </body>
 </html>

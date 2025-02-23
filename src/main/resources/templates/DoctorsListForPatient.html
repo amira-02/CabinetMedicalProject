@@ -5,193 +5,34 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #6366f1;
-            --secondary: #4f46e5;
-            --accent: #f59e0b;
-            --dark: #1e293b;
-            --light: #f8fafc;
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #f3f4ff, #eef2ff);
-            min-height: 100vh;
-            color: var(--dark);
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        /* Animated Background */
-        .background-pattern {
-            position: fixed;
-            width: 100vw;
-            height: 100vh;
-            background:
-                    linear-gradient(45deg, rgba(99, 102, 241, 0.05) 25%, transparent 25%),
-                    linear-gradient(-45deg, rgba(99, 102, 241, 0.05) 25%, transparent 25%);
-            background-size: 60px 60px;
-            z-index: -1;
-            animation: patternMove 20s linear infinite;
-        }
-
-        @keyframes patternMove {
-            0% { background-position: 0 0; }
-            100% { background-position: 60px 60px; }
-        }
-
-        /* Modern Navbar */
-        .navbar {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            padding: 0.8rem 2rem;
-        }
-
-        .navbar-brand {
-            font-weight: 700;
-            color: var(--primary) !important;
-            font-size: 1.5rem;
-        }
-
-        .nav-link {
-            color: var(--dark) !important;
-            margin: 0 1rem;
-            padding: 0.5rem 1rem !important;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .nav-link:hover {
-            background: var(--primary);
-            color: white !important;
-        }
-
-        .nav-link.active {
-            background: var(--primary);
-            color: white !important;
-        }
-
-        /* Doctor Cards */
-        .doctor-card {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 16px;
-            padding: 2rem;
-            margin: 1.5rem 0;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid rgba(99, 102, 241, 0.1);
-        }
-
-        .doctor-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 28px rgba(99, 102, 241, 0.15);
-        }
-
-        .doctor-img {
-            width: 140px;
-            height: 140px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid var(--primary);
-            padding: 3px;
-            margin-right: 2rem;
-        }
-
-        .specialty-badge {
-            background: var(--primary);
-            color: white;
-            padding: 6px 18px;
-            border-radius: 20px;
-            font-size: 0.95rem;
-            display: inline-block;
-            margin-bottom: 1rem;
-        }
-
-        /* Appointment Button */
-        .appointment-btn {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white !important;
-            padding: 12px 35px;
-            border-radius: 30px;
-            border: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-        }
-
-        .appointment-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.3);
-        }
-
-        /* Pagination */
-        .pagination .page-link {
-            border: none;
-            color: var(--dark);
-            margin: 0 4px;
-            border-radius: 12px !important;
-            transition: all 0.3s ease;
-        }
-
-        .pagination .page-link:hover {
-            background: var(--primary) !important;
-            color: white !important;
-        }
-
-        .pagination .active .page-link {
-            background: var(--primary) !important;
-            color: white !important;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .doctor-card {
-                flex-direction: column;
-                text-align: center;
-                padding: 1.5rem;
-            }
-
-            .doctor-img {
-                margin: 0 auto 1.5rem;
-                width: 120px;
-                height: 120px;
-            }
-
-            .navbar {
-                padding: 0.8rem 1rem;
-            }
-
-            .nav-link {
-                margin: 0.25rem 0;
-            }
-        }
-    </style>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="/css/DoctorsListForPatient.css">
+    <link rel="stylesheet" href="/css/nav.css">
 </head>
 <body>
-<div class="background-pattern"></div>
 
 <!-- Navigation Bar -->
 <nav class="navbar navbar-expand-lg navbar-light fixed-top">
     <div class="container">
-        <a class="navbar-brand" href="#">MediCare</a>
+        <a class="navbar-brand" href="#">
+            <i class="bi bi-heart-pulse"></i>
+            MediCare
+        </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
+            <ul class="navbar-nav ms-auto"><ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Home</a>
+                    <a class="nav-link" th:href="@{/home}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/DoctorsListForPatient}">Services</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" href="#">Doctors</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/DoctorsListForPatient}">Appointments</a>
-                </li>
+
                 <li class="nav-item">
                     <a class="nav-link" href="#">Contact</a>
                 </li>
@@ -201,57 +42,196 @@
                         <span th:text="${#authentication.name != null} ? ' Logout' : ' Login'"></span>
                     </a>
                 </li>
+            </ul> <!-- Liens de navigation existants -->
             </ul>
         </div>
     </div>
 </nav>
 
 <!-- Main Content -->
-<div class="container" style="padding-top: 80px;">
-    <h1 class="text-center mb-5 fw-bold" style="color: var(--primary);">Our Medical Experts</h1>
+<div class="container" style="padding-top: 100px;">
+    <!-- Liste des docteurs -->
+    <h1 class="text-center mb-5 fw-bold" style="color: var(--primary);">
+        <i class="bi bi-people"></i>Our Medical Experts
+    </h1>
+    <!-- Section Recherche -->
+    <div class="search-section">
+        <form th:action="@{/DoctorsListForPatient}" method="get" class="search-form">
+            <div class="search-input">
+                <i class="bi bi-search"></i>
+                <input type="text" name="name" placeholder="Rechercher un médecin..." th:value="${param.name}">
+            </div>
 
-    <div class="row">
-        <div class="col-12" th:each="doctor : ${doctors}">
-            <div class="doctor-card d-flex align-items-center">
-                <img th:src="@{${doctor.imagePath}}" class="doctor-img" alt="Doctor">
-                <div class="flex-grow-1">
-                    <span class="specialty-badge" th:text="${doctor.specialty}"></span>
-                    <h3 class="mb-3" th:text="${doctor.name}"></h3>
-                    <div class="row g-4 mb-4">
-                        <div class="col-md-6">
-                            <p class="mb-2"><i class="bi bi-envelope me-2 text-primary"></i><span th:text="${doctor.user.email}"></span></p>
-                            <p class="mb-0"><i class="bi bi-geo-alt me-2 text-primary"></i><span th:text="${doctor.address}"></span></p>
-                        </div>
-                        <div class="col-md-6">
-                            <p class="mb-2"><i class="bi bi-telephone me-2 text-primary"></i><span th:text="${doctor.phone}"></span></p>
-                            <p class="mb-0"><i class="bi bi-info-circle me-2 text-primary"></i><span th:text="${doctor.description}"></span></p>
-                        </div>
+            <div class="search-input">
+                <i class="bi bi-tag"></i>
+                <input type="text" name="specialty" placeholder="Spécialité" th:value="${param.specialty}">
+            </div>
+
+            <div class="search-input">
+                <i class="bi bi-geo-alt"></i>
+                <input type="text" name="location" placeholder="Localisation" th:value="${param.location}">
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-filter"></i> Filtrer
+            </button>
+        </form>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container" style="padding-top: 80px;">
+
+        <div class="row">
+            <div class="col-12" th:each="doctor : ${doctors}">
+                <div class="doctor-card">
+                    <!-- Like Button -->
+                    <div class="like-button" data-doctor-id="${doctor.id}">
+                        <i class="bi bi-heart"></i>
                     </div>
-                    <a th:href="@{/Consultation/form/{doctorId}(doctorId=${doctor.id})}" class="appointment-btn btn">
-                        <i class="bi bi-calendar-plus me-2"></i> Book Appointment
-                    </a>
+
+                    <div class="doctor-img-container">
+                        <img th:src="@{${doctor.imagePath}}" class="doctor-img" alt="Doctor Profile">
+                    </div>
+                    <div class="doctor-info">
+                        <h3 class="mb-3" th:text="${doctor.name}"></h3>
+
+                        <!-- Star Rating -->
+                        <div class="star-rating mb-3" data-doctor-id="${doctor.id}">
+                            <i class="bi bi-star" data-value="1"></i>
+                            <i class="bi bi-star" data-value="2"></i>
+                            <i class="bi bi-star" data-value="3"></i>
+                            <i class="bi bi-star" data-value="4"></i>
+                            <i class="bi bi-star" data-value="5"></i>
+                        </div>
+
+                        <div class="row g-4 mb-4">
+                            <div class="col-md-6">
+                                <p class="mb-2"><i class="bi bi-envelope me-2 text-primary"></i><span th:text="${doctor.user.email}"></span></p>
+                                <p class="mb-0"><i class="bi bi-geo-alt me-2 text-primary"></i><span th:text="${doctor.address}"></span></p>
+                                <p class="mb-2"><i class="bi bi-journal-text me-2 description-icon"></i><span th:text="${doctor.specialty}"></span></p>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="mb-2"><i class="bi bi-telephone me-2 text-primary"></i><span th:text="${doctor.phone}"></span></p>
+                                <p class="mb-0"><i class="bi bi-info-circle me-2 text-primary"></i><span th:text="${doctor.description}"></span></p>
+                            </div>
+                        </div>
+                        <a th:href="@{/Consultation/form/{doctorId}(doctorId=${doctor.id})}"
+                           class="btn appointment-btn btn-primary btn-lg rounded-pill px-4 py-2 d-inline-flex align-items-center">
+                            <i class="bi bi-calendar-plus me-2"></i>
+                            <span>Book Appointment</span>
+                        </a>
+
+                        <style>
+
+                        </style>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Pagination -->
+
+
+
+
+        <!-- Pagination -->
+        <nav th:if="${pages.length > 1}" class="mt-5">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                    <a class="page-link" th:href="@{'/DoctorsListForPatient'(page=${currentPage - 1})}">Previous</a>
+                </li>
+                <li class="page-item" th:each="page : ${#numbers.sequence(0, pages.length - 1)}"
+                    th:classappend="${page == currentPage} ? 'active'">
+                    <a class="page-link" th:href="@{'/DoctorsListForPatient'(page=${page})}" th:text="${page + 1}"></a>
+                </li>
+                <li class="page-item" th:classappend="${currentPage == pages.length - 1} ? 'disabled'">
+                    <a class="page-link" th:href="@{'/DoctorsListForPatient'(page=${currentPage + 1})}">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <!-- Pagination avec style amélioré -->
     <nav th:if="${pages.length > 1}" class="mt-5">
         <ul class="pagination justify-content-center">
-            <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                <a class="page-link" th:href="@{'/DoctorsListForPatient'(page=${currentPage - 1})}">Previous</a>
-            </li>
-            <li class="page-item" th:each="page : ${#numbers.sequence(0, pages.length - 1)}"
-                th:classappend="${page == currentPage} ? 'active'">
-                <a class="page-link" th:href="@{'/DoctorsListForPatient'(page=${page})}" th:text="${page + 1}"></a>
-            </li>
-            <li class="page-item" th:classappend="${currentPage == pages.length - 1} ? 'disabled'">
-                <a class="page-link" th:href="@{'/DoctorsListForPatient'(page=${currentPage + 1})}">Next</a>
-            </li>
+            <!-- Elements de pagination existants avec styles améliorés -->
         </ul>
     </nav>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+<!-- Animation au défilement -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const cards = document.querySelectorAll('.doctor-card');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, {threshold: 0.1});
+
+        cards.forEach(card => {
+            card.style.opacity = 0;
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'all 0.6s ease-out';
+            observer.observe(card);
+        });
+    });
+
+
+
+        // Like Button Functionality
+        document.querySelectorAll('.like-button').forEach(button => {
+        button.addEventListener('click', function () {
+            const doctorId = this.getAttribute('data-doctor-id');
+            this.classList.toggle('liked');
+            this.innerHTML = this.classList.contains('liked') ?
+                '<i class="bi bi-heart-fill"></i>' :
+                '<i class="bi bi-heart"></i>';
+
+            // Store preference in localStorage
+            localStorage.setItem(`doctor_${doctorId}_liked`, this.classList.contains('liked'));
+        });
+
+        // Initialize liked state
+        const doctorId = button.getAttribute('data-doctor-id');
+        if(localStorage.getItem(`doctor_${doctorId}_liked`) === 'true') {
+        button.classList.add('liked');
+        button.innerHTML = '<i class="bi bi-heart-fill"></i>';
+    }
+    });
+
+        // Star Rating Functionality
+        document.querySelectorAll('.star-rating i').forEach(star => {
+        star.addEventListener('click', function () {
+            const rating = parseInt(this.getAttribute('data-value'));
+            const doctorId = this.parentElement.getAttribute('data-doctor-id');
+            const stars = this.parentElement.querySelectorAll('i');
+
+            stars.forEach((s, index) => {
+                s.classList.remove('bi-star-fill', 'bi-star-half');
+                s.classList.add(index < rating ? 'bi-star-fill' : 'bi-star');
+            });
+
+            // Store rating in localStorage
+            localStorage.setItem(`doctor_${doctorId}_rating`, rating);
+        });
+
+        // Initialize ratings
+        const doctorId = star.parentElement.getAttribute('data-doctor-id');
+        const savedRating = localStorage.getItem(`doctor_${doctorId}_rating`);
+        if(savedRating) {
+        const stars = star.parentElement.querySelectorAll('i');
+        stars.forEach((s, index) => {
+        s.classList.remove('bi-star');
+        s.classList.add(index < savedRating ? 'bi-star-fill' : 'bi-star');
+    });
+    }
+    });
+</script>
+
 </body>
 </html>

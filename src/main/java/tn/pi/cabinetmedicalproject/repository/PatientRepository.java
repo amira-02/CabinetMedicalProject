@@ -21,7 +21,8 @@ public interface PatientRepository
 
         // Correct method to find Patient by the associated User's email
         Patient findByUserEmail(String email);
-
+    @Query("SELECT DISTINCT c.patient FROM Consultation c WHERE c.doctor.id = :doctorId")
+    List<Patient> findUniquePatientsForDoctor(@Param("doctorId") Long doctorId);
     Patient findByUser(User user);
     Page<Patient> findByNameContains(String keyword, Pageable pageable);
     // Trouver les patients associés à un médecin par ID et filtrer par nom (case-insensitive)

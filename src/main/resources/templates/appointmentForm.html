@@ -53,7 +53,7 @@
     </div>
 
     <form th:action="@{/Consultation/submit}" method="post" th:object="${consultation}" onsubmit="return confirmSubmission(event)">
-        <input type="hidden" th:field="*{doctor.id}" />
+         <input type="hidden" th:field="*{doctor.id}" />
 
         <div class="row align-items-center mb-4">
             <div class="col-md-4 text-center">
@@ -87,13 +87,27 @@
 
         <div class="row mb-3">
             <div class="col-md-6">
+                <label for="name" class="form-label">Patient Phone:</label>
+                <input type="text" id="name" class="form-control" th:field="*{patient.name}" readonly>
+            </div>
+            <div class="col-md-6">
                 <label for="patientbirthDate" class="form-label">Patient Birth Date:</label>
                 <input type="date" id="patientbirthDate" class="form-control" th:field="*{patient.birthDate}" readonly>
+            </div>
+
+
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="pathology" class="form-label">Pathology Description:</label>
+                <input type="text" id="pathology" class="form-control" th:field="*{pathology}" >
             </div>
             <div class="col-md-6">
                 <label for="patienttelephone" class="form-label">Patient Phone:</label>
                 <input type="text" id="patienttelephone" class="form-control" th:field="*{patient.telephone}" readonly>
             </div>
+
         </div>
 
         <div class="row mb-3">

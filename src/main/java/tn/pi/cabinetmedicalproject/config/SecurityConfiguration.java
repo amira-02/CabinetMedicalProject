@@ -80,6 +80,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/doctorhome").hasAuthority("ROLE_DOCTOR")
                 .antMatchers("/pharmacyhome").hasAuthority("ROLE_PHARMACY")
                 .antMatchers("/patienthome").hasAuthority("ROLE_PATIENT")
+                .antMatchers("/patient/**").permitAll() // Test temporaire
+
                 // Toutes les autres pages nécessitent une authentification
                 .anyRequest().authenticated()
                 .and()

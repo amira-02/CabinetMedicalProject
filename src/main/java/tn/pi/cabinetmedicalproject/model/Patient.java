@@ -1,5 +1,7 @@
 package tn.pi.cabinetmedicalproject.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
@@ -19,7 +21,7 @@ public class Patient {
 
     @Column(name = "telephone")
     private String telephone;
-
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
 
     private float height;
@@ -29,7 +31,7 @@ public class Patient {
     private String gender;
 
 
-    private String pathology;
+
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Consultation> consultations = new ArrayList<>();
@@ -54,7 +56,7 @@ public class Patient {
         this.height = height;
         this.weight = weight;
         this.gender = gender;
-        this.pathology = pathology;
+
         this.user = user;
     }
     public String getEmail() {
@@ -117,13 +119,7 @@ public class Patient {
         this.gender = gender;
     }
 
-    public String getPathology() {
-        return pathology;
-    }
 
-    public void setPathology(String pathology) {
-        this.pathology = pathology;
-    }
 
     public List<Consultation> getConsultations() {
         return consultations;

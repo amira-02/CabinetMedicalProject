@@ -1,0 +1,435 @@
+body {
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #ffffff; /* White background */
+    color: #333333; /* Dark gray text */
+}
+
+/* Navbar Styles */
+
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: rgba(246, 246, 248, 0.96) !important; /* Blue text */
+}
+
+.navbar-nav .nav-link {
+    color: #333333 !important; /* Dark gray text */
+    font-size: 1rem;
+    font-weight: 500;
+    margin: 0 0.75rem;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #ffffff !important; /* Blue hover effect */
+    transform: translateY(-2px); /* Slight lift on hover */
+}
+
+.navbar-toggler {
+    border: none;
+    outline: none;
+}
+
+.navbar-toggler-icon {
+    background-color: #6366f1; /* Blue color for the toggler icon */
+}
+
+/* Hero Section */
+/*.hero-section {*/
+/*  text-align: center;*/
+/*  padding: 150px 15px;*/
+/*  background-color: #f9f9f9; !* Light gray background *!*/
+/*  position: relative;*/
+/*  overflow: hidden;*/
+/*}*/
+/* Hero Section */
+.hero-section {
+    text-align: center;
+    padding: 150px 15px;
+    background: linear-gradient(rgba(99, 102, 241, 0.7),
+    rgb(255, 255, 255)),
+    url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80') center/cover no-repeat;
+    position: relative;
+    overflow: hidden;
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    color: white; /* Change text color to white for better contrast */
+}
+
+/* Remove the existing background-color property */
+
+.hero-section h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #ffffff; /* Blue text */
+}
+
+.hero-section p {
+    font-size: 1.25rem;
+    color: #333333; /* Dark gray text */
+}
+
+/* Sparkles Effect */
+.sparkle {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: #6366f1; /* Blue sparkles */
+    border-radius: 50%;
+    opacity: 0;
+    animation: sparkle 2s infinite ease-in-out;
+}
+
+@keyframes sparkle {
+    0% {
+        opacity: 0;
+        transform: scale(0);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0);
+    }
+}
+
+/* Custom Button */
+.custom-btn {
+    background: linear-gradient(145deg, #6366f1, #a8a8ec); /* Gradient blue */
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 12px 30px;
+    border-radius: 30px;
+    border: none;
+    text-decoration: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.custom-btn:hover {
+    background: linear-gradient(145deg, #6366f1, #a8a8ec); /* Reverse gradient on hover */
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1); /* Add shadow on hover */
+    transform: translateY(-5px); /* Slightly lift the button */
+}
+
+/* Testimonials Section */
+.testimonials {
+    padding: 50px 0;
+    background-color: #ffffff; /* White background */
+}
+
+.testimonial-item {
+    padding: 2rem;
+    background-color: #f9f9f9; /* Light gray background */
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    margin: 0 auto;
+    max-width: 600px;
+}
+
+.testimonial-text {
+    font-size: 1.1rem;
+    color: #666666; /* Light gray text */
+    font-style: italic;
+    margin-bottom: 1rem;
+}
+
+.testimonial-author {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #6366f1; /* Blue text */
+    margin-bottom: 0.5rem;
+}
+
+.testimonial-role {
+    font-size: 0.9rem;
+    color: #999999; /* Light gray text */
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    width: 5%;
+    color: #6366f1; /* Blue color for controls */
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    filter: invert(1); /* Make arrows white */
+}
+
+.carousel-indicators button {
+    background-color: #6366f1; /* Blue color for indicators */
+}
+
+/* Doctors Section */
+/* Doctors Section */
+.doctors {
+    padding: 50px 0;
+    background-color: #f9f9f9; /* Light gray background */
+}
+
+.doctor-card {
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: white;
+}
+
+.doctor-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+}
+
+.doctor-image-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.doctor-image {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.doctor-card:hover .doctor-image {
+    transform: scale(1.05);
+}
+
+.doctor-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, rgba(0, 122, 255, 0) 0%, rgb(99, 102, 241) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.doctor-card:hover .doctor-overlay {
+    opacity: 1;
+}
+
+.doctor-social {
+    padding: 1rem;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+}
+
+.doctor-card:hover .doctor-social {
+    transform: translateY(-20%);
+}
+
+.doctor-social a {
+    color: white;
+    font-size: 1.5rem;
+    margin: 0 0.5rem;
+    transition: color 0.3s ease;
+}
+
+.doctor-social a:hover {
+    color: #ffdd57; /* Yellow hover for icons */
+}
+
+.doctor-info {
+    padding: 1.5rem;
+}
+
+.doctor-info h4 {
+    font-size: 1.4rem;
+    color: #6366f1; /* Blue text */
+    margin-bottom: 0.5rem;
+}
+
+.doctor-info p {
+    font-size: 1rem;
+    color: #666666; /* Light gray text */
+    margin-bottom: 1rem;
+}
+/* Newsletter Section */
+.newsletter {
+    padding: 50px 0;
+    background-color: #f9f9f9; /* Light gray background */
+}
+
+.newsletter h2 {
+    font-size: 2rem;
+    color: #6366f1; /* Blue text */
+    margin-bottom: 1.5rem;
+}
+
+.newsletter p {
+    font-size: 1rem;
+    color: #666666; /* Light gray text */
+    margin-bottom: 1.5rem;
+}
+
+.newsletter .form-control {
+    border-radius: 30px;
+    border: 1px solid #ddd;
+    padding: 10px 20px;
+    margin-bottom: 1rem;
+}
+
+.newsletter .btn {
+    background: linear-gradient(145deg, #6366f1, #005BB5); /* Gradient blue */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.newsletter .btn6366F1FF:hover {
+    background: linear-gradient(145deg, #6366f1, #007AFF); /* Reverse gradient on hover */
+}
+
+/* Services Section */
+.services {
+    padding: 50px 0;
+    background-color: #ffffff; /* White background */
+}
+
+.service-card {
+    text-align: center;
+    padding: 2rem;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.service-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Enhanced shadow on hover */
+}
+
+.service-card i {
+    font-size: 2.5rem;
+    color: #6366f1; /* Blue icon */
+    margin-bottom: 1rem;
+}
+
+.service-card h4 {
+    font-size: 1.2rem;
+    color: #6366f1; /* Blue text */
+}
+
+.service-card p {
+    font-size: 1rem;
+    color: #666666; /* Light gray text */
+}
+
+/* About Us Section */
+.about-us {
+    padding: 50px 0;
+    background-color: #f9f9f9; /* Light gray background */
+}
+
+.about-us h2 {
+    font-size: 2rem;
+    color: #6366f1; /* Blue text */
+    margin-bottom: 1.5rem;
+}
+
+.about-us p {
+    font-size: 1rem;
+    color: #666666; /* Light gray text */
+    line-height: 1.8;
+}
+
+/* Contact Form Section */
+.contact-form {
+    padding: 50px 0;
+    background-color: #ffffff; /* White background */
+}
+
+.contact-form h2 {
+    font-size: 2rem;
+    color: #6366f1; /* Blue text */
+    margin-bottom: 1.5rem;
+}
+
+.contact-form .form-control {
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 1rem;
+}
+
+.contact-form .form-control:focus {
+    border-color: #6366f1; /* Blue border on focus */
+    box-shadow: 0 0 5px rgba(0, 122, 255, 0.5); /* Blue shadow */
+}
+
+.contact-form .btn {
+    background: linear-gradient(145deg, #6366f1, #005BB5); /* Gradient blue */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.contact-form .btn:hover {
+    background: linear-gradient(145deg, #6366f1, #007AFF); /* Reverse gradient on hover */
+}
+
+/* Footer */
+.footer {
+    background-color: #f9f9f9; /* Light gray background */
+    padding: 2rem 0;
+    text-align: center;
+}
+
+.footer a {
+    color: #6366f1; /* Blue text */
+    text-decoration: none;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .hero-section h1 {
+        font-size: 2rem;
+    }
+
+    .hero-section p {
+        font-size: 1rem;
+    }
+
+    .card-title {
+        font-size: 1.1rem;
+    }
+
+    .card-text {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .card-title {
+        font-size: 1rem;
+    }
+
+    .card-text {
+        font-size: 0.8rem;
+    }
+}
