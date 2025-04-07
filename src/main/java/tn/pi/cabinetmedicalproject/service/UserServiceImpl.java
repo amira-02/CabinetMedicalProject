@@ -34,6 +34,14 @@ public class UserServiceImpl implements UserService {
         this.patientRepository = patientRepository;  // Initialiser le PatientRepository
     }
 
+
+
+
+
+    @Override
+    public User findByemail(String email) {
+        return userRepository.findByemail(email).orElse(null);
+    }
     @Override
     public User save(User user) {
         return userRepository.save(user);

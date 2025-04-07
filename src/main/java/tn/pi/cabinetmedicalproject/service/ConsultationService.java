@@ -2,6 +2,8 @@ package tn.pi.cabinetmedicalproject.service;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import tn.pi.cabinetmedicalproject.enums.AppointmentStatus;
 import tn.pi.cabinetmedicalproject.model.Consultation;
@@ -33,49 +35,25 @@ public class ConsultationService {
         consultationRepository.save(consultation);
 
     }
-
-
-
-
 //
-//    public Doctor getDoctorByEmail(String email) {
-//        return doctorRepository.findByUserEmail(email);
+//    public List<Consultation> findByPatientId(Long patientId) {
+//        return consultationRepository.findByPatientId(patientId);
 //    }
-//
-//    public List<Consultation> getConsultationsForDoctor(Long doctorId) {
-//        return consultationRepository.findByDoctorId(doctorId);
-//    }
+
+
+    public Page<Consultation> findConsultationsByPatientId(Long patientId, Pageable pageable) {
+        return consultationRepository.findByPatientId(patientId, pageable);
+    }
+    public boolean hasExistingConsultation(Long patientId, Long doctorId) {
+        return consultationRepository.countByPatientIdAndDoctorId(patientId, doctorId) >= 1;
+    }
+
 public List<Consultation> findByPatientAndDoctor(Patient patient, Doctor doctor) {
     // Requête pour récupérer les consultations du patient avec ce médecin
     return consultationRepository.findByPatientAndDoctor(patient, doctor);
 }
 
-//    @Transactional
-//    public void updateConsultationAndPatient(Long consultationId, Long patientId, String description, String prescription,
-//                                             String allergies, String currentTreatments, String medicalHistory,
-//                                             float height, float weight) {
-//        Consultation consultation = consultationRepository.findById(consultationId)
-//                .orElseThrow(() -> new RuntimeException("Consultation non trouvée"));
-//
-//        Patient patient = patientRepository.findById(patientId)
-//                .orElseThrow(() -> new RuntimeException("Patient non trouvé"));
-//
-//        // Mettre à jour la consultation
-//        consultation.setDescription(description);
-//        consultation.setPrescription(prescription);
-//        consultation.setAllergies(allergies);
-//        consultation.setCurrentTreatments(currentTreatments);
-//        consultation.setMedicalHistory(medicalHistory);
-//        consultation.setStatus(AppointmentStatus.PENDING_PAYMENT); // Mettre le statut à "PENDING_PAYMENT"
-//
-//        // Mettre à jour la taille et le poids du patient
-//        patient.setHeight(height);
-//        patient.setWeight(weight);
-//
-//        // Sauvegarde dans la base de données
-//        consultationRepository.save(consultation);
-//        patientRepository.save(patient);
-//    }
+
 
     public List<Consultation> findByDoctor(Doctor doctor) {
         return consultationRepository.findByDoctor(doctor);

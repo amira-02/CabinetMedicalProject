@@ -142,6 +142,7 @@
             <i class="fas fa-arrow-left"></i> Back to Dashboard
         </a>
     </div>
+    <p class="mb-1"><strong>consultation id:</strong> <span th:text="${consultation.id}"></span></p>
 
     <!-- Patient Header -->
     <div class="patient-header">
@@ -170,25 +171,6 @@
             <h5><i class="fas fa-user me-2"></i> Patient Details</h5>
             <p class="mb-1"><strong>Name:</strong> <span th:text="${patient.name}"></span></p>
             <p class="mb-1"><strong>DOB:</strong> <span th:text="${patient.birthDate}"></span></p>
-            <p class="mb-0"><strong>Age:</strong> <!-- Add age calculation here --></p>
-        </div>
-
-        <div>
-            <h5><i class="fas fa-notes-medical me-2"></i> Vital Stats</h5>
-            <div class="vital-stats">
-                <div class="stat-box">
-                    <small>Height</small>
-                    <h4 class="mb-0" th:text="${patient.height + ' cm'}"></h4>
-                </div>
-                <div class="stat-box">
-                    <small>Weight</small>
-                    <h4 class="mb-0" th:text="${patient.weight + ' kg'}"></h4>
-                </div>
-                <div class="stat-box">
-                    <small>BMI</small>
-                    <h4 class="mb-0"><!-- Add BMI calculation --></h4>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -198,25 +180,42 @@
             <i class="fas fa-edit me-2"></i>Consultation Details
         </h4>
 
-        <form th:action="@{/patient/{patientId}/consultation/{consultationId}/update}" method="post">
+        <form th:action="@{/Consultation/patient/{patientId}/consultation/{consultationId}/update(patientId=${patient.id}, consultationId=${consultation.id})}" method="post">
+
             <div class="row g-4">
                 <!-- Left Column -->
+                <div>
+                    <h5><i class="fas fa-notes-medical me-2"></i> Vital Stats</h5>
+                    <div class="vital-stats">
+                        <div class="stat-box">
+                            <label class="form-label">Height</label>
+                            <input type="number" class="form-control" name="height" th:value="${patient.height}">
+                        </div>
+                        <div class="stat-box">
+                            <label class="form-label">Weight</label>
+                            <input type="number" class="form-control" name="weight" th:value="${patient.weight}">
+                        </div>
+                    </div>
+                </div>
+
                 <div class="col-md-6">
                     <div class="mb-4">
                         <label class="form-label"><i class="fas fa-diagnoses me-2"></i>Pathology</label>
-                        <input type="text" class="form-control" th:value="${consultation.Pathology}" readonly>
+                        <input type="text" class="form-control" th:value="${consultation.pathology}" readonly>
                     </div>
 
                     <div class="mb-4">
                         <label class="form-label"><i class="fas fa-comment-medical me-2"></i>Description</label>
-                        <textarea class="form-control" rows="4" name="description"
-                                  th:text="${consultation.description}"></textarea>
+                        <textarea class="form-control" rows="4" name="description" th:text="${consultation.description}"></textarea>
                     </div>
 
                     <div class="mb-4">
                         <label class="form-label"><i class="fas fa-prescription me-2"></i>Prescription</label>
-                        <textarea class="form-control" rows="4" name="prescription"
-                                  th:text="${consultation.prescription}"></textarea>
+                        <textarea class="form-control" rows="4" name="prescription" th:text="${consultation.prescription}"></textarea>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label"><i class="fas fa-prescription me-2"></i>medicalHistory</label>
+                        <textarea class="form-control" rows="4" name="medicalHistory" th:text="${consultation.medicalHistory}"></textarea>
                     </div>
                 </div>
 
@@ -224,29 +223,26 @@
                 <div class="col-md-6">
                     <div class="mb-4">
                         <label class="form-label"><i class="fas fa-allergies me-2"></i>Allergies</label>
-                        <textarea class="form-control" rows="3" name="allergies"
-                                  th:text="${consultation.allergies}"></textarea>
+                        <textarea class="form-control" rows="3" name="allergies" th:text="${consultation.allergies}"></textarea>
                     </div>
 
                     <div class="mb-4">
                         <label class="form-label"><i class="fas fa-pills me-2"></i>Current Treatments</label>
-                        <textarea class="form-control" rows="3" name="currentTreatments"
-                                  th:text="${consultation.currentTreatments}"></textarea>
+                        <textarea class="form-control" rows="3" name="currentTreatments" th:text="${consultation.currentTreatments}"></textarea>
                     </div>
 
                     <div class="mb-4">
-                        <label class="form-label"><i class="fas fa-history me-2"></i>Medical History</label>
-                        <textarea class="form-control" rows="3" name="medicalHistory"
-                                  th:text="${consultation.medicalHistory}"></textarea>
+                        <label class="form-label"><i class="fas fa-check me-2"></i>Status</label>
+                        <select class="form-control" name="status" th:value="${consultation.status}">
+                            <option value="Scheduled">Scheduled</option>
+                            <option value="Completed">Completed</option>
+                            <option value="Canceled">Canceled</option>
+                        </select>
                     </div>
                 </div>
             </div>
 
-            <div class="text-center mt-4">
-                <button type="submit" class="btn btn-primary px-5">
-                    <i class="fas fa-save me-2"></i>Update Record
-                </button>
-            </div>
+            <button type="submit" class="btn btn-primary">Save Consultation</button>
         </form>
     </div>
 </div>

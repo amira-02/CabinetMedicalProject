@@ -226,6 +226,13 @@
                     <input type="password" class="form-control" th:field="*{user.password}" placeholder=" ">
                     <label class="floating-label">Password</label>
                 </div>
+
+                <div class="input-group">
+                    <i class="input-icon fas fa-location-dot"></i>
+
+                    <input type="text" class="form-control" th:field="*{city}" placeholder=" ">
+                    <label class="floating-label">Medical city</label>
+                </div>
             </div>
 
             <!-- Right Column -->
@@ -246,6 +253,13 @@
                     <i class="input-icon fas fa-map-marker-alt"></i>
                     <input type="text" class="form-control" th:field="*{address}" placeholder=" ">
                     <label class="floating-label">Clinic Address</label>
+                </div>
+
+                <div class="input-group">
+                    <i class="input-icon fas fa-envelope"></i>
+
+                    <input type="postalCode" class="form-control" th:field="*{postalCode}" placeholder=" ">
+                    <label class="floating-label">postalCode</label>
                 </div>
             </div>
         </div>

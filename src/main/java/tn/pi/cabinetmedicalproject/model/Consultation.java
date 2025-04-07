@@ -84,4 +84,5 @@ public class Consultation {
         this.pathology = pathology;
     }
 
+
 }

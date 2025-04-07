@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import tn.pi.cabinetmedicalproject.enums.AppointmentStatus;
 import tn.pi.cabinetmedicalproject.model.Consultation;
 import tn.pi.cabinetmedicalproject.model.Doctor;
@@ -30,14 +32,13 @@ import tn.pi.cabinetmedicalproject.web.dto.UserRegistrationDto;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+
+
 
 @Controller
 @RequestMapping("/Consultation")
@@ -104,6 +105,47 @@ public class ConsultationController {
         // Redirect or return the view
         return "Home";  // Or wherever you need to redirect after submission
     }
+//
+//
+//    @PostMapping("/submit")
+//    public String submitConsultation(@ModelAttribute Consultation consultation, Model model) {
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+//        String email = userDetails.getUsername();
+//
+//        Patient patient = patientService.findByEmail(email);
+//        if (patient == null) {
+//            logger.error("Patient not found for email: {}", email);
+//            model.addAttribute("error", "Patient not found.");
+//            return "doctorhome";
+//        }
+//
+//        // Vérifier si le patient a déjà une consultation avec ce médecin à cette date
+//        boolean exists = consultationRepository.existsByPatientAndDoctorAndDate(patient, consultation.getDoctor());
+//        if (exists) {
+//            logger.error("Patient already has a consultation with this doctor on this date.");
+//            model.addAttribute("error", "You already have a consultation scheduled with this doctor on this date.");
+//            return "doctorhome";
+//        }
+//
+//        if (consultation.getTime() == null || consultation.getDate() == null) {
+//            logger.error("Time or Date is missing!");
+//            model.addAttribute("error", "Time and Date are required.");
+//            return "doctorhome";
+//        }
+//
+//        consultation.setPatient(patient);
+//        consultation.setStatus(AppointmentStatus.SCHEDULED);
+//        consultationService.saveConsultation(consultation);
+//
+//        model.addAttribute("consultationDate", consultation.getDate());
+//        model.addAttribute("consultationTime", consultation.getTime());
+//        model.addAttribute("consultationDoctor", consultation.getDoctor());
+//        model.addAttribute("consultationPatient", consultation.getPatient());
+//
+//        return "Home";
+//    }
+
 
     @PostMapping("/save")
     public String saveConsultation(@ModelAttribute Consultation consultation, Model model) {
@@ -199,6 +241,31 @@ public class ConsultationController {
         return "doctorhome"; // Affichage Thymeleaf
     }
 
+    @GetMapping("/doctor/PendingPayment")
+    public String showDoctorConsultationPendingPayment(Model model) {
+        // Récupérer l'utilisateur connecté
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        // Trouver le médecin associé à cet utilisateur
+        Doctor doctor = doctorRepository.findByUserEmail(username);
+        if (doctor == null) {
+            model.addAttribute("consultation", Collections.emptyList());
+            return "doctorhome"; // Rediriger vers la page sans consultations
+        }
+
+        // Récupérer les consultations du médecin
+        List<Consultation> consultations = consultationRepository.findByDoctor(doctor);
+
+        model.addAttribute("consultation", consultations);
+        model.addAttribute("doctor", doctor);
+        return "doctorhome"; // Affichage Thymeleaf
+    }
+
+
+
+
+
 
 
     @GetMapping("/appointments")
@@ -222,40 +289,6 @@ public class ConsultationController {
         return "doctorhome";  // Return the appointments view for the doctor
     }
 
-//    //    /**
-////     * Ajoute une nouvelle consultation pour un patient spécifique.
-////     */
-//    @PostMapping("/patient/{id}/consultation")
-//    public String addConsultations(
-//            @PathVariable Long id,
-//            @RequestParam(required = false) String description,
-//            @RequestParam(required = false) String prescription,
-//            @RequestParam(required = false) String allergies,
-//            @RequestParam(required = false) String currentTreatments,
-//            @RequestParam(required = false) String medicalHistory,
-//            Model model
-//    ) {
-//        Patient patient = patientRepository.findById(id)
-//                .orElseThrow(() -> new IllegalArgumentException("Invalid patient ID"));
-//
-//        // Créer une nouvelle consultation
-//        Consultation consultation = new Consultation();
-//        consultation.setPatient(patient);
-//        consultation.setDescription(description);
-//        consultation.setPrescription(prescription);
-//        consultation.setAllergies(allergies);
-//        consultation.setCurrentTreatments(currentTreatments);
-//        consultation.setMedicalHistory(medicalHistory);
-//        consultation.setDate(LocalDate.now());  // Utilisation de la date actuelle
-//
-//        // Enregistrer la consultation dans la base de données
-//        consultationRepository.save(consultation);
-//
-//        // Ajouter un attribut pour le message de succès et la liste des consultations
-//        model.addAttribute("consultation", consultationRepository.findByPatientId(id));
-//        model.addAttribute("patient", patient);
-//        return "redirect:/patient/{id}/consultation";  // Rediriger vers la liste des consultations du patient
-//    }
 
     @GetMapping("/doctor/home")
     public String doctorHome(Model model, Principal principal) {
@@ -275,325 +308,104 @@ public class ConsultationController {
         return "doctorhome";
     }
 
-//    @PostMapping("/patient/{patientId}/consultation/{consultationId}/update")
-//    public String updateConsultation(
-//            @PathVariable Long patientId,
-//            @PathVariable Long consultationId,
-//            @RequestParam String description,
-//            @RequestParam String prescription,
-//            @RequestParam String allergies,
-//            @RequestParam String currentTreatments,
-//            @RequestParam String medicalHistory,
-//            @RequestParam float height,
-//            @RequestParam float weight) {
-//
-//        consultationService.updateConsultationAndPatient(consultationId, patientId, description, prescription, allergies, currentTreatments, medicalHistory, height, weight);
-//
-//        return "doctorhome"; // Redirection vers le dossier du patient
-//    }
-
     @PostMapping("/patient/{patientId}/consultation/{consultationId}/update")
     @Transactional
-    public String updateConsultationAndPatient(@PathVariable Long consultationId,
-                                               @PathVariable Long patientId,
-                                               @RequestParam String description,
-                                               @RequestParam String prescription,
-                                               @RequestParam String allergies,
-                                               @RequestParam String currentTreatments,
-                                               @RequestParam String medicalHistory,
-                                               @RequestParam float height,
-                                               @RequestParam float weight,
-                                               Model model) { // Ajout du Model ici
+    public String updateConsultationAndPatient(
+            @PathVariable Long patientId,
+            @PathVariable Long consultationId,
+            @RequestParam String description,
+            @RequestParam String prescription,
+            @RequestParam String allergies,
+            @RequestParam String currentTreatments,
+            @RequestParam String medicalHistory,
+            @RequestParam float height,
+            @RequestParam float weight,
+            Model model,
+            Principal principal) {
 
-        // Récupérer la consultation et le patient par leurs IDs
+        // Logs for debugging
+        System.out.println("Attempting to update consultation: " + consultationId + " for patient: " + patientId);
+
+        // Validate form inputs
+        if (description.isEmpty() || prescription.isEmpty() || allergies.isEmpty() || currentTreatments.isEmpty() || medicalHistory.isEmpty()) {
+            model.addAttribute("error", "All fields must be filled out.");
+            return "errorPage"; // Change to your error page view
+        }
+
+        // Vérifier si la consultation et le patient existent
         Consultation consultation = consultationRepository.findById(consultationId)
-                .orElseThrow(() -> new RuntimeException("Consultation not found"));
+                .orElseThrow(() -> new RuntimeException("Consultation ID " + consultationId + " not found"));
 
         Patient patient = patientRepository.findById(patientId)
-                .orElseThrow(() -> new RuntimeException("Patient not found"));
+                .orElseThrow(() -> new RuntimeException("Patient ID " + patientId + " not found"));
 
-        // Mettre à jour les champs de la consultation
+        Doctor doctor = doctorService.findByEmail(principal.getName());
+
+        // Mise à jour des informations de la consultation
         consultation.setDescription(description);
         consultation.setPrescription(prescription);
         consultation.setAllergies(allergies);
         consultation.setCurrentTreatments(currentTreatments);
         consultation.setMedicalHistory(medicalHistory);
-        consultation.setStatus(AppointmentStatus.PENDING_PAYMENT); // Statut "PENDING_PAYMENT"
+        consultation.setStatus(AppointmentStatus.PENDING_PAYMENT); // Assuming AppointmentStatus enum is defined
 
-        // Mettre à jour la taille et le poids du patient
+        // Mise à jour des informations du patient
         patient.setHeight(height);
         patient.setWeight(weight);
 
-        // Sauvegarde des modifications
+        // Save consultation and patient in the database
         consultationRepository.save(consultation);
         patientRepository.save(patient);
 
-        // Ajout au modèle (si tu veux afficher ces infos sur la vue suivante)
+        // Add the patient, consultation, and doctor objects to the model
         model.addAttribute("patient", patient);
         model.addAttribute("consultation", consultation);
+        model.addAttribute("doctor", doctor);
 
-        // Rediriger vers la page d'accueil du médecin
-        return "redirect:/doctorHome";
+        // Redirect to the doctor's home page
+        return "doctorhome";
     }
 
 
-//    @GetMapping("/doctorHome")
-//    public String doctorHome() {
-//        return "doctorhome"; // Ensure the Thymeleaf template exists
-//    }
-//
-//
+
+
+
+
+
+
+
+
+
+
+    @PostMapping("/{id}/complete")
+    public String markConsultationAsCompleted(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        // Récupérer la consultation par son ID
+        Optional<Consultation> optionalConsultation = consultationRepository.findById(id);
+
+        if (optionalConsultation.isPresent()) {
+            Consultation consultation = optionalConsultation.get();
+
+            // Vérifier que la consultation est en attente de paiement (ou tout autre statut que tu veux)
+            if (AppointmentStatus.PENDING_PAYMENT.equals(consultation.getStatus())) {
+                consultation.setStatus(AppointmentStatus.COMPLETED);  // Modifier le statut
+                consultationRepository.save(consultation);  // Sauvegarder la consultation mise à jour
+
+                // Ajouter un message de succès et rediriger vers la page des consultations
+                redirectAttributes.addFlashAttribute("success", "Consultation marked as completed!");
+                return "redirect:/doctorhome";  // Rediriger vers la page d'accueil du médecin
+            } else {
+                // Ajouter un message d'erreur si le statut n'est pas "PENDING_PAYMENT"
+                redirectAttributes.addFlashAttribute("error", "Consultation cannot be marked as completed because it is not pending payment.");
+            }
+        } else {
+            // Ajouter un message d'erreur si la consultation n'est pas trouvée
+            redirectAttributes.addFlashAttribute("error", "Consultation not found.");
+        }
+
+        return "redirect:/doctorhome";  // Rediriger vers la page d'accueil en cas d'erreur
+    }
+
+
+
+
 }
-
-
-
-
-
-
-
-//    /**
-//     * Affiche la liste des consultations d'un patient spécifique.
-//     */
-//    @GetMapping("/patient/{id}/consultations")
-//    public String getConsultations(@PathVariable Long id, Model model) {
-//        Patient patient = patientRepository.findById(id)
-//                .orElseThrow(() -> new IllegalArgumentException("Invalid patient ID"));
-//        List<Consultation> consultation = consultationRepository.findByPatientId(id);
-//        model.addAttribute("patient", patient);
-//        model.addAttribute("consultation", consultation);
-//        model.addAttribute("newConsultation", new Consultation());
-//        return "consultationPatient";
-//    }
-
-
-
-
-
-
-//    @GetMapping("/patient/{id}/consultation")
-//    public String getConsultations(@PathVariable Long id, Model model) {
-//        Patient patient = patientRepository.findById(id)
-//                .orElseThrow(() -> new IllegalArgumentException("Invalid patient ID"));
-//        List<Consultation> consultation = consultationRepository.findByPatientId(id);
-//        model.addAttribute("patient", patient);
-//        model.addAttribute("consultation", consultation);
-//        return "consultationPatient";  // Vérifie que ce template existe bien !
-//    }
-
-
-//
-
-
-
-
-    // Endpoint to display the Consultation form for a specific doctor
-
-
-
-
-
-
-/**
- //     * Ajoute une nouvelle consultation pour un patient spécifique.
- //     */
-    //    @Transactional
-    //    @PostMapping("/patient/{id}/consultation")
-//        public String addConsultation(
-//                @PathVariable Long id,
-//                @Valid @ModelAttribute("newConsultation") Consultation consultation,
-//                BindingResult bindingResult,
-//                Model model
-//        ) {
-//            Patient patient = patientRepository.findById(id)
-//                    .orElseThrow(() -> new IllegalArgumentException("Invalid patient ID"));
-//            if (bindingResult.hasErrors()) {
-//                log.error("Validation errors: {}", bindingResult.getAllErrors());
-//                List<Consultation> consultations = consultationRepository.findByPatientId(id);
-//                model.addAttribute("patient", patient);
-//                model.addAttribute("consultations", consultations);
-//                return "consultationPatient";
-//            }
-//            consultation.setPatient(patient);
-//            consultation.setDate(LocalDate.now());
-//            consultationRepository.save(consultation);
-//            return "redirect:/patient/" + id + "/consultations";
-//        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /**
-     * Affiche la liste des consultations d'un patient spécifique.
-     */
-//    @GetMapping("/patient/{id}/consultations")
-//    public String getConsultations(@PathVariable Long id, Model model) {
-//        Patient patient = patientRepository.findById(id)
-//                .orElseThrow(() -> new IllegalArgumentException("Invalid patient ID"));
-//
-//        List<Consultation> consultations = consultationRepository.findByPatientId(id);
-//        model.addAttribute("patient", patient);
-//        model.addAttribute("consultations", consultations);
-//        model.addAttribute("newConsultation", new Consultation());
-//
-//        return "consultationPatient";
-//    }
-
-
-
-
-
-//    @GetMapping
-//    public String getAllConsultation(Model model) {
-//        List<Consultation> Consultation = ConsultationService.getAllConsultations();
-//        model.addAttribute("Consultation", Consultation);
-//        return "appointments"; // Thymeleaf view for Consultation
-//    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//    // Endpoint to display the Consultation form for a logged-in patient
-//    @GetMapping("/patient-form")
-//    public String showPatientappointmentForm(Model model) {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        String username = authentication.getName();
-//        User user = userRepository.findByEmail(username);
-//
-//        if (user == null) {
-//            return "redirect:/registration"; // Redirect to registration if not logged in
-//        }
-//
-//        // Get patient associated with the logged-in user
-//        Patient patient = patientService.findByUser(user);
-//        if (patient == null) {
-//            return "redirect:/registration"; // Ensure patient exists, redirect to registration if not
-//        }
-//
-//        List<Doctor> doctors = doctorService.getAllDoctors();
-//        model.addAttribute("doctors", doctors);
-//        model.addAttribute("patient", patient);
-//        model.addAttribute("Consultation", new Consultation());
-//
-//        return "appointmentForm"; // Thymeleaf view for the form
-//    }
-
-
-
-    // Registration logic (handle registration if the user is not logged in)
-//    @GetMapping("/registration")
-//    public String showRegistrationPage() {
-//        return "registration"; // Show registration page if not logged in
-//    }
-
-//    @PostMapping("/registration")
-//    public String handleRegistration(@ModelAttribute UserRegistrationDto userDto, Model model) {
-//        // Registration logic here
-//        // Save the user to the database
-//        User user = userServiceImpl.save(userDto); // Use the correct method from UserServiceImpl
-//
-//        // Create the associated patient
-//        Patient patient = new Patient();
-//        patient.setUser(user);
-//        patientService.savePatient(patient);
-//
-//        // After successful registration, redirect to Consultation form
-//        return "redirect:/Consultation/patient-form"; // Redirect to the patient Consultation form after registration
-//    }
-
-
-
-
-
-
-//    /**
-//     * Supprime une consultation spécifique d'un patient.
-//     */
-//    @Transactional
-//    @GetMapping("/patient/{patientId}/deleteConsultation/{consultationId}")
-//    public String deleteConsultation(@PathVariable Long patientId, @PathVariable Long consultationId) {
-//        Patient patient = patientRepository.findById(patientId)
-//                .orElseThrow(() -> new IllegalArgumentException("Invalid patient ID"));
-//
-//        Consultation consultation = consultationRepository.findById(consultationId)
-//                .orElseThrow(() -> new IllegalArgumentException("Invalid consultation ID"));
-//
-//        consultationRepository.delete(consultation);
-//
-//        return "redirect:/patient/" + patientId + "/consultations";
-//    }
-//
-//    /**
-//     * Mise à jour des informations du patient (Height, Weight, Pathology).
-//     */
-//    @Transactional
-//    @PostMapping("/patient/{id}/update")
-//    public String updatePatientInfo(
-//            @PathVariable Long id,
-//            @RequestParam String height,   // Récupère la hauteur sous forme de chaîne
-//            @RequestParam String weight,   // Récupère le poids sous forme de chaîne
-//            @RequestParam String pathology,
-//            Model model
-//    ) {
-//        // Trouver le patient par son ID
-//        Patient patient = patientRepository.findById(id)
-//                .orElseThrow(() -> new IllegalArgumentException("Invalid patient ID"));
-//
-//        try {
-//            // Convertir les chaînes en float et affecter les valeurs aux champs du patient
-//            if (height != null && !height.isEmpty()) {
-//                patient.setHeight(Float.parseFloat(height));  // Convertit la chaîne en float
-//            }
-//            if (weight != null && !weight.isEmpty()) {
-//                patient.setWeight(Float.parseFloat(weight));  // Convertit la chaîne en float
-//            }
-//
-//            // Affecter le champ Pathology
-//            patient.setPathology(pathology);
-//
-//            // Sauvegarder les modifications dans la base de données
-//            patientRepository.save(patient);
-//
-//        } catch (NumberFormatException e) {
-//            // En cas d'erreur de conversion, logguer l'erreur et ne pas mettre à jour
-//            e.printStackTrace();
-//            model.addAttribute("error", "Invalid height or weight format.");
-//            return "errorPage";  // Rediriger vers une page d'erreur
-//        }
-//
-//        // Rediriger vers la page des consultations après la mise à jour
-//        return "redirect:/patient/" + id + "/consultations";
-//    }
-

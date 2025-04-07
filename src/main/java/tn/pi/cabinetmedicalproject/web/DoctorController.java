@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
 
 @Controller
 @Slf4j
+
 public class DoctorController {
 
     @Autowired
@@ -153,14 +154,6 @@ public class DoctorController {
 
 
 
-
-
-
-
-
-
-
-
     @PostMapping("/saveDoctor")
     public String saveDoctor( Model model,@ModelAttribute Doctor doctor, @RequestParam("image") MultipartFile image) {
         try {
@@ -204,15 +197,6 @@ public class DoctorController {
         model.addAttribute("doctor", new Doctor());
         return "formDoctor";
     }
-
-
-
-
-
-
-
-
-
 
 
 

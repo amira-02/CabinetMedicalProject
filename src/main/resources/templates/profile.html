@@ -3,40 +3,212 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile</title>
+    <title>Patient Portal</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #5B7CFD;
+            --accent: #32BEA6;
+            --background: #F9FAFF;
+            --card-bg: #FFFFFF;
+        }
+
+        body {
+            background: var(--background);
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .portal-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .profile-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .portal-nav {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .nav-item {
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--card-bg);
+        }
+
+        .nav-item.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(91, 124, 253, 0.3);
+        }
+
+        .section-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            border-left: 3px solid var(--primary);
+            margin-bottom: 1.5rem;
+            background: var(--background);
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .timeline-item:hover {
+            transform: translateX(10px);
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .upcoming { background: var(--primary); }
+        .completed { background: var(--accent); }
+    </style>
 </head>
 <body>
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h3 class="card-title text-center mb-4">My Profile</h3>
-                    <div class="mb-3">
-                        <strong>Name:</strong> <span th:text="${patient.name}"></span>
-                    </div>
-                    <div class="mb-3">
-                        <strong>Email:</strong> <span th:text="${patient.email}"></span>
-                    </div>
-                    <div class="mb-3">
-                        <strong>Telephone:</strong> <span th:text="${patient.telephone}"></span>
-                    </div>
-                    <div class="mb-3">
-                        <strong>Birth Date:</strong> <span th:text="${patient.birthDate}"></span>
-                    </div>
-                    <div class="mb-3">
-                        <strong>Gender:</strong> <span th:text="${patient.gender}"></span>
-                    </div>
-
-                    <div class="text-center">
-                        <a href="/" th:href="@{/home}" class="btn btn-primary">Go Back</a>
-                    </div>
+<div class="portal-container">
+    <div class="profile-card">
+        <div class="d-flex justify-content-between align-items-start">
+            <div>
+                <h2 class="mb-3" th:text="${patient.name}"></h2>
+                <div class="d-flex gap-4 text-muted">
+                    <div><i class="fas fa-envelope me-2"></i><span th:text="${patient.email}"></span></div>
+                    <div><i class="fas fa-phone me-2"></i><span th:text="${patient.telephone}"></span></div>
                 </div>
+            </div>
+            <div class="text-end">
+                <div class="badge bg-light text-dark mb-2"><i class="fas fa-birthday-cake me-2"></i><span th:text="${patient.birthDate}"></span></div>
+                <div class="badge bg-light text-dark"><i class="fas fa-venus-mars me-2"></i><span th:text="${patient.gender}"></span></div>
+            </div>
+        </div>
+    </div>
+    <div class="portal-nav">
+        <div class="nav-item active" onclick="showSection('appointments', this)"><i class="fas fa-calendar-alt me-2"></i>Appointments</div>
+        <div class="nav-item" onclick="showSection('consultations', this)"><i class="fas fa-comment-medical me-2"></i>Consultations</div>
+        <div class="nav-item" onclick="showSection('payments', this)"><i class="fas fa-credit-card me-2"></i>Pending Payments</div>
+    </div>
+
+
+    <div id="appointments" class="section-card active-section">
+        <h3>Medical Schedule</h3>
+        <div class="timeline-list">
+            <div class="timeline-item" th:each="consultation : ${consultations}">
+                <div class="status-indicator"
+                     th:classappend="${consultation.status == 'SCHEDULED' ? 'upcoming' : 'completed'}">
+                </div>
+                <div>
+                    <h5 th:text="${consultation.doctor.name}"></h5>
+                </div>
+                <h5 th:text="${consultation.pathology}"></h5>
+                <div class="text-muted">
+                    <i class="fas fa-clock me-2"></i>
+                    <span th:text="${consultation.date} + ' • ' + ${consultation.time}"></span>
+                </div>
+                <button th:if="${consultation.status == 'SCHEDULED'}"
+                        th:attr="data-id=${consultation.id}"
+                        class="btn btn-danger cancel-btn">
+                    Cancel Appointment
+                </button>
+            </div>
+        </div>
+        <div class="pagination-container d-flex justify-content-center mt-4">
+            <ul class="pagination">
+                <li th:if="${currentPage > 0}" class="page-item">
+                    <a class="page-link" th:href="@{/profile(page=${currentPage - 1})}">Précédent</a>
+                </li>
+
+                <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" class="page-item"
+                    th:classappend="${i == currentPage} ? 'active' : ''">
+                    <a class="page-link" th:href="@{/profile(page=${i})}" th:text="${i + 1}"></a>
+                </li>
+
+                <li th:if="${currentPage + 1 < totalPages}" class="page-item">
+                    <a class="page-link" th:href="@{/profile(page=${currentPage + 1})}">Suivant</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+
+
+
+
+    <div id="consultations" class="section-card">
+        <h3>Medical History</h3>
+    </div>
+
+    <div id="payments" class="section-card">
+        <h3>Pending Payments</h3>
+        <div class="timeline-list">
+            <div class="timeline-item" th:each="payment : ${pendingPayments}">
+                <div class="status-indicator pending"></div>
+                <h5 th:text="'Due: ' + ${payment.amount} + ' USD'"></h5>
+                <div class="text-muted"><i class="fas fa-calendar me-2"></i><span th:text="${payment.dueDate}"></span></div>
+                <button class="btn btn-warning btn-sm mt-2"><i class="fas fa-credit-card me-2"></i>Pay Now</button>
             </div>
         </div>
     </div>
 </div>
+
+
+
+<script>
+    function showSection(sectionId, element) {
+        document.querySelectorAll('.section-card').forEach(card => card.classList.remove('active-section'));
+        document.getElementById(sectionId).classList.add('active-section');
+        document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+        element.classList.add('active');
+    }
+
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".cancel-btn").forEach(button => {
+            button.addEventListener("click", function () {
+                let consultationId = this.getAttribute("data-id");
+                if (confirm("Are you sure you want to cancel this appointment?")) {
+                    fetch(`/consultations/cancel/${consultationId}`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        }
+                    }).then(response => {
+                        if (response.ok) {
+                            alert("Appointment canceled successfully.");
+                            location.reload();
+                        } else {
+                            alert("Failed to cancel appointment.");
+                        }
+                    }).catch(error => console.error("Error:", error));
+                }
+            });
+        });
+    });
+</script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
