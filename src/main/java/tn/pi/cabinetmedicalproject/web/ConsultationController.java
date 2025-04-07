@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
@@ -385,6 +386,10 @@ public class ConsultationController {
         if (optionalConsultation.isPresent()) {
             Consultation consultation = optionalConsultation.get();
 
+            // Récupérer l'ID du médecin associé à la consultation
+            Doctor doctor = consultation.getDoctor();  // Assure-toi que "getDoctor()" renvoie l'objet Doctor
+            Long doctorId = doctor != null ? doctor.getId() : null;
+
             // Vérifier que la consultation est en attente de paiement (ou tout autre statut que tu veux)
             if (AppointmentStatus.PENDING_PAYMENT.equals(consultation.getStatus())) {
                 consultation.setStatus(AppointmentStatus.COMPLETED);  // Modifier le statut
@@ -392,6 +397,10 @@ public class ConsultationController {
 
                 // Ajouter un message de succès et rediriger vers la page des consultations
                 redirectAttributes.addFlashAttribute("success", "Consultation marked as completed!");
+
+                // Passer l'ID du médecin dans le modèle pour la redirection
+                redirectAttributes.addFlashAttribute("doctorId", doctorId);  // Passer l'ID du médecin
+
                 return "redirect:/doctorhome";  // Rediriger vers la page d'accueil du médecin
             } else {
                 // Ajouter un message d'erreur si le statut n'est pas "PENDING_PAYMENT"
@@ -406,6 +415,18 @@ public class ConsultationController {
     }
 
 
+    @GetMapping("/doctorhome")
+    public String showDoctorHome(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        Long doctorId = Long.parseLong(userDetails.getUsername());  // ou ajustez selon votre logique
+        Doctor doctor = doctorService.getDoctorById(doctorId);
 
+        if (doctor == null) {
+            // Gérez le cas où le docteur n'est pas trouvé, vous pouvez rediriger ou afficher un message d'erreur
+            return "redirect:/error"; // ou afficher une page d'erreur personnalisée
+        }
+
+        model.addAttribute("doctor", doctor);
+        return "doctorhome";
+    }
 
 }

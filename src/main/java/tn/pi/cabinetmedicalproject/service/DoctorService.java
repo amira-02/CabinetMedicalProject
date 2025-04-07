@@ -56,4 +56,10 @@ public class DoctorService {
     public Doctor findById(Long id) {
         return doctorRepository.findById(id).orElseThrow(() -> new RuntimeException("Doctor not found"));
     }
+
+    public Doctor getDoctorById(Long id) {
+        return doctorRepository.findById(id).orElse(null);
+    }
+
+
 }
