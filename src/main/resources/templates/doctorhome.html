@@ -17,19 +17,24 @@
     <div class="sidebar">
         <div class="logo">MediCare Pro</div>
         <div class="doctor-info">
-            <img th:src="@{${doctor.imagePath}}" alt="Profile Picture">
-            <h3 th:text="${doctor.name}"></h3>
-            <h5 th:text="${doctor.specialty}"></h5>
-            <h5 th:text="${doctor.city}"></h5>
-            <h5 th:text="${doctor.phone}"></h5>
-            <h5 th:text="${doctor.address}"></h5>
+            <div th:if="${doctor != null}">
+                <img th:src="@{${doctor.imagePath}}" alt="Doctor Image" />
+
+                    <h3 th:text="${doctor.name}"></h3>
+                    <h5 th:text="${doctor.specialty}"></h5>
+                    <h5 th:text="${doctor.city}"></h5>
+                    <h5 th:text="${doctor.phone}"></h5>
+                    <h5 th:text="${doctor.address}"></h5>
+
+
+            </div>
         </div>
         <ul class="nav">
             <li><a href="#" class="active" data-target="dashboard"><i class="fas fa-home"></i>Dashboard</a></li>
             <li><a href="#" data-target="patients"><i class="fas fa-user-injured"></i>Patients</a></li>
             <li><a href="#" data-target="appointments"><i class="fas fa-calendar-check"></i>Appointments</a></li>
             <li><a href="/Consultation/doctor/PendigPayment" data-target="pending-payment"><i class="fas fa-prescription"></i>Pending Payment</a></li>
-            <li><a href="#" data-target="archive"><i class="fas fa-chart-line"></i>Archive</a></li>
+<!--            <li><a href="#" data-target="archive"><i class="fas fa-chart-line"></i>Archive</a></li>-->
             <li><a href="#"><i class="fas fa-cog"></i>Settings</a></li>
             <!-- Logout Button -->
             <li>
@@ -45,9 +50,10 @@
 
     <!-- Main Content -->
     <div class="main-content">
-        <header>
-            <h1>Welcome Back, Dr. <span th:text="${doctor.name.split(' ')[1]}"></span></h1>
+        <header th:if="${doctor != null}">
+            <h1>Welcome Back, Dr. <span th:text="${doctor.name != null ? doctor.name.split(' ')[1] : ''}"></span></h1>
         </header>
+
 
         <div class="cards">
             <div class="card">
@@ -131,9 +137,10 @@
                             <p><i class="fas fa-envelope"></i> Email: <span th:text="${consultation.patient.user.email}"></span></p>
                             <p><i class="fas fa-prescription-bottle-alt"></i> Pathology: <span th:text="${consultation.pathology}"></span></p>
                         </div>
-                        <a th:href="@{/patients/{id}(id=${consultation.patient.id})}" class="btn-view-profile">
+                        <a th:href="@{/Consultation/{doctorId}/{patientId}(doctorId=${doctor.id}, patientId=${consultation.patient.id})}" class="btn-view-profile">
                             <i class="fas fa-file-medical"></i> Voir la fiche
                         </a>
+
                     </div>
                 </div>
             </div>
@@ -161,29 +168,72 @@
                             <td th:text="${consultation.patient != null ? consultation.patient.name : 'N/A'}"></td>
                             <td><span th:text="${consultation.date}"></span></td>
                             <td><span th:text="${consultation.time}"></span></td>
-                            <td><span th:text="${consultation.price}"></span></td>
+                            <td><span th:text="${doctor.consultationPrice}"></span></td>
                             <td><span class="status" th:text="${consultation.status}"></span></td>
                             <td>
                                 <form th:action="@{/Consultation/{id}/complete(id=${consultation.id})}" method="post" style="display:inline;">
-                                    <button type="submit" class="btn btn-success">
-                                        <i class="fas fa-check"></i> Mark as Completed
+                                    <button type="submit" class="btn btn-success" onclick="showSuccessPopup()">
+                                        <i class="fas fa-check"></i> Pay
                                     </button>
                                 </form>
-
                             </td>
                         </tr>
                         </tbody>
                     </table>
                 </th:block>
+
                 <th:block th:if="${consultation == null or consultation.isEmpty()}">
                     <div class="empty-state">
                         <i class="fas fa-calendar-times fa-3x"></i>
                         <h3>No appointments to pay</h3>
-                        <p>You have no consultation unpayed for today</p>
+                        <p>You have no consultation unpaid for today</p>
                     </div>
                 </th:block>
             </main>
+
+            <!-- ✅ Popup de succès -->
+            <div id="successPopup" style="display: none;
+        position: fixed;
+        top: 30%;
+        left: 50%;
+        transform: translate(-50%, -30%);
+        background-color: #ffffff;
+        border: 2px solid #28a745;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        text-align: center;
+        z-index: 1000;">
+                <h4 style="color: #28a745;">✅ Paiement effectué avec succès</h4>
+                <br>
+                <button onclick="redirectToDoctorHome()" class="btn btn-primary">Retourner</button>
+            </div>
+
+            <!-- ✅ Overlay sombre -->
+            <div id="popupOverlay" style="display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(0,0,0,0.5);
+        z-index: 999;"></div>
         </div>
+
+        <!-- ✅ JavaScript -->
+        <script>
+            // Fonction pour afficher le popup de succès
+            function showSuccessPopup() {
+                document.getElementById("successPopup").style.display = "block";
+                document.getElementById("popupOverlay").style.display = "block";
+            }
+
+            // Fonction pour rediriger vers la page doctorhome après un clic sur le bouton
+            function redirectToDoctorHome() {
+                window.location.href = "/doctorhome?success=Consultation%20completed%20successfully";
+            }
+        </script>
+
 
         <!-- Archive Section -->
         <div class="archive-section" id="archive" style="display: none;">

@@ -1,10 +1,13 @@
 package tn.pi.cabinetmedicalproject.web;
+import javax.servlet.http.HttpServletResponse;
 
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,7 +33,9 @@ import tn.pi.cabinetmedicalproject.service.PatientService;
 import tn.pi.cabinetmedicalproject.service.UserServiceImpl;
 import tn.pi.cabinetmedicalproject.web.dto.UserRegistrationDto;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.*;
@@ -59,14 +64,20 @@ public class ConsultationController {
     private ConsultationRepository consultationRepository;
     private static final Logger logger = LoggerFactory.getLogger(ConsultationController.class);
 
-
+    private final UserRepository userRepository;
     @Autowired
     private UserDetailsService userDetailsService;  // Pour récupérer l'utilisateur connecté
 
     @Autowired
     private ConsultationService consultationService; // Injection correcte
 
-
+    public ConsultationController(ConsultationRepository consultationRepository,
+                                  DoctorRepository doctorRepository,
+                                  UserRepository userRepository) {
+        this.consultationRepository = consultationRepository;
+        this.doctorRepository = doctorRepository;
+        this.userRepository = userRepository;
+    }
     @PostMapping("/submit")
     public String submitConsultation(@ModelAttribute Consultation consultation, Model model) {
         // Get the logged-in user's email from the Spring Security context
@@ -106,46 +117,7 @@ public class ConsultationController {
         // Redirect or return the view
         return "Home";  // Or wherever you need to redirect after submission
     }
-//
-//
-//    @PostMapping("/submit")
-//    public String submitConsultation(@ModelAttribute Consultation consultation, Model model) {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-//        String email = userDetails.getUsername();
-//
-//        Patient patient = patientService.findByEmail(email);
-//        if (patient == null) {
-//            logger.error("Patient not found for email: {}", email);
-//            model.addAttribute("error", "Patient not found.");
-//            return "doctorhome";
-//        }
-//
-//        // Vérifier si le patient a déjà une consultation avec ce médecin à cette date
-//        boolean exists = consultationRepository.existsByPatientAndDoctorAndDate(patient, consultation.getDoctor());
-//        if (exists) {
-//            logger.error("Patient already has a consultation with this doctor on this date.");
-//            model.addAttribute("error", "You already have a consultation scheduled with this doctor on this date.");
-//            return "doctorhome";
-//        }
-//
-//        if (consultation.getTime() == null || consultation.getDate() == null) {
-//            logger.error("Time or Date is missing!");
-//            model.addAttribute("error", "Time and Date are required.");
-//            return "doctorhome";
-//        }
-//
-//        consultation.setPatient(patient);
-//        consultation.setStatus(AppointmentStatus.SCHEDULED);
-//        consultationService.saveConsultation(consultation);
-//
-//        model.addAttribute("consultationDate", consultation.getDate());
-//        model.addAttribute("consultationTime", consultation.getTime());
-//        model.addAttribute("consultationDoctor", consultation.getDoctor());
-//        model.addAttribute("consultationPatient", consultation.getPatient());
-//
-//        return "Home";
-//    }
+
 
 
     @PostMapping("/save")
@@ -340,7 +312,9 @@ public class ConsultationController {
         Patient patient = patientRepository.findById(patientId)
                 .orElseThrow(() -> new RuntimeException("Patient ID " + patientId + " not found"));
 
+        // Ensure doctor exists, retrieve the doctor based on the authenticated user's email
         Doctor doctor = doctorService.findByEmail(principal.getName());
+
 
         // Mise à jour des informations de la consultation
         consultation.setDescription(description);
@@ -355,8 +329,8 @@ public class ConsultationController {
         patient.setWeight(weight);
 
         // Save consultation and patient in the database
-        consultationRepository.save(consultation);
-        patientRepository.save(patient);
+        consultation = consultationRepository.save(consultation); // Save the consultation
+        patient = patientRepository.save(patient); // Save the patient
 
         // Add the patient, consultation, and doctor objects to the model
         model.addAttribute("patient", patient);
@@ -364,69 +338,75 @@ public class ConsultationController {
         model.addAttribute("doctor", doctor);
 
         // Redirect to the doctor's home page
-        return "doctorhome";
+        return "redirect:/Consultation/doctor";
     }
 
 
 
-
-
-
-
-
-
-
+//
 
 
     @PostMapping("/{id}/complete")
-    public String markConsultationAsCompleted(@PathVariable Long id, RedirectAttributes redirectAttributes) {
-        // Récupérer la consultation par son ID
-        Optional<Consultation> optionalConsultation = consultationRepository.findById(id);
+    public void markAsCompleted(@PathVariable Long id, HttpServletResponse response,   Model model,
+                                Principal principal) throws IOException {
+        // 1. Récupérer l'utilisateur connecté
+        String email = principal.getName();
+        User user = userRepository.findByEmail(email);
 
-        if (optionalConsultation.isPresent()) {
-            Consultation consultation = optionalConsultation.get();
+        // 2. Trouver le docteur correspondant à cet utilisateur
+        Doctor doctor = doctorRepository.findByUserEmail(email);
 
-            // Récupérer l'ID du médecin associé à la consultation
-            Doctor doctor = consultation.getDoctor();  // Assure-toi que "getDoctor()" renvoie l'objet Doctor
-            Long doctorId = doctor != null ? doctor.getId() : null;
+        // 3. Récupérer la consultation
+        Consultation consultation = consultationRepository.findById(id).orElse(null);
 
-            // Vérifier que la consultation est en attente de paiement (ou tout autre statut que tu veux)
-            if (AppointmentStatus.PENDING_PAYMENT.equals(consultation.getStatus())) {
-                consultation.setStatus(AppointmentStatus.COMPLETED);  // Modifier le statut
-                consultationRepository.save(consultation);  // Sauvegarder la consultation mise à jour
-
-                // Ajouter un message de succès et rediriger vers la page des consultations
-                redirectAttributes.addFlashAttribute("success", "Consultation marked as completed!");
-
-                // Passer l'ID du médecin dans le modèle pour la redirection
-                redirectAttributes.addFlashAttribute("doctorId", doctorId);  // Passer l'ID du médecin
-
-                return "redirect:/doctorhome";  // Rediriger vers la page d'accueil du médecin
-            } else {
-                // Ajouter un message d'erreur si le statut n'est pas "PENDING_PAYMENT"
-                redirectAttributes.addFlashAttribute("error", "Consultation cannot be marked as completed because it is not pending payment.");
-            }
+        // 4. Vérifier l'appartenance et mettre à jour
+        if (consultation != null && consultation.getDoctor().getId().equals(doctor.getId())) {
+            consultation.setStatus(AppointmentStatus.COMPLETED);
+            consultationRepository.save(consultation);
+            doctorRepository.save(doctor);
+            model.addAttribute("doctor", doctor);
+            response.sendRedirect("/Consultation/doctor?success=Consultation%20completed%20successfully");
         } else {
-            // Ajouter un message d'erreur si la consultation n'est pas trouvée
-            redirectAttributes.addFlashAttribute("error", "Consultation not found.");
+            response.sendRedirect("/doctorhome?error=Unauthorized%20or%20consultation%20not%20found");
         }
-
-        return "redirect:/doctorhome";  // Rediriger vers la page d'accueil en cas d'erreur
     }
 
 
     @GetMapping("/doctorhome")
-    public String showDoctorHome(Model model, @AuthenticationPrincipal UserDetails userDetails) {
-        Long doctorId = Long.parseLong(userDetails.getUsername());  // ou ajustez selon votre logique
-        Doctor doctor = doctorService.getDoctorById(doctorId);
+    public String getDoctorHome(Model model ,  Principal principal) {
+        String email = principal.getName();
+        Doctor doctor = doctorService.findByEmail(email);// or however you're fetching the doctor
+        model.addAttribute("doctor", doctor);
+        return "doctorhome"; // the view name
+    }
 
-        if (doctor == null) {
-            // Gérez le cas où le docteur n'est pas trouvé, vous pouvez rediriger ou afficher un message d'erreur
-            return "redirect:/error"; // ou afficher une page d'erreur personnalisée
+
+
+    @GetMapping("/{doctorId}/{patientId}")
+    public String viewPatientConsultations(@PathVariable Long doctorId, @PathVariable Long patientId, Model model, Principal principal) {
+        // Ensure the logged-in user is the doctor for this patient
+        Doctor doctor = doctorService.findById(doctorId);
+        if (doctor == null || !doctor.getUser().getEmail().equals(principal.getName())) {
+            return "errorPage"; // Redirect to error page if the doctor doesn't exist or doesn't match the logged-in user
         }
 
+        // Find all consultations for the specific patient and doctor
+        List<Consultation> consultations = consultationRepository.findByPatientIdAndDoctorId(patientId, doctorId);
+
+        // Add consultations to the model
+        model.addAttribute("consultations", consultations);
+        model.addAttribute("patient", patientRepository.findById(patientId).orElseThrow(() -> new RuntimeException("Patient not found")));
         model.addAttribute("doctor", doctor);
-        return "doctorhome";
+
+        // Return the view to display the consultations
+        return "patientConsultations";
     }
+
+
+
+
+
+
+
 
 }

@@ -45,7 +45,7 @@ public class Consultation {
     @Lob
     private String medicalHistory;  // Medical history (in English)
     private String pathology;
-    private float price;
+
 
     private LocalTime time;
     @DateTimeFormat(pattern = "yyyy-MM-dd")

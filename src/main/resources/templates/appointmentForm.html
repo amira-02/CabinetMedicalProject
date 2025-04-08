@@ -7,165 +7,190 @@
     <link rel="stylesheet" href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="/webjars/bootstrap-icons/1.10.5/font/bootstrap-icons.css">
     <style>
+        :root {
+            --bs-primary: #6f42c1;
+        }
+
         body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
-            margin: 0;
-            padding: 0;
+            background: linear-gradient(135deg, #f8f0fc, #e9d8fd);
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            padding: 2rem 0;
         }
-        .container {
+        .main-card {
+            border-radius: 1rem;
+            box-shadow: 0 0.5rem 1rem rgba(111, 66, 193, 0.15);
+            border: 1px solid #e9d8fd;
             background: white;
-            border-radius: 15px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            max-width: 800px;
-            width: 100%;
         }
-        .doctor-image {
-            max-width: 150px;
-            border-radius: 10px;
+        .doctor-img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid white;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+        .section-title {
+            color: #4a2d7d;
+            border-bottom: 3px solid var(--bs-primary);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+        .section-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -3px;
+            width: 40px;
+            height: 3px;
+            background: var(--bs-primary);
+        }
+        .info-badge {
+            background: #f3e8ff;
+            color: #4a2d7d;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid #e9d8fd;
         }
         .btn-primary {
-            background: linear-gradient(135deg, #007bff, #0056b3);
+            background: linear-gradient(135deg, #6f42c1, #4a2d7d);
             border: none;
-            border-radius: 25px;
-            padding: 12px 30px;
-            font-size: 1rem;
-            font-weight: 600;
-            transition: background 0.3s ease;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
         .btn-primary:hover {
-            background: linear-gradient(135deg, #0056b3, #003d80);
+            transform: translateY(-2px);
+            box-shadow: 0 0.5rem 1rem rgba(111, 66, 193, 0.3);
+        }
+        .form-control:focus {
+            border-color: #b794f4;
+            box-shadow: 0 0 0 0.25rem rgba(111, 66, 193, 0.25);
+        }
+        .form-control:disabled {
+            background-color: #f8f9fa;
+            opacity: 1;
         }
     </style>
 </head>
 <body>
-
 <div class="container">
-    <div class="form-header text-center mb-4">
-        <h2>Doctor Appointment Request</h2>
-        <p>Fill out the form below to request an appointment.</p>
+    <div class="main-card">
+        <div class="p-4">
+            <h2 class="text-center mb-4 fw-bold text-primary">
+                <i class="bi bi-heart-pulse me-2"></i>Appointment Request
+            </h2>
+
+            <!-- Doctor Information Section -->
+            <div class="mb-5 text-center">
+                <h4 class="section-title">Doctor Information</h4>
+                <div class="d-flex justify-content-center mb-4">
+                    <img th:src="@{${doctor.imagePath}}" alt="Doctor" class="doctor-img">
+                </div>
+                <div class="row g-4 justify-content-center">
+                    <div class="col-md-8">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label text-muted">Full Name</label>
+                                <div class="info-badge">[[${doctor.name}]]</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-muted">Contact</label>
+                                <div class="info-badge">[[${doctor.phone}]]</div>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label text-muted">Address</label>
+                                <div class="info-badge">[[${doctor.address}]]</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-muted">Consultation Fee</label>
+                                <div class="info-badge">$[[${doctor.consultationPrice}]]</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Patient Information Section -->
+            <form th:action="@{/Consultation/submit}" method="post" th:object="${consultation}" onsubmit="return confirmSubmission(event)">
+                <input type="hidden" th:field="*{doctor.id}" />
+
+                <div class="mb-5">
+                    <h4 class="section-title">Patient Information</h4>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" class="form-control" th:field="*{patient.name}" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Birth Date</label>
+                            <input type="date" class="form-control" th:field="*{patient.birthDate}" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Contact Number</label>
+                            <input type="text" class="form-control" th:field="*{patient.telephone}" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Appointment Details -->
+                <div class="mb-5">
+                    <h4 class="section-title">Appointment Details</h4>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Pathology Description</label>
+                            <textarea class="form-control" th:field="*{pathology}" rows="3"></textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Appointment Date</label>
+                            <input type="date" id="date" class="form-control" th:field="*{date}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Appointment Time</label>
+                            <input type="time" id="time" class="form-control" th:field="*{time}" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Status</label>
+                            <input type="text" class="form-control" value="SCHEDULED" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-grid gap-2 mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg py-3">
+                        <i class="bi bi-calendar-check me-2"></i> Schedule Appointment
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
-
-    <form th:action="@{/Consultation/submit}" method="post" th:object="${consultation}" onsubmit="return confirmSubmission(event)">
-         <input type="hidden" th:field="*{doctor.id}" />
-
-        <div class="row align-items-center mb-4">
-            <div class="col-md-4 text-center">
-                <img th:src="@{${doctor.imagePath}}" alt="Doctor Image" class="img-fluid doctor-image">
-            </div>
-            <div class="col-md-8">
-
-                <div class="col-md-8">
-                <label for="doctorname" class="form-label">Doctor Name:</label>
-                <input type="text" id="doctorname" class="form-control" th:value="${doctor.name}" disabled>
-
-                <label for="phone" class="form-label">Doctor Phone:</label>
-                <input type="text" id="phone" class="form-control" th:value="${doctor.phone}" disabled>
-                </div>
-
-
-                <div class="col-md-8">
-                <label for="docadress" class="form-label">Doctor Adress  :</label>
-                <input type="text" id="docadress" class="form-control" th:value="${doctor.address}" disabled>
-                </div>
-            </div>
-
-<!--            -->
-<!--                <label for="phone" class="form-label">Doctor Phone:</label>-->
-<!--                <input type="text" id="phone" class="form-control" th:value="${doctor.phone}" disabled>-->
-<!--           -->
-
-
-
-        </div>
-
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label for="name" class="form-label">Patient Phone:</label>
-                <input type="text" id="name" class="form-control" th:field="*{patient.name}" readonly>
-            </div>
-            <div class="col-md-6">
-                <label for="patientbirthDate" class="form-label">Patient Birth Date:</label>
-                <input type="date" id="patientbirthDate" class="form-control" th:field="*{patient.birthDate}" readonly>
-            </div>
-
-
-        </div>
-
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label for="pathology" class="form-label">Pathology Description:</label>
-                <input type="text" id="pathology" class="form-control" th:field="*{pathology}" >
-            </div>
-            <div class="col-md-6">
-                <label for="patienttelephone" class="form-label">Patient Phone:</label>
-                <input type="text" id="patienttelephone" class="form-control" th:field="*{patient.telephone}" readonly>
-            </div>
-
-        </div>
-
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label for="Date" class="form-label">Appointment Date:</label>
-                <input type="date" id="Date" class="form-control" th:field="*{date}" required>
-            </div>
-            <div class="col-md-6">
-                <label for="Time" class="form-label">Appointment Time:</label>
-                <input type="time" id="Time" class="form-control" th:field="*{time}" required>
-            </div>
-        </div>
-
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label for="status" class="form-label">Status:</label>
-                <input type="text" id="status" class="form-control" th:value="'SCHEDULED'" readonly />
-            </div>
-        </div>
-
-        <div class="text-center">
-            <button type="submit" class="btn btn-primary">Schedule Appointment </button>
-        </div>
-    </form>
 </div>
-<div id="successToast" class="toast align-items-center text-white bg-success border-0 position-fixed top-0 end-0 m-3" role="alert" aria-live="assertive" aria-atomic="true">
+
+<!-- Success Toast -->
+<div class="toast align-items-center text-white bg-success border-0 position-fixed top-0 end-0 m-3"
+     id="successToast" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="d-flex">
-        <div class="toast-body" id="toastMessage">
-            Appointment created successfully!
-        </div>
+        <div class="toast-body" id="toastMessage"></div>
         <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
     </div>
 </div>
-<script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
-<!-- Custom Scripts -->
+<script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 <script>
     function confirmSubmission(event) {
-        event.preventDefault();  // Empêcher la soumission immédiate
+        event.preventDefault();
+        const date = document.getElementById("date").value;
+        const time = document.getElementById("time").value;
 
-        let date = document.getElementById("Date").value;
-        let time = document.getElementById("Time").value;
+        document.getElementById("toastMessage").textContent =
+            `Appointment scheduled successfully! Date: ${date} Time: ${time}`;
 
-        // Mettre à jour le message du toast
-        let toastMessage = `Appointment created successfully! Date: ${date} Time: ${time}`;
-        document.getElementById("toastMessage").textContent = toastMessage;
+        new bootstrap.Toast(document.getElementById('successToast')).show();
 
-        // Afficher le toast Bootstrap
-        let toastElement = document.getElementById('successToast');
-        let toast = new bootstrap.Toast(toastElement);
-        toast.show();
-
-        // Soumettre le formulaire après 1.5 secondes
-        setTimeout(function() {
+        setTimeout(() => {
             event.target.submit();
         }, 1500);
     }
 </script>
-
 </body>
 </html>

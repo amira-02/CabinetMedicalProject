@@ -29,4 +29,5 @@ public interface ConsultationRepository extends JpaRepository<Consultation, Long
     int countByPatientIdAndDoctorId(Long patientId, Long doctorId);
 //    boolean existsByPatientAndDoctorAndDate(Patient patient, Doctor doctor);
 Page<Consultation> findByPatientId(Long patientId, Pageable pageable);
+    List<Consultation> findByPatientIdAndDoctorId(Long patientId, Long doctorId);
 }

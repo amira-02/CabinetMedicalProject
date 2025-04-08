@@ -1,9 +1,9 @@
 package tn.pi.cabinetmedicalproject.model;
 
-import javax.persistence.*;
-import javax.validation.constraints.Size;
 import lombok.*;
 
+import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -30,7 +30,7 @@ public class Doctor {
     private int phone;
 
    private String Description;
-
+    private float ConsultationPrice;
     // Relationship to Consultation, assuming a doctor can have many consultations
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Consultation> consultations = new ArrayList<>();
