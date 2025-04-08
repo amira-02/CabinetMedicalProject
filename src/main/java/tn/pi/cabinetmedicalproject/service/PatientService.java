@@ -8,6 +8,8 @@ import tn.pi.cabinetmedicalproject.repository.PatientRepository;
 import tn.pi.cabinetmedicalproject.repository.UserRepository;
 import tn.pi.cabinetmedicalproject.web.dto.UserRegistrationDto;
 
+import java.util.List;
+
 @Service
 public class PatientService {
 
@@ -20,7 +22,10 @@ public class PatientService {
     @Autowired
     private UserRepository userRepository;
 
-
+    // Méthode pour obtenir tous les patients
+    public List<Patient> getAllPatients() {
+        return patientRepository.findAll();  // Utiliser la méthode de repository pour récupérer les patients
+    }
     // Method to find a patient by the associated user
     public Patient findByUser(User user) {
         return patientRepository.findByUser(user);
@@ -42,5 +47,10 @@ public class PatientService {
     // Méthode pour récupérer un patient par son ID
     public Patient getPatientById(Long id) {
         return patientRepository.findById(id).orElse(null); // Renvoie le patient ou null si pas trouvé
+    }
+
+
+    public List<Patient> findAllPatients() {
+        return patientRepository.findAll();
     }
 }

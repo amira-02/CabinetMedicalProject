@@ -19,6 +19,7 @@ import tn.pi.cabinetmedicalproject.repository.PatientRepository;
 import tn.pi.cabinetmedicalproject.repository.UserRepository;
 import tn.pi.cabinetmedicalproject.service.ConsultationService;
 import tn.pi.cabinetmedicalproject.service.DoctorService;
+import tn.pi.cabinetmedicalproject.service.PatientService;
 
 import java.security.Principal;
 import java.util.List;
@@ -33,6 +34,10 @@ public class PatientController {
     private ConsultationService consultationService; // Injection correcte
     @Autowired
     private DoctorService doctorService;
+    @Autowired
+    private PatientService patientService;
+
+
     public PatientController(PatientRepository patientRepository, UserRepository userRepository) {
         this.patientRepository = patientRepository;
         this.userRepository = userRepository;
@@ -80,7 +85,12 @@ public class PatientController {
         model.addAttribute("patient", new Patient());
         return "redirect:/index";
     }
-
+    @GetMapping("/patients")
+    public String getPatients(Model model) {
+        List<Patient> patients = patientService.findAllPatients();
+        model.addAttribute("patients", patients); // Envoi des patients à la vue
+        return "patients"; // Nom de la vue Thymeleaf (patients.html)
+    }
     @GetMapping("/EditPatients")
     public String EditPatients(Model model, @RequestParam(name = "id") Long id) {
         Patient patient = patientRepository.findById(id).get();
@@ -157,6 +167,19 @@ public class PatientController {
         // Retourner la vue de consultation
         return "ConsultationPatient";
     }
+    @GetMapping("/patientsList")
+    public String index(Model model,
+                        @RequestParam(name = "page", defaultValue = "0") int page,
+                        @RequestParam(name = "size", defaultValue = "4") int size,
+                        @RequestParam(name = "keyword", defaultValue = "") String keyword) {
+        Page<Patient> patients = patientRepository.findByNameContains(keyword, PageRequest.of(page, size));
+        model.addAttribute("patients", patients.getContent());
+        model.addAttribute("pages", new int[patients.getTotalPages()]);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("keyword", keyword);
+        return "patientsList";
+    }
+
 
 
 }

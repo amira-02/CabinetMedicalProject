@@ -19,14 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import tn.pi.cabinetmedicalproject.enums.AppointmentStatus;
-import tn.pi.cabinetmedicalproject.model.Consultation;
-import tn.pi.cabinetmedicalproject.model.Doctor;
-import tn.pi.cabinetmedicalproject.model.Patient;
-import tn.pi.cabinetmedicalproject.model.User;
-import tn.pi.cabinetmedicalproject.repository.ConsultationRepository;
-import tn.pi.cabinetmedicalproject.repository.DoctorRepository;
-import tn.pi.cabinetmedicalproject.repository.PatientRepository;
-import tn.pi.cabinetmedicalproject.repository.UserRepository;
+import tn.pi.cabinetmedicalproject.model.*;
+import tn.pi.cabinetmedicalproject.repository.*;
 import tn.pi.cabinetmedicalproject.service.ConsultationService;
 import tn.pi.cabinetmedicalproject.service.DoctorService;
 import tn.pi.cabinetmedicalproject.service.PatientService;
@@ -59,6 +53,8 @@ public class ConsultationController {
     private PatientService patientService;
     @Autowired
     private PatientRepository patientRepository;
+    @Autowired
+    private ArchiveRepository archiveRepository;
 
     @Autowired
     private ConsultationRepository consultationRepository;
@@ -156,40 +152,84 @@ public class ConsultationController {
         }
     }
 
+//    @GetMapping("/form/{doctorId}")
+//    public String showConsultationForm(@PathVariable Long doctorId, Model model) {
+//        // Récupérer l'utilisateur connecté
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        String email = authentication.getName();
+//
+//        // Récupérer le patient associé à cet utilisateur
+//        Patient patient = patientRepository.findByUserEmail(email);
+//
+//        // Vérifier si le patient existe
+//        if (patient == null) {
+//            model.addAttribute("error", "Patient not found");
+//            return "error patient";
+//        }
+//
+//        // Récupérer le docteur
+//        Doctor doctor = doctorService.findById(doctorId);
+//        if (doctor == null) {
+//            model.addAttribute("error", "Doctor not found");
+//            return "error";
+//        }
+//
+//        // Créer une consultation et pré-remplir les champs
+//        Consultation consultation = new Consultation();
+//        consultation.setDoctor(doctor);
+//        consultation.setPatient(patient); // Associer le patient à la consultation
+//
+//        // Ajouter les objets au modèle pour Thymeleaf
+//        model.addAttribute("consultation", consultation);
+//        model.addAttribute("doctor", doctor);
+//        model.addAttribute("patient", patient); // Ajouter le patient pour pré-remplir le formulaire
+//
+//        return "appointmentForm"; // Thymeleaf view
+//    }
+
+
+
+
+
+
     @GetMapping("/form/{doctorId}")
-    public String showConsultationForm(@PathVariable Long doctorId, Model model) {
-        // Récupérer l'utilisateur connecté
+    public String showConsultationForm(@PathVariable Long doctorId, Model model, RedirectAttributes redirectAttributes) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
 
-        // Récupérer le patient associé à cet utilisateur
         Patient patient = patientRepository.findByUserEmail(email);
-
-        // Vérifier si le patient existe
         if (patient == null) {
             model.addAttribute("error", "Patient not found");
             return "error patient";
         }
 
-        // Récupérer le docteur
         Doctor doctor = doctorService.findById(doctorId);
         if (doctor == null) {
             model.addAttribute("error", "Doctor not found");
             return "error";
         }
 
-        // Créer une consultation et pré-remplir les champs
+
+        boolean exists = consultationRepository.existsByPatientIdAndDoctorId(patient.getId(), doctor.getId());
+        if (exists) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Vous avez déjà un rendez-vous avec ce docteur.");
+            return "redirect:/DoctorsListForPatient"; // redirige par exemple vers la liste des docteurs
+        }
+
         Consultation consultation = new Consultation();
         consultation.setDoctor(doctor);
-        consultation.setPatient(patient); // Associer le patient à la consultation
+        consultation.setPatient(patient);
 
-        // Ajouter les objets au modèle pour Thymeleaf
         model.addAttribute("consultation", consultation);
         model.addAttribute("doctor", doctor);
-        model.addAttribute("patient", patient); // Ajouter le patient pour pré-remplir le formulaire
+        model.addAttribute("patient", patient);
 
-        return "appointmentForm"; // Thymeleaf view
+        return "appointmentForm";
     }
+
+
+
+
 
 
     // Endpoint to display Consultation for the logged-in doctor
@@ -346,9 +386,33 @@ public class ConsultationController {
 //
 
 
+//    @PostMapping("/{id}/complete")
+//    public void markAsCompleted(@PathVariable Long id, HttpServletResponse response,   Model model,
+//                                Principal principal) throws IOException {
+//        // 1. Récupérer l'utilisateur connecté
+//        String email = principal.getName();
+//        User user = userRepository.findByEmail(email);
+//
+//        // 2. Trouver le docteur correspondant à cet utilisateur
+//        Doctor doctor = doctorRepository.findByUserEmail(email);
+//
+//        // 3. Récupérer la consultation
+//        Consultation consultation = consultationRepository.findById(id).orElse(null);
+//
+//        // 4. Vérifier l'appartenance et mettre à jour
+//        if (consultation != null && consultation.getDoctor().getId().equals(doctor.getId())) {
+//            consultation.setStatus(AppointmentStatus.COMPLETED);
+//            consultationRepository.save(consultation);
+//            doctorRepository.save(doctor);
+//            model.addAttribute("doctor", doctor);
+//            response.sendRedirect("/Consultation/doctor?success=Consultation%20completed%20successfully");
+//        } else {
+//            response.sendRedirect("/doctorhome?error=Unauthorized%20or%20consultation%20not%20found");
+//        }
+//    }
+
     @PostMapping("/{id}/complete")
-    public void markAsCompleted(@PathVariable Long id, HttpServletResponse response,   Model model,
-                                Principal principal) throws IOException {
+    public void markAsCompleted(@PathVariable Long id, HttpServletResponse response, Model model, Principal principal) throws IOException {
         // 1. Récupérer l'utilisateur connecté
         String email = principal.getName();
         User user = userRepository.findByEmail(email);
@@ -361,12 +425,40 @@ public class ConsultationController {
 
         // 4. Vérifier l'appartenance et mettre à jour
         if (consultation != null && consultation.getDoctor().getId().equals(doctor.getId())) {
+            // 5. Mettre à jour le statut de la consultation
             consultation.setStatus(AppointmentStatus.COMPLETED);
-            consultationRepository.save(consultation);
+
+            // 6. Créer une nouvelle instance de Archive pour stocker la consultation
+            Archive archive = Archive.builder()
+                    .doctor(consultation.getDoctor())
+                    .patient(consultation.getPatient())
+                    .date(consultation.getDate())
+                    .time(consultation.getTime())
+                    .status(consultation.getStatus())
+                    .description(consultation.getDescription())
+                    .prescription(consultation.getPrescription())
+                    .allergies(consultation.getAllergies())
+                    .currentTreatments(consultation.getCurrentTreatments())
+                    .medicalHistory(consultation.getMedicalHistory())
+                    .pathology(consultation.getPathology())
+                    .build();
+
+            // 7. Sauvegarder la consultation dans la table Archive
+            archiveRepository.save(archive);
+
+            // 8. Supprimer la consultation de la table Consultation
+            consultationRepository.delete(consultation);
+
+            // 9. Sauvegarder le docteur
             doctorRepository.save(doctor);
+
+            // 10. Ajouter les informations nécessaires au modèle
             model.addAttribute("doctor", doctor);
+
+            // 11. Rediriger avec un message de succès
             response.sendRedirect("/Consultation/doctor?success=Consultation%20completed%20successfully");
         } else {
+            // 12. Rediriger avec un message d'erreur si la consultation n'est pas trouvée ou l'utilisateur n'est pas autorisé
             response.sendRedirect("/doctorhome?error=Unauthorized%20or%20consultation%20not%20found");
         }
     }

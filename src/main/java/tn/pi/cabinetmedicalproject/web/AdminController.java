@@ -5,7 +5,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import tn.pi.cabinetmedicalproject.model.Doctor;
+import tn.pi.cabinetmedicalproject.model.Patient;
 import tn.pi.cabinetmedicalproject.service.DoctorService;
+import tn.pi.cabinetmedicalproject.service.PatientService;
 
 import java.util.List;
 
@@ -14,7 +16,7 @@ public class AdminController {
 
     private final DoctorService doctorService;
 
-    // Injection de dépendance via le constructeur
+
     @Autowired
     public AdminController(DoctorService doctorService) {
         this.doctorService = doctorService;

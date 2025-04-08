@@ -17,35 +17,28 @@
 <div class="sidebar">
     <div class="sidebar-header">
         <h4 class="mb-0"><i class="bi bi-shield-check me-2"></i>MediAdmin</h4>
-        <small class="text-muted">Healthcare Management System</small>
+        <small >Healthcare Management System</small>
     </div>
+
 
     <div class="p-3">
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a class="nav-link active">
+                <a class="nav-link active" href="#" onclick="showSection('dashboard')">
                     <i class="bi bi-speedometer2 me-2"></i> Dashboard
                 </a>
             </li>
             <li class="nav-item">
-
-                <a class="nav-link" href="javascript:void(0);" onclick="loadDoctorsList()"><i class="bi bi-people me-2"></i>Doctors</a>
+                <a class="nav-link" href="#" onclick="showSection('doctors')">
+                    <i class="bi bi-people me-2"></i>Doctors
+                </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link">
+                <a class="nav-link" href="#" onclick="showSection('patients')">
                     <i class="bi bi-people me-2"></i> Patients
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link">
-                    <i class="bi bi-calendar-check me-2"></i> Appointments
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link">
-                    <i class="bi bi-gear me-2"></i> Settings
-                </a>
-            </li>
+            <!-- ... autres éléments du menu ... -->
         </ul>
     </div>
 </div>
@@ -147,23 +140,33 @@
 
     </div>
 
-    <!-- Doctors Table -->
-    <div class="card">
-        <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h5 class="card-title mb-0">Doctor Management</h5>
-                <a  th:href="@{/formDoctor}" class="btn btn-primary">
-                           <i class="bi bi-plus-lg"></i> Add Doctor
-                         </a>
-
+    <div id="doctors" class="content-section" style="display: none;">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="card-title mb-0">Doctor Management</h5>
+                    <a th:href="@{/formDoctor}" class="btn btn-primary">
+                        <i class="bi bi-plus-lg"></i> Add Doctor
+                    </a>
+                </div>
+                <div class="table-responsive" id="doctorsListContainer"></div>
             </div>
+        </div>
+    </div>
 
-            <div class="table-responsive">
-                <div id="doctorsListContainer"></div>
+    <div id="patients" class="content-section" style="display: none;">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="card-title mb-0">Patient Management</h5>
+
+                </div>
+                <div class="table-responsive" id="patientsListContainer"></div>
             </div>
         </div>
     </div>
 </div>
+
 
 
 <script>
@@ -185,6 +188,22 @@
             }
         });
     }
+
+
+    function loadpatientsList() {
+        $.ajax({
+            url: '/patientsList',  // URL where the doctors list can be fetched
+            type: 'GET',
+            success: function(response) {
+                // Dynamically update the page with the doctors list HTML
+                $('#patientsListContainer').html(response);
+            },
+            error: function() {
+                alert('Error loading patients list!');
+            }
+        });
+    }
+
 
     // Graphique linéaire pour les rendez-vous
     const appointmentsCtx = document.getElementById('appointmentsChart').getContext('2d');
@@ -241,6 +260,74 @@
             }
         }
     });
+    // Fonction pour afficher les sections
+    function showSection(sectionId) {
+        // Masquer toutes les sections
+        document.querySelectorAll('.content-section').forEach(section => {
+            section.style.display = 'none';
+        });
+
+        // Afficher la section sélectionnée
+        document.getElementById(sectionId).style.display = 'block';
+
+        // Charger le contenu dynamique
+        if(sectionId === 'doctors') {
+            loadDoctorsList();
+            document.title = "Doctor Management - MediAdmin";
+        }
+        else if(sectionId === 'patients') {
+            loadpatientsList();
+            document.title = "Patient Management - MediAdmin";
+        }
+        else {
+            document.title = "Dashboard - MediAdmin";
+        }
+
+        // Mettre à jour l'état actif du menu
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.classList.remove('active');
+        });
+        event.target.classList.add('active');
+    }
+
+    // Initialiser le dashboard au chargement
+    document.addEventListener('DOMContentLoaded', function() {
+        showSection('dashboard');
+        initCharts();
+    });
+
+    // Fonctions de chargement existantes
+    function loadDoctorsList() {
+        $.ajax({
+            url: '/DoctorsList',
+            type: 'GET',
+            success: function(response) {
+                $('#doctorsListContainer').html(response);
+            },
+            error: function() {
+                alert('Error loading doctors list!');
+            }
+        });
+    }
+
+    function loadpatientsList() {
+        $.ajax({
+            url: '/patientsList',
+            type: 'GET',
+            success: function(response) {
+                $('#patientsListContainer').html(response);
+            },
+            error: function() {
+                alert('Error loading patients list!');
+            }
+        });
+    }
+
+    // Initialisation des graphiques
+    function initCharts() {
+        // Code d'initialisation des graphiques existant
+    }
+
 </script>
 
 </body>

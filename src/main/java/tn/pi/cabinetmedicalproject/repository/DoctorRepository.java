@@ -25,7 +25,7 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
     // Trouver un médecin basé sur l'email de l'utilisateur connecté
     Doctor findByUserEmail(String email);
     // Recherche par email de l'utilisateur
-
+    Page<Doctor> findByNameContaining(String name, Pageable pageable);
 
 
 

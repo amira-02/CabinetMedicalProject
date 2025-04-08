@@ -30,4 +30,6 @@ public interface ConsultationRepository extends JpaRepository<Consultation, Long
 //    boolean existsByPatientAndDoctorAndDate(Patient patient, Doctor doctor);
 Page<Consultation> findByPatientId(Long patientId, Pageable pageable);
     List<Consultation> findByPatientIdAndDoctorId(Long patientId, Long doctorId);
+    boolean existsByPatientIdAndDoctorId(Long patientId, Long doctorId);
+
 }

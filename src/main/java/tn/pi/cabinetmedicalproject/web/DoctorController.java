@@ -88,48 +88,6 @@ public class DoctorController {
 
 
 
-//    @GetMapping("/DoctorsList")
-//    public String index(Model model,
-//                        @RequestParam(name = "page", defaultValue = "0") int page,
-//                        @RequestParam(name = "size", defaultValue = "4") int size,
-//                        @RequestParam(name = "keyword", defaultValue = "") String keyword) {
-//        Page<Doctor> doctors = doctorRepository.findByNameContains(keyword, PageRequest.of(page, size));
-//
-//        doctors.getContent().forEach(doctor -> log.info("Doctor: {}", doctor));
-//        model.addAttribute("doctors", doctors.getContent());
-//        model.addAttribute("pages", new int[doctors.getTotalPages()]);
-//        model.addAttribute("currentPage", page);
-//        model.addAttribute("keyword", keyword);
-//        return "DoctorsList";
-//    }
-
-//
-//
-//    @GetMapping("/doctor/patients")
-//    public String getUniquePatientsForDoctor(Model model) {
-//        // Récupérer l'utilisateur connecté (doctor)
-//        User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        Long doctorId = Long.parseLong(principal.getEmail()); // Si l'ID du médecin est stocké dans le nom d'utilisateur
-//
-//        // Récupérer toutes les consultations du médecin avec l'ID doctorId
-//        List<Consultation> consultations = consultationRepository.findAllByDoctorId(doctorId);
-//
-//        // Créer un Set pour garantir l'unicité des patients
-//        Set<Patient> uniquePatients = new HashSet<>();
-//
-//        // Ajouter chaque patient de chaque consultation au Set pour filtrer les doublonsx  x
-//        for (Consultation consultation : consultations) {
-//            uniquePatients.add(consultation.getPatient());
-//        }
-//
-//        // Ajouter la liste des patients uniques au modèle
-//        model.addAttribute("uniquePatients", uniquePatients);
-//
-//        // Retourner le nom de la vue
-//        return "doctorhome";
-//    }
-
-
 
     @GetMapping("/DoctorsList")
     public String index(Model model,
@@ -200,42 +158,6 @@ public class DoctorController {
 
 
 
-//
-//    @PostMapping("/saveDoctor")
-//    public String saveDoctor(Model model, @Valid Doctor doctor, BindingResult bindingResult) {
-//        if (bindingResult.hasErrors()) {
-//            return "formDoctor"; // Return the form page if there are validation errors
-//        }
-//
-//        // Ensure the User object is set for the doctor
-//        if (doctor.getUser() == null) {
-//            doctor.setUser(new User()); // Create a new User if not provided
-//        }
-//
-//        // Hash the password before saving it
-//        User user = doctor.getUser();
-//        if (user.getPassword() != null && !user.getPassword().isEmpty()) {
-//            user.setPassword(passwordEncoder.encode(user.getPassword())); // Hash the password
-//        }
-//
-//        user.setRole("ROLE_DOCTOR"); // Assign the role to "doctor"
-//
-//        // Save the User first
-//        userService.save(user);
-//
-//        // After saving the user, associate the user with the doctor
-//        doctor.setUser(user);
-//
-//        // Save the Doctor entity
-//        doctorRepository.save(doctor);
-//
-//        // Reset the form (clear the Doctor instance for the next input)
-//        model.addAttribute("doctor", new Doctor());
-//        return "redirect:/DoctorsList"; // Redirect to the list of doctors
-//    }
-
-
-
     @GetMapping("/EditDoctor")
     public String EditDoctor(Model model, @RequestParam(name = "id") Long id) {
         Doctor doctor = doctorRepository.findById(id).orElseThrow(() -> new RuntimeException("Doctor not found"));
@@ -243,12 +165,6 @@ public class DoctorController {
         return "EditDoctor";
     }
 
-//    @GetMapping("/EditDoctor")
-//    public String EditPatients(Model model,@RequestParam(name = "id") Long id ){
-//        Doctor doctor =doctorRepository.findById(id).get();
-//        model.addAttribute("patient", patient);
-//        return "EditDoctor";
-//    }
 
 
     @GetMapping("/ConsultationDoctor")
@@ -272,6 +188,8 @@ public class DoctorController {
 
         return "DoctorsListForPatient"; // Nom du fichier HTML à afficher
     }
+
+
 
 
 }
