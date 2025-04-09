@@ -69,4 +69,11 @@ public List<Consultation> findByPatientAndDoctor(Patient patient, Doctor doctor)
     public List<Consultation> getAllConsultations() {
         return consultationRepository.findAll();
     }
+
+    public Page<Consultation> findConsultationsByPatientIdAndStatus(Long patientId, AppointmentStatus status, Pageable pageable) {
+        return consultationRepository.findByPatientIdAndStatus(patientId, status, pageable);
+    }
+
+
+
 }

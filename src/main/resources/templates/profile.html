@@ -59,6 +59,11 @@
             padding: 2rem;
             margin-bottom: 2rem;
             box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+            display: none; /* hide by default */
+        }
+
+        .section-card.active-section {
+            display: block;
         }
 
         .timeline-item {
@@ -89,6 +94,9 @@
 </head>
 <body>
 <div class="portal-container">
+    <a href="/home" class="btn btn-outline-primary mb-3">
+        <i class="fas fa-arrow-left me-2"></i>Retour
+    </a>
     <div class="profile-card">
         <div class="d-flex justify-content-between align-items-start">
             <div>
@@ -104,85 +112,66 @@
             </div>
         </div>
     </div>
+
     <div class="portal-nav">
         <div class="nav-item active" onclick="showSection('appointments', this)"><i class="fas fa-calendar-alt me-2"></i>Appointments</div>
-        <div class="nav-item" onclick="showSection('consultations', this)"><i class="fas fa-comment-medical me-2"></i>Consultations</div>
-        <div class="nav-item" onclick="showSection('payments', this)"><i class="fas fa-credit-card me-2"></i>Pending Payments</div>
-    </div>
 
+        <div class="nav-item" onclick="showSection('payments', this)"><i class="fas fa-credit-card me-2"></i>Pending Payments</div>
+        <div class="nav-item" onclick="showSection('consultations', this)"><i class="fas fa-comment-medical me-2"></i>Consultations</div>
+    </div>
 
     <div id="appointments" class="section-card active-section">
         <h3>Medical Schedule</h3>
-        <div class="timeline-list">
-            <div class="timeline-item" th:each="consultation : ${consultations}">
-                <div class="status-indicator"
-                     th:classappend="${consultation.status == 'SCHEDULED' ? 'upcoming' : 'completed'}">
+        <div class="timeline">
+            <div th:each="consultation : ${scheduledAppointments}">
+                <div class="timeline-item">
+                    <div>
+                        <p><strong>Date:</strong> <span th:text="${consultation.date}"></span></p>
+                        <p><strong>Status:</strong> <span class="badge bg-primary" th:text="${consultation.status}"></span></p>
+                    </div>
+                    <div>
+                        <button class="cancel-btn" th:data-id="${consultation.id}">Cancel</button>
+                    </div>
                 </div>
-                <div>
-                    <h5 th:text="${consultation.doctor.name}"></h5>
-                </div>
-                <h5 th:text="${consultation.pathology}"></h5>
-                <div class="text-muted">
-                    <i class="fas fa-clock me-2"></i>
-                    <span th:text="${consultation.date} + ' • ' + ${consultation.time}"></span>
-                </div>
-                <button th:if="${consultation.status == 'SCHEDULED'}"
-                        th:attr="data-id=${consultation.id}"
-                        class="btn btn-danger cancel-btn">
-                    Cancel Appointment
-                </button>
             </div>
         </div>
-        <div class="pagination-container d-flex justify-content-center mt-4">
-            <ul class="pagination">
-                <li th:if="${currentPage > 0}" class="page-item">
-                    <a class="page-link" th:href="@{/profile(page=${currentPage - 1})}">Précédent</a>
-                </li>
-
-                <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" class="page-item"
-                    th:classappend="${i == currentPage} ? 'active' : ''">
-                    <a class="page-link" th:href="@{/profile(page=${i})}" th:text="${i + 1}"></a>
-                </li>
-
-                <li th:if="${currentPage + 1 < totalPages}" class="page-item">
-                    <a class="page-link" th:href="@{/profile(page=${currentPage + 1})}">Suivant</a>
-                </li>
-            </ul>
-        </div>
     </div>
-
-
-
 
 
     <div id="consultations" class="section-card">
         <h3>Medical History</h3>
+
     </div>
 
     <div id="payments" class="section-card">
         <h3>Pending Payments</h3>
-        <div class="timeline-list">
-            <div class="timeline-item" th:each="payment : ${pendingPayments}">
-                <div class="status-indicator pending"></div>
-                <h5 th:text="'Due: ' + ${payment.amount} + ' USD'"></h5>
-                <div class="text-muted"><i class="fas fa-calendar me-2"></i><span th:text="${payment.dueDate}"></span></div>
-                <button class="btn btn-warning btn-sm mt-2"><i class="fas fa-credit-card me-2"></i>Pay Now</button>
+        <div class="timeline">
+            <div th:each="consultation : ${pendingPayments}">
+                <div class="timeline-item">
+                    <div>
+                        <p><strong>Date:</strong> <span th:text="${consultation.date}"></span></p>
+                        <p><strong>Status:</strong> <span class="badge bg-warning" th:text="${consultation.status}"></span></p>
+                    </div>
+                    <div>
+                        <button class="pay-btn" th:data-id="${consultation.id}">Pay</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
 </div>
-
-
 
 <script>
     function showSection(sectionId, element) {
+        // Hide all section cards
         document.querySelectorAll('.section-card').forEach(card => card.classList.remove('active-section'));
+        // Show the selected one
         document.getElementById(sectionId).classList.add('active-section');
+        // Update nav item active class
         document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
         element.classList.add('active');
     }
-
-
 
     document.addEventListener("DOMContentLoaded", function () {
         document.querySelectorAll(".cancel-btn").forEach(button => {
@@ -211,4 +200,3 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
