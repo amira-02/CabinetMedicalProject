@@ -1,236 +1,237 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Patient Portal</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #5B7CFD;
-            --accent: #32BEA6;
-            --background: #F9FAFF;
-            --card-bg: #FFFFFF;
-        }
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Patient Portal</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+        <style>
+            :root {
+                --primary: #5B7CFD;
+                --accent: #32BEA6;
+                --background: #F9FAFF;
+                --card-bg: #FFFFFF;
+            }
 
-        body {
-            background: var(--background);
-            font-family: 'Segoe UI', sans-serif;
-        }
+            body {
+                background: var(--background);
+                font-family: 'Segoe UI', sans-serif;
+            }
 
-        .portal-container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
+            .portal-container {
+                max-width: 1200px;
+                margin: 2rem auto;
+                padding: 0 1rem;
+            }
 
-        .profile-card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.05);
-            padding: 2rem;
-            margin-bottom: 2rem;
-        }
+            .profile-card {
+                background: var(--card-bg);
+                border-radius: 16px;
+                box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+                padding: 2rem;
+                margin-bottom: 2rem;
+            }
 
-        .portal-nav {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
+            .portal-nav {
+                display: flex;
+                gap: 1rem;
+                margin-bottom: 2rem;
+            }
 
-        .nav-item {
-            padding: 1rem 2rem;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: var(--card-bg);
-        }
+            .nav-item {
+                padding: 1rem 2rem;
+                border-radius: 12px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                background: var(--card-bg);
+            }
 
-        .nav-item.active {
-            background: var(--primary);
-            color: white;
-            box-shadow: 0 4px 12px rgba(91, 124, 253, 0.3);
-        }
+            .nav-item.active {
+                background: var(--primary);
+                color: white;
+                box-shadow: 0 4px 12px rgba(91, 124, 253, 0.3);
+            }
 
-        .section-card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.05);
-            display: none; /* hide by default */
-        }
+            .section-card {
+                background: var(--card-bg);
+                border-radius: 16px;
+                padding: 2rem;
+                margin-bottom: 2rem;
+                box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+                display: none; /* hide by default */
+            }
 
-        .section-card.active-section {
-            display: block;
-        }
+            .section-card.active-section {
+                display: block;
+            }
 
-        .timeline-item {
-            display: flex;
-            gap: 1.5rem;
-            padding: 1.5rem;
-            border-left: 3px solid var(--primary);
-            margin-bottom: 1.5rem;
-            background: var(--background);
-            border-radius: 8px;
-            transition: transform 0.3s ease;
-        }
+            .timeline-item {
+                display: flex;
+                gap: 1.5rem;
+                padding: 1.5rem;
+                border-left: 3px solid var(--primary);
+                margin-bottom: 1.5rem;
+                background: var(--background);
+                border-radius: 8px;
+                transition: transform 0.3s ease;
+            }
 
-        .timeline-item:hover {
-            transform: translateX(10px);
-        }
+            .timeline-item:hover {
+                transform: translateX(10px);
+            }
 
-        .status-indicator {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            margin-right: 8px;
-        }
+            .status-indicator {
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+                margin-right: 8px;
+            }
 
-        .upcoming { background: var(--primary); }
-        .completed { background: var(--accent); }
-    </style>
-</head>
-<body>
-<div class="portal-container">
-    <a href="/home" class="btn btn-outline-primary mb-3">
-        <i class="fas fa-arrow-left me-2"></i>Retour
-    </a>
-    <div class="profile-card">
-        <div class="d-flex justify-content-between align-items-start">
-            <div>
-                <h2 class="mb-3" th:text="${patient.name}"></h2>
-                <div class="d-flex gap-4 text-muted">
-                    <div><i class="fas fa-envelope me-2"></i><span th:text="${patient.email}"></span></div>
-                    <div><i class="fas fa-phone me-2"></i><span th:text="${patient.telephone}"></span></div>
-                </div>
-            </div>
-            <div class="text-end">
-                <div class="badge bg-light text-dark mb-2"><i class="fas fa-birthday-cake me-2"></i><span th:text="${patient.birthDate}"></span></div>
-                <div class="badge bg-light text-dark"><i class="fas fa-venus-mars me-2"></i><span th:text="${patient.gender}"></span></div>
-            </div>
-        </div>
-    </div>
-
-    <div class="portal-nav">
-        <div class="nav-item active" onclick="showSection('appointments', this)"><i class="fas fa-calendar-alt me-2"></i>Appointments</div>
-
-        <div class="nav-item" onclick="showSection('payments', this)"><i class="fas fa-credit-card me-2"></i>Pending Payments</div>
-        <div class="nav-item" onclick="showSection('consultations', this)"><i class="fas fa-comment-medical me-2"></i>Consultations</div>
-    </div>
-
-    <div id="appointments" class="section-card active-section">
-
-        <h3>Medical Schedule</h3>
-        <div th:if="${param.success}">
-            <div class="alert alert-success" th:text="${param.success}"></div>
-        </div>
-
-        <div class="timeline">
-            <div th:each="consultation : ${scheduledAppointments}">
-                <div class="timeline-item">
-                    <div>
-                        <p><strong>Doctor Name:</strong> <span th:text="${consultation.doctor.name}"></span></p>
-                        <p><strong>Pathology:</strong> <span th:text="${consultation.pathology}"></span></p>
-                        <p><strong>Date:</strong> <span th:text="${consultation.date}"></span></p>
-                        <p><strong>Status:</strong> <span class="badge bg-primary" th:text="${consultation.status}"></span></p>
+            .upcoming { background: var(--primary); }
+            .completed { background: var(--accent); }
+        </style>
+    </head>
+    <body>
+    <div class="portal-container">
+        <a href="/home" class="btn btn-outline-primary mb-3">
+            <i class="fas fa-arrow-left me-2"></i>Retour
+        </a>
+        <div class="profile-card">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <h2 class="mb-3" th:text="${patient.name}"></h2>
+                    <div class="d-flex gap-4 text-muted">
+                        <div><i class="fas fa-envelope me-2"></i><span th:text="${patient.email}"></span></div>
+                        <div><i class="fas fa-phone me-2"></i><span th:text="${patient.telephone}"></span></div>
                     </div>
-
-                    <form th:action="@{/profile/{id}/canceled(id=${consultation.id})}" method="post" style="display:inline;">
-                        <button type="submit" class="btn btn-success" onclick="showSuccessPopup()">
-                            <i class="fas fa-check"></i> cancel
-                        </button>
-                    </form>
-
                 </div>
-            </div>
-        </div>
-        <div class="pagination-container d-flex justify-content-center mt-4">
-            <ul class="pagination">
-                <li th:if="${currentPage > 0}" class="page-item">
-                    <a class="page-link" th:href="@{/profile(page=${currentPage - 1})}">Précédent</a>
-                </li>
-
-                <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" class="page-item"
-                    th:classappend="${i == currentPage} ? 'active' : ''">
-                    <a class="page-link" th:href="@{/profile(page=${i})}" th:text="${i + 1}"></a>
-                </li>
-
-                <li th:if="${currentPage + 1 < totalPages}" class="page-item">
-                    <a class="page-link" th:href="@{/profile(page=${currentPage + 1})}">Suivant</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-
-
-    <div id="consultations" class="section-card">
-        <h3>Medical History</h3>
-        <h3 class="mt-5">Consultations Terminées</h3>
-        <div class="timeline">
-            <div th:each="archive : ${completedConsultations}">
-                <div class="timeline-item">
-                    <div>
-                        <p><strong>Docteur:</strong> <span th:text="${archive.doctor.name}"></span></p>
-                        <p><strong>Date:</strong> <span th:text="${archive.date}"></span></p>
-                        <p><strong>Heure:</strong> <span th:text="${archive.time}"></span></p>
-                        <p><strong>Description:</strong> <span th:text="${archive.description} ?: 'Aucune'"></span></p>
-                        <p><strong>Prescription:</strong> <span th:text="${archive.prescription} ?: 'Aucune'"></span></p>
-                        <span class="badge bg-success" th:text="${archive.status}"></span>
-                    </div>
+                <div class="text-end">
+                    <div class="badge bg-light text-dark mb-2"><i class="fas fa-birthday-cake me-2"></i><span th:text="${patient.birthDate}"></span></div>
+                    <div class="badge bg-light text-dark"><i class="fas fa-venus-mars me-2"></i><span th:text="${patient.gender}"></span></div>
                 </div>
             </div>
         </div>
 
-    </div>
+        <div class="portal-nav">
+            <div class="nav-item active" onclick="showSection('appointments', this)"><i class="fas fa-calendar-alt me-2"></i>Appointments</div>
 
-    <div id="payments" class="section-card">
-        <h3>Pending Payments</h3>
-        <div class="timeline">
-            <div th:each="consultation : ${pendingPayments}">
-                <div class="timeline-item">
-                    <div>
-                        <p><strong>Doctor Name:</strong> <span th:text="${consultation.doctor.name}"></span></p>
-                        <p><strong>Pathology:</strong> <span th:text="${consultation.pathology}"></span></p>
-                        <p><strong>Date:</strong> <span th:text="${consultation.date}"></span></p>
-                        <p><strong>Status:</strong> <span class="badge bg-warning" th:text="${consultation.status}"></span></p>
-                    </div>
+            <div class="nav-item" onclick="showSection('payments', this)"><i class="fas fa-credit-card me-2"></i>Pending Payments</div>
+            <div class="nav-item" onclick="showSection('consultations', this)"><i class="fas fa-comment-medical me-2"></i>Consultations</div>
+        </div>
 
-                        <form th:action="@{/profile/{id}/completed(id=${consultation.id})}" method="post" style="display:inline;">
+        <div id="appointments" class="section-card active-section">
+
+            <h3>Medical Schedule</h3>
+            <div th:if="${param.success}">
+                <div class="alert alert-success" th:text="${param.success}"></div>
+            </div>
+
+            <div class="timeline">
+                <div th:each="consultation : ${scheduledAppointments}">
+                    <div class="timeline-item">
+                        <div>
+                            <p><strong>Doctor Name:</strong> <span th:text="${consultation.doctor.name}"></span></p>
+                            <p><strong>Pathology:</strong> <span th:text="${consultation.pathology}"></span></p>
+                            <p><strong>Date:</strong> <span th:text="${consultation.date}"></span></p>
+                            <p> <span class="badge bg-primary" th:text="${consultation.status}"></span></p>
+                        </div>
+
+                        <form th:action="@{/profile/{id}/canceled(id=${consultation.id})}" method="post" style="display:inline;">
                             <button type="submit" class="btn btn-success" onclick="showSuccessPopup()">
-                                <i class="fas fa-check"></i> Pay
+                                <i class="fas fa-check"></i> cancel
                             </button>
                         </form>
+
+                    </div>
+                </div>
+            </div>
+            <div class="pagination-container d-flex justify-content-center mt-4">
+                <ul class="pagination">
+                    <li th:if="${currentPage > 0}" class="page-item">
+                        <a class="page-link" th:href="@{/profile(page=${currentPage - 1})}">Précédent</a>
+                    </li>
+
+                    <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" class="page-item"
+                        th:classappend="${i == currentPage} ? 'active' : ''">
+                        <a class="page-link" th:href="@{/profile(page=${i})}" th:text="${i + 1}"></a>
+                    </li>
+
+                    <li th:if="${currentPage + 1 < totalPages}" class="page-item">
+                        <a class="page-link" th:href="@{/profile(page=${currentPage + 1})}">Suivant</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+
+        <div id="consultations" class="section-card">
+            <h3>Medical History</h3>
+
+            <div class="timeline">
+                <div th:each="archive : ${completedConsultations}">
+                    <div class="timeline-item">
+                        <div>
+                            <p><strong>Docteur:</strong> <span th:text="${archive.doctor.name}"></span></p>
+                            <p><strong>Date:</strong> <span th:text="${archive.date}"></span></p>
+                            <p><strong>Heure:</strong> <span th:text="${archive.time}"></span></p>
+                            <p><strong>Description:</strong> <span th:text="${archive.description} ?: 'Aucune'"></span></p>
+                            <p><strong>Prescription:</strong> <span th:text="${archive.prescription} ?: 'Aucune'"></span></p>
+                            <span class="badge bg-success" th:text="${archive.status}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="payments" class="section-card">
+            <h3>Pending Payments</h3>
+            <div class="timeline">
+                <div th:each="consultation : ${pendingPayments}">
+                    <div class="timeline-item">
+
+                        <div>
+                            <p><strong>Doctor Name:</strong> <span th:text="${consultation.doctor.name}"></span></p>
+                            <p><strong>Pathology:</strong> <span th:text="${consultation.pathology}"></span></p>
+                            <p><strong>Date:</strong> <span th:text="${consultation.date}"></span></p>
+                            <p> <span class="badge bg-warning" th:text="${consultation.status}"></span></p>
+                        </div>
+
+                            <form th:action="@{/profile/{id}/completed(id=${consultation.id})}" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-success" onclick="showSuccessPopup()">
+                                    <i class="fas fa-check"></i> Pay
+                                </button>
+                            </form>
+                    </div>
                 </div>
             </div>
         </div>
+
     </div>
 
-</div>
+    <script>
+        function showSection(sectionId, element) {
+            // Hide all section cards
+            document.querySelectorAll('.section-card').forEach(card => card.classList.remove('active-section'));
+            // Show the selected one
+            document.getElementById(sectionId).classList.add('active-section');
+            // Update nav item active class
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            element.classList.add('active');
+        }
 
-<script>
-    function showSection(sectionId, element) {
-        // Hide all section cards
-        document.querySelectorAll('.section-card').forEach(card => card.classList.remove('active-section'));
-        // Show the selected one
-        document.getElementById(sectionId).classList.add('active-section');
-        // Update nav item active class
-        document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-        element.classList.add('active');
-    }
+        function showSuccessPopup() {
+            document.getElementById("successPopup").style.display = "block";
+            document.getElementById("popupOverlay").style.display = "block";
+        }
 
-    function showSuccessPopup() {
-        document.getElementById("successPopup").style.display = "block";
-        document.getElementById("popupOverlay").style.display = "block";
-    }
+        // Fonction pour rediriger vers la page doctorhome après un clic sur le bouton
+        function redirectToDoctorHome() {
+            window.location.href = "/profile?success=Consultation%20canceled%20successfully";
+        }
+    </script>
 
-    // Fonction pour rediriger vers la page doctorhome après un clic sur le bouton
-    function redirectToDoctorHome() {
-        window.location.href = "/profile?success=Consultation%20canceled%20successfully";
-    }
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
+    </html>

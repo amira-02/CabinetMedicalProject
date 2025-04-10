@@ -26,7 +26,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
-
 @Controller
 @RequestMapping("/profile")
 public class ProfileController {
@@ -38,6 +37,7 @@ public class ProfileController {
 
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private DoctorRepository doctorRepository;
 
@@ -46,7 +46,6 @@ public class ProfileController {
 
     @Autowired
     private ArchiveRepository archiveRepository;
-
 
     @PostMapping("/{id}/canceled")
     public String markAsCanceled(@PathVariable Long id, Principal principal) {
@@ -89,7 +88,6 @@ public class ProfileController {
         return "redirect:/profile?success=Consultation annulée avec succès";
     }
 
-
     @GetMapping
     public String getProfile(Model model, Principal principal,
                              @RequestParam(defaultValue = "0") int page,
@@ -121,16 +119,20 @@ public class ProfileController {
         Page<Consultation> consultationsPage = consultationService.findConsultationsByPatientId(patient.getId(), pageable);
         model.addAttribute("consultations", consultationsPage.getContent());
 
+        List<Archive> completedConsultations = archiveRepository.findByPatientIdAndStatus(patient.getId(), AppointmentStatus.COMPLETED);
+        model.addAttribute("completedConsultations", completedConsultations);
+
+
+
         // Ajouter la pagination dans le modèle
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", consultationsPage.getTotalPages());
 
-        return "profile";
+        return "profile";  // Nom de la vue Thymeleaf
     }
 
-
     @PostMapping("/{id}/completed")
-    public String markAscompleted(@PathVariable Long id, Principal principal) {
+    public String markAsCompleted(@PathVariable Long id, Principal principal) {
         String email = principal.getName();
 
         // Trouver l'utilisateur connecté
@@ -167,35 +169,7 @@ public class ProfileController {
         }
 
         // Rediriger vers la page profile avec un message de succès
-        return "redirect:/profile?success=Consultation annulée avec succès";
+        return "redirect:/profile?success=Consultation terminée avec succès";
     }
-    @GetMapping
-    public String getProfile(Model model, Principal principal,
-                             @RequestParam(defaultValue = "0") int page) {
-
-        String email = principal.getName();
-        User user = userRepository.findByEmail(email);
-
-        // Récupérer le patient connecté
-        Patient patient = patientService.findByUserId(user.getId());
-
-        // Récupérer les rendez-vous planifiés
-        Page<Consultation> scheduledAppointments = consultationService
-                .getScheduledAppointmentsForPatient(patient.getId(), page, 5);
-        model.addAttribute("scheduledAppointments", scheduledAppointments.getContent());
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", scheduledAppointments.getTotalPages());
-
-        // ✅ Récupérer les consultations complétées depuis Archive
-        List<Archive> completedConsultations = archiveRepository
-                .findByPatientIdAndStatus(patient.getId(), AppointmentStatus.COMPLETED);
-        model.addAttribute("completedConsultations", completedConsultations);
-
-        return "profile"; // ou le nom de ton template
-    }
-
-
-
-
 }
 
