@@ -5,22 +5,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import tn.pi.cabinetmedicalproject.enums.AppointmentStatus;
-import tn.pi.cabinetmedicalproject.model.Consultation;
-import tn.pi.cabinetmedicalproject.model.Patient;
-import tn.pi.cabinetmedicalproject.model.User;
+import tn.pi.cabinetmedicalproject.model.*;
+import tn.pi.cabinetmedicalproject.repository.ArchiveRepository;
+import tn.pi.cabinetmedicalproject.repository.ConsultationRepository;
+import tn.pi.cabinetmedicalproject.repository.DoctorRepository;
 import tn.pi.cabinetmedicalproject.repository.UserRepository;
 import tn.pi.cabinetmedicalproject.service.ConsultationService;
 import tn.pi.cabinetmedicalproject.service.PatientService;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
@@ -35,7 +38,56 @@ public class ProfileController {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private DoctorRepository doctorRepository;
 
+    @Autowired
+    private ConsultationRepository consultationRepository;
+
+    @Autowired
+    private ArchiveRepository archiveRepository;
+
+
+    @PostMapping("/{id}/canceled")
+    public String markAsCanceled(@PathVariable Long id, Principal principal) {
+        String email = principal.getName();
+
+        // Trouver l'utilisateur connecté
+        User user = userRepository.findByEmail(email);
+
+        // Trouver le patient lié à l'utilisateur
+        Patient patient = patientService.findByUserId(user.getId());
+
+        // Trouver la consultation
+        Consultation consultation = consultationRepository.findById(id).orElse(null);
+
+        // Vérifier que la consultation appartient bien au patient connecté
+        if (consultation != null && consultation.getPatient().getId().equals(patient.getId())) {
+
+            // Mettre à jour le statut
+            consultation.setStatus(AppointmentStatus.CANCELED);
+
+            // Créer une archive
+            Archive archive = Archive.builder()
+                    .doctor(consultation.getDoctor())
+                    .patient(consultation.getPatient())
+                    .date(consultation.getDate())
+                    .time(consultation.getTime())
+                    .status(AppointmentStatus.CANCELED)
+                    .description(consultation.getDescription())
+                    .prescription(consultation.getPrescription())
+                    .build();
+
+            // Sauvegarder l'archive
+            archiveRepository.save(archive);
+
+            // Supprimer la consultation (ou la sauvegarder si tu préfères la garder)
+            consultationRepository.delete(consultation);
+        }
+
+        // Rediriger vers la page profile avec un message de succès
+        return "redirect:/profile?success=Consultation annulée avec succès";
+    }
 
 
     @GetMapping
@@ -76,6 +128,71 @@ public class ProfileController {
         return "profile";
     }
 
+
+    @PostMapping("/{id}/completed")
+    public String markAscompleted(@PathVariable Long id, Principal principal) {
+        String email = principal.getName();
+
+        // Trouver l'utilisateur connecté
+        User user = userRepository.findByEmail(email);
+
+        // Trouver le patient lié à l'utilisateur
+        Patient patient = patientService.findByUserId(user.getId());
+
+        // Trouver la consultation
+        Consultation consultation = consultationRepository.findById(id).orElse(null);
+
+        // Vérifier que la consultation appartient bien au patient connecté
+        if (consultation != null && consultation.getPatient().getId().equals(patient.getId())) {
+
+            // Mettre à jour le statut
+            consultation.setStatus(AppointmentStatus.COMPLETED);
+
+            // Créer une archive
+            Archive archive = Archive.builder()
+                    .doctor(consultation.getDoctor())
+                    .patient(consultation.getPatient())
+                    .date(consultation.getDate())
+                    .time(consultation.getTime())
+                    .status(AppointmentStatus.COMPLETED)
+                    .description(consultation.getDescription())
+                    .prescription(consultation.getPrescription())
+                    .build();
+
+            // Sauvegarder l'archive
+            archiveRepository.save(archive);
+
+            // Supprimer la consultation (ou la sauvegarder si tu préfères la garder)
+            consultationRepository.delete(consultation);
+        }
+
+        // Rediriger vers la page profile avec un message de succès
+        return "redirect:/profile?success=Consultation annulée avec succès";
+    }
+    @GetMapping
+    public String getProfile(Model model, Principal principal,
+                             @RequestParam(defaultValue = "0") int page) {
+
+        String email = principal.getName();
+        User user = userRepository.findByEmail(email);
+
+        // Récupérer le patient connecté
+        Patient patient = patientService.findByUserId(user.getId());
+
+        // Récupérer les rendez-vous planifiés
+        Page<Consultation> scheduledAppointments = consultationService
+                .getScheduledAppointmentsForPatient(patient.getId(), page, 5);
+        model.addAttribute("scheduledAppointments", scheduledAppointments.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", scheduledAppointments.getTotalPages());
+
+        // ✅ Récupérer les consultations complétées depuis Archive
+        List<Archive> completedConsultations = archiveRepository
+                .findByPatientIdAndStatus(patient.getId(), AppointmentStatus.COMPLETED);
+        model.addAttribute("completedConsultations", completedConsultations);
+
+        return "profile"; // ou le nom de ton template
+    }
 
 
 

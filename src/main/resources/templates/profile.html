@@ -121,25 +121,67 @@
     </div>
 
     <div id="appointments" class="section-card active-section">
+
         <h3>Medical Schedule</h3>
+        <div th:if="${param.success}">
+            <div class="alert alert-success" th:text="${param.success}"></div>
+        </div>
+
         <div class="timeline">
             <div th:each="consultation : ${scheduledAppointments}">
                 <div class="timeline-item">
                     <div>
+                        <p><strong>Doctor Name:</strong> <span th:text="${consultation.doctor.name}"></span></p>
+                        <p><strong>Pathology:</strong> <span th:text="${consultation.pathology}"></span></p>
                         <p><strong>Date:</strong> <span th:text="${consultation.date}"></span></p>
                         <p><strong>Status:</strong> <span class="badge bg-primary" th:text="${consultation.status}"></span></p>
                     </div>
-                    <div>
-                        <button class="cancel-btn" th:data-id="${consultation.id}">Cancel</button>
-                    </div>
+
+                    <form th:action="@{/profile/{id}/canceled(id=${consultation.id})}" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-success" onclick="showSuccessPopup()">
+                            <i class="fas fa-check"></i> cancel
+                        </button>
+                    </form>
+
                 </div>
             </div>
+        </div>
+        <div class="pagination-container d-flex justify-content-center mt-4">
+            <ul class="pagination">
+                <li th:if="${currentPage > 0}" class="page-item">
+                    <a class="page-link" th:href="@{/profile(page=${currentPage - 1})}">Précédent</a>
+                </li>
+
+                <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}" class="page-item"
+                    th:classappend="${i == currentPage} ? 'active' : ''">
+                    <a class="page-link" th:href="@{/profile(page=${i})}" th:text="${i + 1}"></a>
+                </li>
+
+                <li th:if="${currentPage + 1 < totalPages}" class="page-item">
+                    <a class="page-link" th:href="@{/profile(page=${currentPage + 1})}">Suivant</a>
+                </li>
+            </ul>
         </div>
     </div>
 
 
     <div id="consultations" class="section-card">
         <h3>Medical History</h3>
+        <h3 class="mt-5">Consultations Terminées</h3>
+        <div class="timeline">
+            <div th:each="archive : ${completedConsultations}">
+                <div class="timeline-item">
+                    <div>
+                        <p><strong>Docteur:</strong> <span th:text="${archive.doctor.name}"></span></p>
+                        <p><strong>Date:</strong> <span th:text="${archive.date}"></span></p>
+                        <p><strong>Heure:</strong> <span th:text="${archive.time}"></span></p>
+                        <p><strong>Description:</strong> <span th:text="${archive.description} ?: 'Aucune'"></span></p>
+                        <p><strong>Prescription:</strong> <span th:text="${archive.prescription} ?: 'Aucune'"></span></p>
+                        <span class="badge bg-success" th:text="${archive.status}"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
 
@@ -149,12 +191,17 @@
             <div th:each="consultation : ${pendingPayments}">
                 <div class="timeline-item">
                     <div>
+                        <p><strong>Doctor Name:</strong> <span th:text="${consultation.doctor.name}"></span></p>
+                        <p><strong>Pathology:</strong> <span th:text="${consultation.pathology}"></span></p>
                         <p><strong>Date:</strong> <span th:text="${consultation.date}"></span></p>
                         <p><strong>Status:</strong> <span class="badge bg-warning" th:text="${consultation.status}"></span></p>
                     </div>
-                    <div>
-                        <button class="pay-btn" th:data-id="${consultation.id}">Pay</button>
-                    </div>
+
+                        <form th:action="@{/profile/{id}/completed(id=${consultation.id})}" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-success" onclick="showSuccessPopup()">
+                                <i class="fas fa-check"></i> Pay
+                            </button>
+                        </form>
                 </div>
             </div>
         </div>
@@ -173,28 +220,15 @@
         element.classList.add('active');
     }
 
-    document.addEventListener("DOMContentLoaded", function () {
-        document.querySelectorAll(".cancel-btn").forEach(button => {
-            button.addEventListener("click", function () {
-                let consultationId = this.getAttribute("data-id");
-                if (confirm("Are you sure you want to cancel this appointment?")) {
-                    fetch(`/consultations/cancel/${consultationId}`, {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        }
-                    }).then(response => {
-                        if (response.ok) {
-                            alert("Appointment canceled successfully.");
-                            location.reload();
-                        } else {
-                            alert("Failed to cancel appointment.");
-                        }
-                    }).catch(error => console.error("Error:", error));
-                }
-            });
-        });
-    });
+    function showSuccessPopup() {
+        document.getElementById("successPopup").style.display = "block";
+        document.getElementById("popupOverlay").style.display = "block";
+    }
+
+    // Fonction pour rediriger vers la page doctorhome après un clic sur le bouton
+    function redirectToDoctorHome() {
+        window.location.href = "/profile?success=Consultation%20canceled%20successfully";
+    }
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>

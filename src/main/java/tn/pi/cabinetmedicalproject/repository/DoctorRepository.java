@@ -29,6 +29,7 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
 
 
 
+
     Doctor findByName(String name);  // Recherche un docteur par son nom
 
 }

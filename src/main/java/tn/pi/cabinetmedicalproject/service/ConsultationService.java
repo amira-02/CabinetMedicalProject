@@ -1,8 +1,8 @@
 package tn.pi.cabinetmedicalproject.service;
 
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import tn.pi.cabinetmedicalproject.enums.AppointmentStatus;
@@ -15,9 +15,8 @@ import tn.pi.cabinetmedicalproject.repository.PatientRepository;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.logging.Logger;
 
-@Service  // <-- Ajoute cette annotation pour déclarer le service comme un bean Spring
+@Service
 public class ConsultationService {
 
     @Autowired
@@ -26,54 +25,47 @@ public class ConsultationService {
     @Autowired
     private DoctorRepository doctorRepository;
 
-
     @Autowired
     private PatientRepository patientRepository;
+
     @Transactional
     public void saveConsultation(Consultation consultation) {
-
         consultationRepository.save(consultation);
-
     }
-//
-//    public List<Consultation> findByPatientId(Long patientId) {
-//        return consultationRepository.findByPatientId(patientId);
-//    }
 
-
+    // Méthode pour récupérer les consultations d'un patient par ID avec pagination
     public Page<Consultation> findConsultationsByPatientId(Long patientId, Pageable pageable) {
         return consultationRepository.findByPatientId(patientId, pageable);
     }
+
     public boolean hasExistingConsultation(Long patientId, Long doctorId) {
         return consultationRepository.countByPatientIdAndDoctorId(patientId, doctorId) >= 1;
     }
 
-public List<Consultation> findByPatientAndDoctor(Patient patient, Doctor doctor) {
-    // Requête pour récupérer les consultations du patient avec ce médecin
-    return consultationRepository.findByPatientAndDoctor(patient, doctor);
-}
-
-
+    public List<Consultation> findByPatientAndDoctor(Patient patient, Doctor doctor) {
+        return consultationRepository.findByPatientAndDoctor(patient, doctor);
+    }
 
     public List<Consultation> findByDoctor(Doctor doctor) {
         return consultationRepository.findByDoctor(doctor);
     }
 
-
-//    // Méthode pour récupérer un rendez-vous par son ID
     public Consultation getConsultationById(Long id) {
         return consultationRepository.findById(id).orElse(null);
     }
-//
-//    // Méthode pour récupérer tous les rendez-vous
+
     public List<Consultation> getAllConsultations() {
         return consultationRepository.findAll();
     }
 
+    // Récupérer les consultations programmées d'un patient par son ID avec statut SCHEDULED et pagination
     public Page<Consultation> findConsultationsByPatientIdAndStatus(Long patientId, AppointmentStatus status, Pageable pageable) {
         return consultationRepository.findByPatientIdAndStatus(patientId, status, pageable);
     }
 
-
-
+    // Méthode pour récupérer les rendez-vous programmés pour un patient avec pagination
+    public Page<Consultation> getScheduledAppointmentsForPatient(Long patientId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return consultationRepository.findByPatientIdAndStatus(patientId, AppointmentStatus.SCHEDULED, pageable);
+    }
 }
